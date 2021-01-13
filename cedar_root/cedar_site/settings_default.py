@@ -31,5 +31,5 @@ STATIC_URL = '/static/'
 # Add static directory at root
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'static')
+    BASE_DIR / 'static'
 ]
