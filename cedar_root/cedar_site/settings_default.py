@@ -13,8 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = True
 
 
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+# Database set to "db_default.sqlite3"
 
 DATABASES = {
     'default': {
@@ -28,3 +27,9 @@ DATABASES = {
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Add static directory at root
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static')
+]
