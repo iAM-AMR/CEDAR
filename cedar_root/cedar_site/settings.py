@@ -70,17 +70,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'cedar_site.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -114,7 +103,18 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
+# STATIC   --> settings_.py
+# DATABASE --> settings_.py
+# DEBUG    --> settings_.py
 
-STATIC_URL = '/static/'
+# Import settings_.py
+# Attempt to load the settings_local file. If an import error occurs, load settings_default file.
+# Note, this functionality should be removed in production.
+
+try:
+    from .settings_local import *
+except ImportError as error_settings_local:
+    try:
+        from .settings_default import *
+    except ImportError as error_settings_default:
+        pass
