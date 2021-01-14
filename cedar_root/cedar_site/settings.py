@@ -54,7 +54,7 @@ ROOT_URLCONF = 'cedar_site.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'cedar_home/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
