@@ -5,4 +5,5 @@ from django.http import HttpResponse
 
 def index(request):
     title = "Hello World"
-    return render(request, 'cedar_home/base.html', {'title': title})
+    page_title = "CEDAR"
+    return render(request, 'cedar_home/index.html', {'title': title, 'page_title': page_title})
