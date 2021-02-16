@@ -109,11 +109,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Import local_settings.py
-# Attempt to load the local_settings file.
-# Note, this functionality should be removed in production.
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -132,6 +127,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
+
+# Import local_settings.py
+# Attempt to load the local_settings file.
+# Note, this functionality should be removed in production.
 
 try:
     from .local_settings import *
