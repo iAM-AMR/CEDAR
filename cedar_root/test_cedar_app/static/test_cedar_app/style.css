@@ -1,0 +1,44 @@
+/*
+table, th, td {
+    table-layout: fixed;
+    border: 1px solid black;
+    border-collapse: collapse;
+}*/
+/*
+thead {
+    background-color: rgb(56, 114, 138);
+    padding: 5px;
+}*/
+/*scrolling
+.my-custom-scrollbar {
+    position: relative;
+    height: 200px;
+    overflow: auto;
+}
+    .table-wrapper-scroll-y {
+    display: block;
+}*/
+
+/*zebra striping*/
+tbody tr:nth-child(odd) {
+    background-color: rgb(242, 247, 255);
+}
+
+
+/*button in ref_detail.html*/
+#openfactor {
+    border: none;
+    background-color: rgb(242, 247, 255);
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+
+/*
+tbody > tr:hover {
+    background-color: rgb(191, 192, 192)!important;
+}*/

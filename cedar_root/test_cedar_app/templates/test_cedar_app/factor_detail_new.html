@@ -1,0 +1,13 @@
+{% extends './base_factor.html' %}
+
+{% load crispy_forms_tags %}
+
+{% load widget_tweaks %}
+
+{% block content %}
+    <form action="" method="post" id="facviewform" role="form">
+        {% csrf_token %}
+        {% crispy fac_form %}
+    </form>
+
+{% endblock %}

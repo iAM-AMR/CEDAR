@@ -31,13 +31,20 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'test_cedar_app.apps.TestCedarAppConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
+    'widget_tweaks',
+    'crispy_forms',
+    'bootstrap4',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -54,7 +61,7 @@ ROOT_URLCONF = 'cedar_site.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'cedar_home/templates'],
+        'DIRS': [BASE_DIR / 'cedar_home/templates'], # change this when move templates to project-level
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -103,18 +110,15 @@ USE_L10N = True
 USE_TZ = True
 
 
-# STATIC   --> settings_.py
-# DATABASE --> settings_.py
-# DEBUG    --> settings_.py
+# STATIC   --> local_settings.py
+# DATABASE --> local_settings.py
+# DEBUG    --> local_settings.py
 
-# Import settings_.py
-# Attempt to load the settings_local file. If an import error occurs, load settings_default file.
+# Import local_settings.py
+# Attempt to load the local_settings file.
 # Note, this functionality should be removed in production.
 
 try:
-    from .settings_local import *
-except ImportError as error_settings_local:
-    try:
-        from .settings_default import *
-    except ImportError as error_settings_default:
-        pass
+    from .local_settings import *
+except ImportError as error_local_settings:
+    pass

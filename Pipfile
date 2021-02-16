@@ -8,6 +8,16 @@ verify_ssl = true
 [packages]
 django = "*"
 psycopg2 = "*"
+sphinx = "*"
+sphinx-autobuild = "*"
+sphinx-rtd-theme = "*"
+django-crispy-forms = "*"
+django-bootstrap4 = "*"
+django-extensions = "*"
+django-widget-tweaks = "*"
+pyparsing = "*"
+pydot = "*"
+pandas = "*"
 
 [requires]
 python_version = "3.8"
