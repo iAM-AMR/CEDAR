@@ -124,6 +124,3 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Local Settings Support
-settings_local.py
-db_default.sqlite3
