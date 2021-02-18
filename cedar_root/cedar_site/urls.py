@@ -18,6 +18,6 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('test_cedar_app/', include('test_cedar_app.urls')),
+    path('cedar_core/', include('cedar_core.urls')),
     path('', include('cedar_home.urls'))
 ]
