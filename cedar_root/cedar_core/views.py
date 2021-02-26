@@ -69,7 +69,7 @@ def view_references(request):
         return render(request, 'cedar_core/view_refs_new.html', context)
     """
     
-    context = {'refs_list': refs_list}
+    context = {'refs_list': refs_list, 'page_title': 'References'}
     return render(request, 'cedar_core/view_refs_new.html', context)
 
 def view_factors(request, ref_id):
@@ -109,6 +109,7 @@ def view_factors(request, ref_id):
     context = {
         'ref': ref,
         'ref_factors': ref_factors,
+        'page_title': 'View Factors',
     }
     return render(request, 'cedar_core/view_factors.html', context)
 
@@ -197,7 +198,7 @@ def export_query(request):
             if len(export_facs) == 0:
                 # return popup
                 #messages.info(request, 'No factors exist that meet the chosen criteria. Please try broadening your query')
-                return render(request, 'cedar_core/export_query.html', {'query_form': QuerySelectForm(), 'message_text': 'No factors exist that meet the chosen criteria. Please try broadening your query'})
+                return render(request, 'cedar_core/export_query.html', {'query_form': QuerySelectForm(), 'page_title': 'Export a Query', 'message_text': 'No factors exist that meet the chosen criteria. Please try broadening your query'})
             
             # Prepare all required fields for a .csv file export (raw timber)
             
@@ -284,7 +285,7 @@ def export_query(request):
     else:
         query_form = QuerySelectForm()
     
-    context = {'query_form': query_form}
+    context = {'query_form': query_form, 'page_title': 'Export a Query'}
     return render(request, 'cedar_core/export_query.html', context)
 
 def expand_factor(request, ref_id, fac_id):
@@ -306,6 +307,7 @@ def expand_factor(request, ref_id, fac_id):
         'ref': ref,
         'ref_factors': ref_factors,
         'exp_form': exp_form,
+        'page_title': 'View Factors',
     }
     return render(request, 'cedar_core/view_factors.html', context)
 
@@ -434,6 +436,7 @@ def ref_detail(request, ref_id):
                'loc_helper': loc_helper,
                'note_formset': note_formset,
                'note_helper': note_helper,
+               'page_title': 'Update a Reference',
                }
     return render(request, 'cedar_core/ref_detail.html', context)
 
@@ -458,6 +461,8 @@ def add_ref_info(request, ref_id, form_type):
     return redirect(redir_path)
 
 def factor_detail(request, ref_id, fac_id):
+    
+    ref = reference.objects.get(pk=ref_id)
     
     #Get factor
     try:
@@ -486,7 +491,8 @@ def factor_detail(request, ref_id, fac_id):
         fac_form = FactorForm(initial=model_to_dict(fac), instance=fac)
 
     context = {'fac': fac,
-               'fac_form': fac_form, 
+               'fac_form': fac_form,
+               'page_title': 'Edit Factor',
     }
     return render(request, 'cedar_core/factor_detail_new.html', context)
     

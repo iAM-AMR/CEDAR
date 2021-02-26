@@ -574,6 +574,7 @@ class ConTableForm(ModelForm):
         self.helper.form_show_labels = False
         self.helper.layout = Layout(
             HTML('''
+                    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.19.2/css/addons/datatables.min.css"> -->
                     <table id="facTable" class="table">
                         <thead>
                             <tr style="background-color: white;">
@@ -585,12 +586,17 @@ class ConTableForm(ModelForm):
                             <td>
                                 <table id="amrData" class="table table-sm style="width: 100%;">
                                     <thead>
-                                        <tr>
+                                        <tr style="background-color: rgb(242, 247, 255);">
                                             <th style="border: none;">'''),
             Field('resistance_id'),
             HTML('''                        </th>
                                         </tr>
                                     </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </td>
                             <td>
@@ -645,36 +651,6 @@ class ConTableForm(ModelForm):
                             </tr>
                         </tfoot>
                     </table>
-                    
-                    <script>
-                        $(document).ready(function () {
-                            $('#facTable').DataTable({
-                                "paging": false,
-                                "searching": false,
-                                "info": false,
-                            });
-                        });
-                    </script>
-
-                    <script>
-                        $(document).ready(function () {
-                            $('#facData').DataTable({
-                                "paging": false,
-                                "searching": false,
-                                "info": false,
-                            });
-                        });
-                    </script>
-                    
-                    <script>
-                        $(document).ready(function () {
-                            $('#amrData').DataTable({
-                                "paging": false,
-                                "searching": false,
-                                "info": false,
-                            });
-                        });
-                    </script>
             '''),
         )
         

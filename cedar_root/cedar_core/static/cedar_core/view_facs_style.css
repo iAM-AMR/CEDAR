@@ -4,6 +4,12 @@
   align-items: center;
 } */
 
+/* hide sorting arrows in the table headers */
+.dataTable > thead > tr > th[class*="sort"]:before,
+.dataTable > thead > tr > th[class*="sort"]:after {
+  content: "" !important;
+}
+
 .btn-xs {
   display: inline-block;
   font-size: 12px;

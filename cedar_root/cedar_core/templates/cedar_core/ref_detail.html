@@ -6,64 +6,102 @@
 
 {% load widget_tweaks %}
 
-<link rel="stylesheet" href="{% static 'cedar_core/style.css' %}">
+{% block page_header %}
+    {{ref.study_title}}
+{% endblock page_header %}
+
+{% block head_css %}
+  <!-- Your custom styles (optional) -->
+  <link rel="stylesheet" href="{% static 'cedar_core/ref_detail_style.css' %}">
+{% endblock head_css %}
+
 
 {% block content %}
-    <button type="button" id="openfactor">
-        <a href="{% url 'view_factors' ref_id=ref.id %}">Open Factor List</a>
-    </button>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12"> <!--entire width, was a smaller width as col-8 -->
+        
+                <h1 class="mt-2">{{ref.study_title}}</h1>
 
-    <br>
-    <br>
+                <hr class="mt-0 mb-4" style="border-width:5px;">
 
-    <form action="" method="post" id="leadform" enctype="multipart/form-data" role="form">
-        {% csrf_token %}
-        <ul class="nav nav-tabs md-tabs" id="myTabMD" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="main-tab-md" data-toggle="tab" href="#main-md" role="tab" aria-controls="main-md"
-                    aria-selected="true">Main</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="study-tab-md" data-toggle="tab" href="#study-md" role="tab" aria-controls="study-md"
-                    aria-selected="false">Study Design</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="loc-tab-md" data-toggle="tab" href="#loc-md" role="tab" aria-controls="loc-md"
-                    aria-selected="false">Location</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="notes-tab-md" data-toggle="tab" href="#notes-md" role="tab" aria-controls="notes-md"
-                    aria-selected="false">Notes and Issues</a>
-            </li>
-        </ul>
-        <div class="tab-content card pt-5" id="myTabContentMD">
-            {% crispy ref_form ref_form_helper %}
-            <div class="tab-pane fade" id="loc-md" role="tabpanel" aria-labelledby="loc-tab-md">
-                <button type="button" class="btn btn-success btn-xs" id="addloc">
-                    <a href="{% url 'add_ref_info' ref_id=ref.id form_type='loc' %}">Add Location</a>
-                    <i class="fas fa-plus-square"></i>
+                <br>
+
+                <button type="button" id="openfactor">
+                    <a href="{% url 'view_factors' ref_id=ref.id %}">Open Factor List</a>
                 </button>
-                <br><br>
-                {% crispy loc_formset loc_helper %}
-                <!-- {% for loc in loc_forms %}
-                    {% crispy loc %}
-                {% endfor %} -->
-            </div>
-            <div class="tab-pane fade" id="notes-md" role="tabpanel" aria-labelledby="notes-tab-md">
-                <button type="button" class="btn btn-success btn-xs" id="addnote">
-                    <a href="{% url 'add_ref_info' ref_id=ref.id form_type='note' %}">Add Note</a>
-                    <i class="fas fa-plus-square"></i>
-                </button>
-                <br><br>
-                {% crispy note_formset note_helper %}
-                <!-- {% for f in note_forms %}
-                    {% crispy f %}
-                {% endfor %} -->
+
+                <br>
+                <br>
+
+                <form action="" method="post" id="leadform" enctype="multipart/form-data" role="form">
+                    {% csrf_token %}
+                    <ul class="nav nav-tabs md-tabs" id="myTabMD" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="main-tab-md" data-toggle="tab" href="#main-md" role="tab" aria-controls="main-md"
+                                aria-selected="true">Main</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="study-tab-md" data-toggle="tab" href="#study-md" role="tab" aria-controls="study-md"
+                                aria-selected="false">Study Design</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="loc-tab-md" data-toggle="tab" href="#loc-md" role="tab" aria-controls="loc-md"
+                                aria-selected="false">Location</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="notes-tab-md" data-toggle="tab" href="#notes-md" role="tab" aria-controls="notes-md"
+                                aria-selected="false">Notes and Issues</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content card pt-5" id="myTabContentMD">
+                        {% crispy ref_form ref_form_helper %}
+                        <div class="tab-pane fade" id="loc-md" role="tabpanel" aria-labelledby="loc-tab-md">
+                            <button type="button" class="btn btn-success btn-xs" id="addloc">
+                                <a href="{% url 'add_ref_info' ref_id=ref.id form_type='loc' %}">Add Location</a>
+                                <i class="fas fa-plus-square"></i>
+                            </button>
+                            <br><br>
+                            {% crispy loc_formset loc_helper %}
+                            <!-- {% for loc in loc_forms %}
+                                {% crispy loc %}
+                            {% endfor %} -->
+                        </div>
+                        <div class="tab-pane fade" id="notes-md" role="tabpanel" aria-labelledby="notes-tab-md">
+                            <button type="button" class="btn btn-success btn-xs" id="addnote">
+                                <a href="{% url 'add_ref_info' ref_id=ref.id form_type='note' %}">Add Note</a>
+                                <i class="fas fa-plus-square"></i>
+                            </button>
+                            <br><br>
+                            {% crispy note_formset note_helper %}
+                            <!-- {% for f in note_forms %}
+                                {% crispy f %}
+                            {% endfor %} -->
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-    </form>
+    </div>
 
     <!-- {% for note in ref_notes %}
         <p>{{ note.note }}</p>
     {% endfor %} -->
 {% endblock %}
+
+{% block body_scripts %}
+
+    <!-- On page reload, the tab currently active remains so -->
+    <script>
+        $(document).ready(function(){
+            $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+                localStorage.setItem('activeTab', $(e.target).attr('href'));
+            });
+            var activeTab = localStorage.getItem('activeTab');
+            if(activeTab){
+                $('#myTabMD a[href="' + activeTab + '"]').tab('show');
+            }
+        });
+    </script>
+
+{% endblock body_scripts %}

@@ -1,3 +1,4 @@
+
 /*
 table, th, td {
     table-layout: fixed;
@@ -24,21 +25,7 @@ tbody tr:nth-child(odd) {
     background-color: rgb(242, 247, 255);
 }
 
-
-/*button in ref_detail.html*/
-#openfactor {
-    border: none;
-    background-color: rgb(242, 247, 255);
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-  }
-
-/*
-tbody > tr:hover {
-    background-color: rgb(191, 192, 192)!important;
-}*/
+table a:hover {
+  color: blue;
+  text-decoration: underline;
+}
