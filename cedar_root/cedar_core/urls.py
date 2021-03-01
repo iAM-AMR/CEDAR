@@ -1,7 +1,6 @@
 from django.urls import path
 
 from . import views
-from cedar_core.views import *
 
 urlpatterns = [
     path('', views.index, name='index'),
