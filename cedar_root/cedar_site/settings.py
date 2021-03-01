@@ -61,7 +61,7 @@ ROOT_URLCONF = 'cedar_site.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'cedar_home/templates'], # change this when move templates to project-level
+        'DIRS': [BASE_DIR / 'cedar_site/templates'], # change this when move templates to project-level
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,7 +125,7 @@ STATIC_URL = '/static/'
 # Add static directory at root
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'cedar_home/static'
+    BASE_DIR / 'cedar_site/static'
 ]
 
 # Import local_settings.py

@@ -24,9 +24,6 @@ from django.contrib import messages
 import re
 #from django.views.decorators.csrf import csrf_protect
 
-def index(request):
-    return HttpResponse("Welcome to the CEDAR Database.")
-
 #@csrf_protect
 def view_references(request):
     
