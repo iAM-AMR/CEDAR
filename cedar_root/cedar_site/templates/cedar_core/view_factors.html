@@ -63,7 +63,7 @@
           {% for factor in ref_factors %}
             <tr>
               <td>
-                <a href="{% url 'expand_factor' ref_id=ref.id fac_id=factor.id %}" id="expFac">{{ factor.factor_title }}</a>
+                <a href="{% url 'expand_factor' ref_id=ref.id fac_id=factor.id view_type=view_type %}" id="expFac">{{ factor.factor_title }}</a>
               </td>
               <td>{{ factor.factor_description }}</td>
               <td>{{ factor.host_01_id }}</td>
@@ -72,11 +72,18 @@
               <td>{{ factor.moa_type_id }}</td>
               <td style='white-space: nowrap'>
                 <!-- <div class="container"> -->
-                  <a title="Edit All Factor Data" href="/cedar_core/references/{{ ref.id }}/factors/{{ factor.id }}/edit" class="btn btn-info btn-xs" role="button">
+                  <!-- "/cedar_core/references/{{ ref.id }}/factors/{{ factor.id }}/edit" -->
+                  <a title="Edit All Factor Data" href="{% url 'factor_detail' ref_id=ref.id fac_id=factor.id view_type=view_type %}" class="btn btn-info btn-xs" role="button">
                     <i class="fas fa-pencil-alt"></i>
                   </a>
-                  <a title="Delete" href="/cedar_core/references/{{ ref.id }}/factors/{{ factor.id }}/delete" class="btn btn-danger btn-xs" role="button">
+                  <!-- "/cedar_core/references/{{ ref.id }}/factors/{{ factor.id }}/delete" -->
+                  <a title="Delete" href="{% url 'delete_factor' ref_id=ref.id fac_id=factor.id view_type=view_type %}" class="btn btn-danger btn-xs" role="button">
                     <i class="far fa-trash-alt"></i>
+
+                  <!-- Disabled form of the delete factor button. TO DO: toggle between this and above based on view_type -->
+                  <!-- <a title="Delete" href="{% url 'delete_factor' ref_id=ref.id fac_id=factor.id view_type=view_type %}" class="btn btn-danger btn-xs disabled" role="button" aria-disabled="true">
+                    <i class="far fa-trash-alt"></i> -->
+
                 <!-- </div> -->
               </td>
             </tr>
@@ -129,6 +136,27 @@
             "info": false,
         });
     });
+  </script>
+
+  <!-- Disable most all inputs if in view mode -->
+
+  {{ view_type|json_script:"get_view_type" }}
+
+  <script>
+    const view_type = JSON.parse(document.getElementById('get_view_type').textContent);
+  
+    if (view_type == 'view') {
+      $(':input').prop('disabled', 'true');
+      //$(':a').prop('disabled', 'true');
+      //document.getElementById("delFactor").disabled = true;
+      //$('#delFactor').prop('disabled', 'true');
+      //$('.delete-factor button').hide();
+      //var x = document.getElementsByClassName("btn btn-danger btn-xs");
+      //var i;
+      //for (i = 0; i < x.length; i++) {
+        //x[i].disabled = true;
+      //}
+    }
   </script>
 
 {% endblock body_scripts %}
