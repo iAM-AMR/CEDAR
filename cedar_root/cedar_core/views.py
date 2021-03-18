@@ -14,6 +14,7 @@ from django.db.models import F, Q
 import csv
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 #import json
 #from django.core import serializers
@@ -25,7 +26,8 @@ import re
 #from django.views.decorators.csrf import csrf_protect
 
 #@csrf_protect
-def view_references(request, view_type):
+@login_required
+def view_references(request):
     
     refs_list = reference.objects.order_by('key_bibtex')
     
@@ -66,10 +68,11 @@ def view_references(request, view_type):
         return render(request, 'cedar_core/view_refs_new.html', context)
     """
     
-    context = {'refs_list': refs_list, 'page_title': 'References', 'view_type': view_type}
+    context = {'refs_list': refs_list, 'page_title': 'References'}
     return render(request, 'cedar_core/view_refs_new.html', context)
 
-def view_factors(request, ref_id, view_type):
+@login_required
+def view_factors(request, ref_id):
     
     try:
         ref = reference.objects.get(pk=ref_id)
@@ -107,7 +110,6 @@ def view_factors(request, ref_id, view_type):
         'ref': ref,
         'ref_factors': ref_factors,
         'page_title': 'View Factors',
-        'view_type': view_type,
     }
     return render(request, 'cedar_core/view_factors.html', context)
 
@@ -286,14 +288,15 @@ def export_query(request):
     context = {'query_form': query_form, 'page_title': 'Export a Query'}
     return render(request, 'cedar_core/export_query.html', context)
 
-def expand_factor(request, ref_id, fac_id, view_type):
+@login_required
+def expand_factor(request, ref_id, fac_id):
     
     ref = reference.objects.get(pk=ref_id)
     ref_factors = ref.factor_set.all()
     main_fac = factor.objects.get(id=fac_id)
     result_type = factor._meta.get_field('moa_type_id').value_from_object(main_fac)
     
-    if request.method == 'POST' and view_type == 'edit':
+    if request.method == 'POST':
         # Create the appropriate factor data form depending on the result type. TO DO: account for Relative Risk
         if result_type == 4:
             exp_form = OddsTableForm(request.POST, initial=model_to_dict(main_fac), instance=main_fac)
@@ -323,31 +326,30 @@ def expand_factor(request, ref_id, fac_id, view_type):
         'ref_factors': ref_factors,
         'exp_form': exp_form,
         'page_title': 'View Factors',
-        'view_type': view_type,
     }
     return render(request, 'cedar_core/view_factors.html', context)
 
-def delete_factor(request, ref_id, fac_id, view_type):
+@login_required
+def delete_factor(request, ref_id, fac_id):
     
-    if view_type == 'edit':
-        # Delete the factor
-        del_fac = factor.objects.get(id=fac_id)
-        del_fac.delete()
+    # Delete the factor
+    del_fac = factor.objects.get(id=fac_id)
+    del_fac.delete()
     
-        # Reload the view factors page
-        ref = reference.objects.get(pk=ref_id)
-        ref_factors = ref.factor_set.all()
+    # Reload the view factors page
+    ref = reference.objects.get(pk=ref_id)
+    ref_factors = ref.factor_set.all()
     
-        context = {
-            'ref': ref,
-            'ref_factors': ref_factors,
-            'view_type': view_type,
-        }
+    context = {
+        'ref': ref,
+        'ref_factors': ref_factors,
+    }
     
-        return redirect('/cedar_core/references/' + str(ref_id) + '/factors/' + view_type + '/')
+    return redirect('/cedar_core/references/' + str(ref_id) + '/factors/')
     #return render(request,'cedar_core/view_factors.html', context)
 
-def ref_detail(request, ref_id, view_type):
+@login_required
+def ref_detail(request, ref_id):
 
     try:
         ref = reference.objects.get(pk=ref_id)
@@ -360,7 +362,7 @@ def ref_detail(request, ref_id, view_type):
     #init_vals = {k: state[k] for k in set(list(state.keys())) - set(exclude_key)}
     
     # If this is a POST request, process the form data
-    if request.method == 'POST' and view_type == 'edit':
+    if request.method == 'POST':
         print('POST ENTERED')
         
         # Create form instances and populate them with data from the request
@@ -455,32 +457,32 @@ def ref_detail(request, ref_id, view_type):
                'note_formset': note_formset,
                'note_helper': note_helper,
                'page_title': 'Update a Reference',
-               'view_type': view_type,
                }
     return render(request, 'cedar_core/ref_detail.html', context)
 
 # Add either a new reference note, or a new location
-def add_ref_info(request, ref_id, form_type, view_type):
+@login_required
+def add_ref_info(request, ref_id, form_type):
     
-    if view_type == 'edit':
-        # Get reference object
-        ref = reference.objects.get(pk=ref_id)
+    # Get reference object
+    ref = reference.objects.get(pk=ref_id)
     
-        # Create a new object linked to this reference
-        #new_loc = location_join.objects.create(reference = ref)
-        if form_type == 'loc':
-            new_obj = location_join(loc_ref_id = ref)
-            redir_path = '/cedar_core/references/' + str(ref_id) + '/' + view_type + '/#loc-md'
-        else:
-            new_obj = reference_note(loc_ref_id = ref)
-            redir_path = '/cedar_core/references/' + str(ref_id) + '/' + view_type + '/#notes-md'
+    # Create a new object linked to this reference
+    #new_loc = location_join.objects.create(reference = ref)
+    if form_type == 'loc':
+        new_obj = location_join(loc_ref_id = ref)
+        redir_path = '/cedar_core/references/' + str(ref_id) + '/#loc-md'
+    else:
+        new_obj = reference_note(note_ref_id = ref)
+        redir_path = '/cedar_core/references/' + str(ref_id) + '/#notes-md'
     
-        # Save new object and redirect
-        new_obj.save()
+    # Save new object and redirect
+    new_obj.save()
     
-        return redirect(redir_path)
+    return redirect(redir_path)
 
-def factor_detail(request, ref_id, fac_id, view_type):
+@login_required
+def factor_detail(request, ref_id, fac_id):
     
     ref = reference.objects.get(pk=ref_id)
     
@@ -497,7 +499,7 @@ def factor_detail(request, ref_id, fac_id, view_type):
             #curr_factor.fields[key].disabled = True
         ##factor_forms[f].fields['factor_title'].disabled = True
         
-    if request.method == 'POST' and view_type == 'edit':
+    if request.method == 'POST':
         fac_form = FactorForm(request.POST, initial=model_to_dict(fac), instance=fac)
         
         if fac_form.is_valid():
@@ -513,10 +515,5 @@ def factor_detail(request, ref_id, fac_id, view_type):
     context = {'fac': fac,
                'fac_form': fac_form,
                'page_title': 'Edit Factor',
-               'view_type': view_type,
     }
     return render(request, 'cedar_core/factor_detail_new.html', context)
-    
-
-def add_ref_success(request):
-    return HttpResponse('The reference was updated successfully.')

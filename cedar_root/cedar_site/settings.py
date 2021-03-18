@@ -128,6 +128,11 @@ STATICFILES_DIRS = [
     BASE_DIR / 'cedar_site/static'
 ]
 
+# Login URL
+LOGIN_URL = '/accounts/login/'
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 # Import local_settings.py
 # Attempt to load the local_settings file.
 # Note, this functionality should be removed in production.

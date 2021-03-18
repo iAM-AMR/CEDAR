@@ -20,19 +20,3 @@
     </div>
 
 {% endblock %}
-
-{% block body_scripts %}
-
-    <!-- Disable all inputs if in view mode -->
-
-    {{ view_type|json_script:"get_view_type" }}
-
-    <script>
-        const view_type = JSON.parse(document.getElementById('get_view_type').textContent);
-
-        if (view_type == 'view') {
-            $(':input').prop('disabled', 'true');
-        }
-    </script>
-
-{% endblock body_scripts %}

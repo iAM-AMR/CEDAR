@@ -32,7 +32,7 @@
               <td>{{ reference.key_bibtex }}</td>
               <td>
                 <!-- <a href="/cedar_core/references/{{ reference.id }}/">{{ reference.study_title }}</a> -->
-                <a href="{% url 'ref_detail' ref_id=reference.id view_type=view_type %}">{{ reference.study_title }}</a>
+                <a href="{% url 'ref_detail' ref_id=reference.id %}">{{ reference.study_title }}</a>
               </td>
             </tr>
           {% endfor %}

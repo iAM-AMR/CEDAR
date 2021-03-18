@@ -28,7 +28,7 @@
                 <br>
 
                 <button type="button" id="openfactor">
-                    <a href="{% url 'view_factors' ref_id=ref.id view_type=view_type %}">Open Factor List</a>
+                    <a href="{% url 'view_factors' ref_id=ref.id %}">Open Factor List</a>
                 </button>
 
                 <br>
@@ -102,30 +102,6 @@
                 $('#myTabMD a[href="' + activeTab + '"]').tab('show');
             }
         });
-    </script>
-
-    <!-- Disable all inputs (except the open factor button) if in view mode -->
-
-    {{ view_type|json_script:"get_view_type" }}
-
-    <script>
-        const view_type = JSON.parse(document.getElementById('get_view_type').textContent);
-
-        if (view_type == 'view') {
-            //$(':input').attr('readonly', 'true');
-
-            //$(':input').attr('disabled', 'true');
-            $(':input').not("#openfactor").prop('disabled', 'true');
-            //$('#openfactor select').prop('disabled', false);
-
-            //$('input[type=checkbox]').attr('disabled','true');
-            //$(':button').prop('disabled', true);
-            //var form = document.getElementById("leadform");
-            //var elements = form.elements;
-            //for (var i = 0, len = elements.length; i < len; ++i) {
-                //elements[i].readOnly = true;
-            //}
-        }
     </script>
 
 {% endblock body_scripts %}

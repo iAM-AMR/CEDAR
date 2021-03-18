@@ -1,0 +1,75 @@
+
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+
+  <head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>
+      {% block title %}
+        {{ page_title|default:"Untitled Page" }}
+      {% endblock title %}
+    </title>
+    
+    <!-- JQuery -->
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+    
+    <!-- Toggleable Tabs: only for ref_detail.html -->
+    <script type="text/javascript" src="https://getbootstrap.com/2.0.4/assets/js/bootstrap-tab.js"> </script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+
+    <!-- Material Design Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.19.2/css/mdb.min.css">
+
+    <!-- MDBootstrap Datatables  -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.19.2/css/addons/datatables.min.css">
+ 
+    {% block head_css %}
+    {% endblock head_css %}
+    
+  </head>
+
+  <body>
+
+    {% block content %}
+    {% endblock %}
+
+    <!-- SCRIPTS -->
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.19.2/js/jquery.min.js"></script>
+
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.19.2/js/popper.min.js"></script>
+
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.19.2/js/bootstrap.min.js"></script>
+
+    <!-- MDB core JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.19.2/js/mdb.min.js"></script>
+
+    <!-- MDBootstrap Datatables  --> 
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.19.2/js/addons/datatables.min.js"></script>
+
+    <!-- Your custom scripts (optional) -->
+
+    {% block body_scripts %}
+    {% endblock body_scripts %}
+
+  </body>
+</html>
