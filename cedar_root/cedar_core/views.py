@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 
 from crispy_forms.utils import render_crispy_form
 
-from .models import reference, location_join, reference_note, factor
+from .models import reference, location_join, reference_note, factor, publisher
 from .forms import ReferenceForm, RefLocForm, RefNoteForm, FactorForm, RefLocFormSet, RefLocFormSetHelper, RefNoteFormSet, RefNoteFormSetHelper, ConTableForm, PrevTableForm, OddsTableForm, QuerySelectForm
 
 from django.forms.models import model_to_dict, formset_factory, modelformset_factory
@@ -16,6 +16,8 @@ import csv
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
+from dal import autocomplete
+
 #import json
 #from django.core import serializers
 #from django.core.serializers.json import DjangoJSONEncoder
@@ -26,6 +28,26 @@ import re
 #from django.views.decorators.csrf import csrf_protect
 
 #@csrf_protect
+
+class PublisherAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_authenticated:
+            return publisher.objects.none()
+
+        qs = publisher.objects.all()
+
+        if self.q:
+            qs = qs.filter(pub_title__istartswith=self.q)
+
+        return qs
+
+#def load_subregions(request):
+    #country_id = request.GET.get('location_02_id')
+    #subregions = location_02.objects.filter(iso_country_code_2_id=country_id)
+    #return render(request, '', {'subregions': subregions})
+
+
 @login_required
 def view_references(request):
     

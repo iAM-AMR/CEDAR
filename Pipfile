@@ -18,6 +18,8 @@ django-widget-tweaks = "*"
 pyparsing = "*"
 pydot = "*"
 pandas = "*"
+crispy-bootstrap5 = "*"
+django-autocomplete-light = "*"
 
 [requires]
 python_version = "3.8"

@@ -10,12 +10,17 @@ from crispy_forms.utils import render_crispy_form
 
 from django.forms.models import modelformset_factory, inlineformset_factory
 
+from dal import autocomplete
+
 class ReferenceForm(ModelForm):
     class Meta:
         model = reference
         fields = ['study_title','study_authors', 'publish_year', 'publish_id', 'publish_doi', 'publish_pmid', 
                   'exclude_extraction','exclude_extraction_reason', 'study_design_id', 'study_design_detail',
                   'study_sample_method', 'ast_method_id', 'ref_has_explicit_break', 'ref_has_mic_table']
+        widgets = {
+            'publish_id': autocomplete.ModelSelect2(url='publish-id-autocomplete')
+        }
         
         # Replaced by prepended text below
         #labels = {
@@ -70,6 +75,19 @@ class ReferenceForm(ModelForm):
                                 PrependedText('publish_id', 'Publisher', placeholder="Publisher Here"), #form-text styles oddly
                                 css_class='col-md-6'
                             ),
+                            #HTML(
+                                #""" <style>
+                                        #.row{
+                                            #overflow: hidden; 
+                                        #}
+
+                                        #[class*="col-"]{
+                                            #margin-bottom: -99999px;
+                                            #padding-bottom: 99999px;
+                                        #}
+                                    #</style> """
+                            #),
+                            #css_class = 'd-flex flex-row',
                         ),
                         HTML(
                             """<br> <h6>Study Identifiers:</h6> <hr>"""
