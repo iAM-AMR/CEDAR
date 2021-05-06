@@ -47,6 +47,17 @@
 
       <!-- Actual factor table -->
       <h2 class="mt-2">All Factors</h2>
+
+      <br>
+
+      <!-- Add new factors button -->
+
+      <a title="New Factor" href="{% url 'add_ref_info' ref_id=ref.id form_type='fac' %}" class="btn btn-success btn-lg" role="button">
+        <i class="fas fa-plus-square"></i>
+      </a>
+
+      <br><br>
+
       <table id="factorTable" class="table table-bordered table-sm" cellspacing="0" width="100%">
         <thead>
           <tr>

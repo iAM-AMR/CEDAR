@@ -31,7 +31,7 @@ import re
 
 class PublisherAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        # Don't forget to filter out results depending on the visitor !
+
         if not self.request.user.is_authenticated:
             return publisher.objects.none()
 
@@ -494,9 +494,12 @@ def add_ref_info(request, ref_id, form_type):
     if form_type == 'loc':
         new_obj = location_join(loc_ref_id = ref)
         redir_path = '/cedar_core/references/' + str(ref_id) + '/#loc-md'
-    else:
+    elif form_type == 'note':
         new_obj = reference_note(note_ref_id = ref)
         redir_path = '/cedar_core/references/' + str(ref_id) + '/#notes-md'
+    else:
+        new_obj = factor(factor_ref_id = ref)
+        redir_path = '/cedar_core/references/' + str(ref_id) + '/factors'
     
     # Save new object and redirect
     new_obj.save()
