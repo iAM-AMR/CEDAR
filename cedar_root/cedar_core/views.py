@@ -14,7 +14,7 @@ from django.db.models import F, Q
 import csv
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 
 from dal import autocomplete
 
@@ -49,6 +49,7 @@ class PublisherAutocomplete(autocomplete.Select2QuerySetView):
 
 
 @login_required
+@permission_required('cedar_core.add_factor') # this permission check serves to verify that the logged in user is part of the "Edit" permissions group
 def view_references(request):
     
     refs_list = reference.objects.order_by('key_bibtex')
@@ -94,6 +95,7 @@ def view_references(request):
     return render(request, 'cedar_core/view_refs_new.html', context)
 
 @login_required
+@permission_required('cedar_core.add_factor')
 def view_factors(request, ref_id):
     
     try:
@@ -135,6 +137,7 @@ def view_factors(request, ref_id):
     }
     return render(request, 'cedar_core/view_factors.html', context)
 
+@login_required
 def export_query(request):
     
     if request.method == 'POST':
@@ -311,6 +314,7 @@ def export_query(request):
     return render(request, 'cedar_core/export_query.html', context)
 
 @login_required
+@permission_required('cedar_core.add_factor')
 def expand_factor(request, ref_id, fac_id):
     
     ref = reference.objects.get(pk=ref_id)
@@ -352,6 +356,7 @@ def expand_factor(request, ref_id, fac_id):
     return render(request, 'cedar_core/view_factors.html', context)
 
 @login_required
+@permission_required('cedar_core.add_factor')
 def delete_factor(request, ref_id, fac_id):
     
     # Delete the factor
@@ -371,6 +376,7 @@ def delete_factor(request, ref_id, fac_id):
     #return render(request,'cedar_core/view_factors.html', context)
 
 @login_required
+@permission_required('cedar_core.add_factor')
 def ref_detail(request, ref_id):
 
     try:
@@ -484,6 +490,7 @@ def ref_detail(request, ref_id):
 
 # Add either a new reference note, or a new location
 @login_required
+@permission_required('cedar_core.add_factor')
 def add_ref_info(request, ref_id, form_type):
     
     # Get reference object
@@ -507,6 +514,7 @@ def add_ref_info(request, ref_id, form_type):
     return redirect(redir_path)
 
 @login_required
+@permission_required('cedar_core.add_factor')
 def factor_detail(request, ref_id, fac_id):
     
     ref = reference.objects.get(pk=ref_id)
