@@ -33,6 +33,6 @@ DATABASES = {
         'HOST': hostname + ".postgres.database.azure.com",
         'USER': os.environ['DBUSER'] + "@" + hostname,
         'PASSWORD': os.environ['DBPASS'], 
-        'ssl': true
+        'OPTIONS': {'sslmode': 'require'}
     }
 }
