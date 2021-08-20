@@ -329,6 +329,7 @@ class QuerySelectForm(forms.Form):
             ),
         )
 
+# Need to re-jig this form to pull from the resistance outcome table
 class FactorForm(ModelForm):
     class Meta:
         model = factor

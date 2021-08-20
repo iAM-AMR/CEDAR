@@ -10,7 +10,7 @@ import pandas
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 colnames = ['table', 'field', 'caption', 'description', 'help_text', 'analysis_notes']
-file_path = BASE_DIR / 'CEDAR_Dictionary_Main_2021.02.11.csv'
+file_path = BASE_DIR / 'CEDAR_Dictionary_Main_2021.08.20.csv'
 data_file = pandas.read_csv(file_path, names=colnames, encoding='cp1252')
 field_names = data_file.field.tolist()[1:]
 field_descs = data_file.description.tolist()[1:]
@@ -332,27 +332,27 @@ class reference_history_action(models.Model):
     action_description = models.TextField(blank=True, null=True, help_text='')
     action_level = models.CharField(max_length=100, blank=True, null=True, help_text='')
     #action_level_numeric
-
-class factor(models.Model):
+    
+class res_outcome(models.Model):
     """
-    An individual factor associated with antimicrobial resistance.
+    An measured association with a resistance outcome.
     """
-    factor_ref_id = models.ForeignKey(reference, on_delete=models.CASCADE, to_field='other_reference_id', help_text=data_dict['factor_ref_id'])
-    resistance_id = models.ForeignKey(atc_vet, on_delete=models.SET_NULL, blank=True, null=True, related_name='factors_resistance', help_text=data_dict['resistance_id'])
-    amu_id = models.ManyToManyField(atc_vet, db_table='factor_amu_join', related_name='factors_amu', help_text=data_dict['amu_id'])
-    factor_title = models.CharField(max_length=200, blank=True, null=True, help_text=data_dict['factor_title'])
-    factor_description = models.TextField(blank=True, null=True, help_text=data_dict['factor_description'])
+    ufid = models.TextField(blank=True, null=True, help_text=data_dict['ufid']) # update this to a ForeignKey later
+    urid = models.TextField(blank=True, null=True, help_text=data_dict['urid']) # update this to a ForeignKey later
+    
+    fk_resistance_id = models.ForeignKey(atc_vet, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_resistance_id'])
+    fk_genetic_element_id = models.TextField(blank=True, null=True, help_text=data_dict['fk_genetic_element_id']) # update this to a ForeignKey later
+    
+    fk_microbe_01_id = models.ForeignKey(microbe_01, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_microbe_01_id'])
+    fk_microbe_02_id = models.ForeignKey(microbe_02, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_microbe_02_id'])
+    
+    fk_group_observe_prod_stage_id = models.ForeignKey(production_stage, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_group_observe_prod_stage_id'])
+    
+    fk_moa_type_id = models.ForeignKey(moa_type, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_moa_type_id'])
+    fk_moa_unit_id = models.ForeignKey(moa_unit, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_moa_unit_id'])
+    
     place_in_text = models.CharField(max_length=50, blank=True, null=True, help_text=data_dict['place_in_text'])
-    host_01_id = models.ForeignKey(host_01, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['host_01_id'])
-    host_02_id = models.ForeignKey(host_02, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['host_02_id'])
-    microbe_01_id = models.ForeignKey(microbe_01, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['microbe_01_id'])
-    microbe_02_id = models.ForeignKey(microbe_02, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['microbe_02_id'])
-    prod_stage_group_allocate_id = models.ForeignKey(production_stage, on_delete=models.SET_NULL, blank=True, null=True, related_name='factors_a', help_text=data_dict['prod_stage_group_allocate_id'])
-    prod_stage_group_observe_id = models.ForeignKey(production_stage, on_delete=models.SET_NULL, blank=True, null=True, related_name='factors_o', help_text=data_dict['prod_stage_group_observe_id'])
-    group_exposed = models.CharField(max_length=200, blank=True, null=True, help_text=data_dict['group_exposed'])
-    group_referent = models.CharField(max_length=200, blank=True, null=True, help_text=data_dict['group_referent'])
-    moa_type_id = models.ForeignKey(moa_type, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['moa_type_id'])
-    moa_unit_id = models.ForeignKey(moa_unit, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['moa_unit_id'])
+    
     contable_a = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['contable_a']) #
     contable_b = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['contable_b']) #
     contable_c = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['contable_c']) #
@@ -361,35 +361,23 @@ class factor(models.Model):
     prevtable_b = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))], blank=True, null=True, help_text=data_dict['prevtable_b'])
     prevtable_c = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))], blank=True, null=True, help_text=data_dict['prevtable_c'])
     prevtable_d = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))], blank=True, null=True, help_text=data_dict['prevtable_d'])
+    
     table_n_exp = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['table_n_exp']) #
     table_n_ref = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['table_n_ref']) #
+    
     odds_ratio = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))], blank=True, null=True, help_text=data_dict['odds_ratio']) #
     odds_ratio_lo = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))], blank=True, null=True, help_text=data_dict['odds_ratio_lo']) #
     odds_ratio_up = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))], blank=True, null=True, help_text=data_dict['odds_ratio_up']) #
     odds_ratio_sig = models.CharField(max_length=20, blank=True, null=True, help_text=data_dict['odds_ratio_sig'])
-    
-    # NEW
     odds_ratio_confidence = models.DecimalField(blank=True, null=True, max_digits=5, decimal_places=3, help_text=data_dict['odds_ratio_confidence'])
-    DEP_total_obs = models.CharField(blank=True, null=True, max_length=500, help_text='')
-    DEP_exclude_iam = models.BooleanField(blank=True, null=True, help_text='')
-    DEP_exclude_iam_reason = models.CharField(blank=True, null=True, max_length=500, help_text='')
-    OLD_short_name = models.CharField(blank=True, null=True, max_length=200, help_text='')
-    OLD_resistance_id = models.IntegerField(blank=True, null=True, help_text='')
-    OLD_use_id = models.IntegerField(blank=True, null=True, help_text='')
-    microbe_02_old_id = models.IntegerField(blank=True, null=True, help_text='')
-    TEMP_use_id = models.IntegerField(blank=True, null=True, help_text='')
-    exclude_cedar = models.BooleanField(blank=True, null=True, help_text=data_dict['exclude_cedar'])
-    exclude_cedar_reason = models.CharField(blank=True, null=True, max_length=500, help_text=data_dict['exclude_cedar_reason'])
     
-    factor_v0_id = models.IntegerField(blank=True, null=True, help_text=data_dict['factor_v0_id'])
-    v12_is_v1_import = models.BooleanField(blank=True, null=True, help_text=data_dict['v12_is_v1_import'])
-    v12_ID_factor_v1 = models.IntegerField(blank=True, null=True, help_text=data_dict['v12_ID_factor_v1'])
-    v12_ID_reference_v1 = models.IntegerField(blank=True, null=True, help_text=data_dict['v12_ID_reference_v1'])
-    v12_ID_reference_v2_initial = models.IntegerField(blank=True, null=True, help_text=data_dict['v12_ID_reference_v2_initial'])
-    v12_solo_extraction_2016 = models.BooleanField(blank=True, null=True, help_text=data_dict['v12_solo_extraction_2016'])
+    figure_extract = models.BooleanField(blank=True, null=True, help_text=data_dict['figure_extract'])
+    figure_extract_reproducible = models.BooleanField(blank=True, null=True, help_text=data_dict['figure_extract_reproducible'])
+    fk_figure_extract_method_id = models.TextField(blank=True, null=True, help_text=data_dict['fk_figure_extract_method_id']) # update this to a ForeignKey later
+    extraction_num = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['extraction_num'])
     
     def __str__(self):
-        return '%s_%s' % (self.factor_title, self.factor_ref_id)
+        return '%s_%s_%s' % (self.ufid, self.factor_urid, self.fk_resistance_id)
     
     #Clean method called automatically when model is used in a form
     def clean(self):
@@ -406,6 +394,48 @@ class factor(models.Model):
         
         if all(v is not None for v in [self.contable_c, self.table_n_ref]) and (self.contable_c > self.table_n_ref):
             raise ValidationError(_('Count of AMR+ within the referent group is greater than the total number in the referent group'))
+    
+class factor(models.Model):
+    """
+    An individual factor associated with antimicrobial resistance.
+    """
+    ufid = models.TextField(blank=True, null=True, help_text=data_dict['ufid']) # update this to a ForeignKey later
+    fk_reference_id = models.ForeignKey(reference, on_delete=models.CASCADE, to_field='other_reference_id', help_text=data_dict['fk_reference_id'])
+    
+    #amu_id = models.ManyToManyField(atc_vet, db_table='factor_amu_join', related_name='factors_amu', help_text=data_dict['amu_id'])
+    
+    factor_title = models.CharField(max_length=200, blank=True, null=True, help_text=data_dict['factor_title'])
+    factor_description = models.TextField(blank=True, null=True, help_text=data_dict['factor_description'])
+    
+    fk_host_01_id = models.ForeignKey(host_01, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_host_01_id'])
+    fk_host_02_id = models.ForeignKey(host_02, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_host_02_id'])
+    
+    fk_group_allocate_prod_stage_id = models.ForeignKey(production_stage, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_group_allocate_prod_stage_id'])
+    
+    group_exposed = models.CharField(max_length=200, blank=True, null=True, help_text=data_dict['group_exposed'])
+    group_referent = models.CharField(max_length=200, blank=True, null=True, help_text=data_dict['group_referent'])
+
+    DEP_total_obs = models.CharField(blank=True, null=True, max_length=500, help_text='')
+    DEP_exclude_iam = models.BooleanField(blank=True, null=True, help_text='')
+    DEP_exclude_iam_reason = models.CharField(blank=True, null=True, max_length=500, help_text='')
+    OLD_short_name = models.CharField(blank=True, null=True, max_length=200, help_text='')
+    OLD_resistance_id = models.IntegerField(blank=True, null=True, help_text='')
+    OLD_use_id = models.IntegerField(blank=True, null=True, help_text='')
+    microbe_02_old_id = models.IntegerField(blank=True, null=True, help_text='')
+    TEMP_use_id = models.IntegerField(blank=True, null=True, help_text='')
+    exclude_cedar = models.BooleanField(blank=True, null=True, help_text=data_dict['exclude_cedar'])
+    exclude_cedar_reason = models.CharField(blank=True, null=True, max_length=500, help_text=data_dict['exclude_cedar_reason'])
+    exclude_is_validation = models.BooleanField(blank=True, null=True, help_text=data_dict['exclude_is_validation'])
+    
+    factor_v0_id = models.IntegerField(blank=True, null=True, help_text=data_dict['factor_v0_id'])
+    v12_is_v1_import = models.BooleanField(blank=True, null=True, help_text=data_dict['v12_is_v1_import'])
+    v12_ID_factor_v1 = models.IntegerField(blank=True, null=True, help_text=data_dict['v12_ID_factor_v1'])
+    v12_ID_reference_v1 = models.IntegerField(blank=True, null=True, help_text=data_dict['v12_ID_reference_v1'])
+    v12_ID_reference_v2_initial = models.IntegerField(blank=True, null=True, help_text=data_dict['v12_ID_reference_v2_initial'])
+    v12_solo_extraction_2016 = models.BooleanField(blank=True, null=True, help_text=data_dict['v12_solo_extraction_2016'])
+    
+    def __str__(self):
+        return '%s_%s' % (self.factor_title, self.fk_reference_id)
 
 class factor_exclusion(models.Model):
     """
