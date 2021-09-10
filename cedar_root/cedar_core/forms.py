@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from cedar_core.models import factor, reference, location_join, reference_note, location_01, location_02, host_01, microbe_01, atc_vet
+from cedar_core.models import factor, reference, reference_join_location, reference_join_reference_note, location_01, location_02, host_01, microbe_01, atc_vet
 from django.utils.translation import gettext_lazy as _
 
 from crispy_forms.bootstrap import Tab, TabHolder, FormActions, PrependedText, AppendedText
@@ -15,11 +15,11 @@ from dal import autocomplete
 class ReferenceForm(ModelForm):
     class Meta:
         model = reference
-        fields = ['study_title','study_authors', 'publish_year', 'publish_id', 'publish_doi', 'publish_pmid', 
-                  'exclude_extraction','exclude_extraction_reason', 'study_design_id', 'study_design_detail',
-                  'study_sample_method', 'ast_method_id', 'ref_has_explicit_break', 'ref_has_mic_table']
+        fields = ['study_title','study_authors', 'publish_year', 'fk_publisher_id', 'publish_doi', 'publish_pmid', 
+                  'exclude_extraction','exclude_extraction_reason', 'fk_study_design_id', 'study_design_detail',
+                  'study_sample_method', 'fk_ast_method_id', 'ref_has_ast_explicit_break', 'ref_has_ast_mic_table']
         widgets = {
-            'publish_id': autocomplete.ModelSelect2(url='publish-id-autocomplete')
+            'fk_publisher_id': autocomplete.ModelSelect2(url='publish-id-autocomplete')
         }
         
         # Replaced by prepended text below
@@ -72,7 +72,7 @@ class ReferenceForm(ModelForm):
                                 css_class='col-md-6'
                             ),
                             Column(
-                                PrependedText('publish_id', 'Publisher', placeholder="Publisher Here"), #form-text styles oddly
+                                PrependedText('fk_publisher_id', 'Publisher', placeholder="Publisher Here"), #form-text styles oddly
                                 css_class='col-md-6'
                             ),
                             #HTML(
@@ -123,16 +123,16 @@ class ReferenceForm(ModelForm):
                     HTML(
                         """<br> <h6>Study Design:</h6> <hr>"""
                     ),          
-                    PrependedText('study_design_id', 'Study Design:'),
+                    PrependedText('fk_study_design_id', 'Study Design:'),
                     PrependedText('study_design_detail', 'Design Detail:'), 
                     PrependedText('study_sample_method', 'Sampling Method:'), 
                     HTML(
                         """<h6>AST:</h6> <hr>"""
                     ),
                     Row(  
-                        Column(PrependedText('ast_method_id', 'AST Method'), css_class='form-group col-md-4 mx-0'),
-                        Column(PrependedText('ref_has_explicit_break', 'Has Explicit Breakpoints?'), css_class='form-group col-md-4 mb-0'),
-                        Column(PrependedText('ref_has_mic_table', 'Has MIC Table?'), css_class='form-group col-md-4 mb-0'),
+                        Column(PrependedText('fk_ast_method_id', 'AST Method'), css_class='form-group col-md-4 mx-0'),
+                        Column(PrependedText('ref_has_ast_explicit_break', 'Has Explicit Breakpoints?'), css_class='form-group col-md-4 mb-0'),
+                        Column(PrependedText('ref_has_ast_mic_table', 'Has MIC Table?'), css_class='form-group col-md-4 mb-0'),
                         css_class='form-row'
                     ),
                 ),    
@@ -143,11 +143,11 @@ class ReferenceForm(ModelForm):
                 css_class='tab-pane fade',
             ),
         )
-        
+   
 class RefLocForm(ModelForm):
     class Meta:
-        model = location_join
-        fields = ['location_01_id', 'location_02_id', 'ref_loc_note']
+        model = reference_join_location
+        fields = ['fk_location_01_id', 'fk_location_02_r_join_loc_id', 'ref_loc_note']
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -171,13 +171,13 @@ class RefLocFormSetHelper(FormHelper):
         self.layout = Layout(
             Div(
                 Column(
-                    PrependedText('location_01_id', 'Country'),
+                    PrependedText('fk_location_01_id', 'Country'),
                     HTML("""<br>"""),
                     Column(
                         Column(
                             Row(
                                 Column(
-                                    PrependedText('location_02_id', 'Region:'),
+                                    PrependedText('fk_location_02_r_join_loc_id', 'Region:'),
                                     'ref_loc_note',
                                     css_class='form-group col-md-8 mx-0'
                                 ),
@@ -195,29 +195,12 @@ class RefLocFormSetHelper(FormHelper):
                 css_class='tab-pane fade show active',
             ),
         )
-RefLocFormSet = inlineformset_factory(reference, location_join, form=RefLocForm, extra=0, can_delete=True)
+RefLocFormSet = inlineformset_factory(reference, reference_join_location, form=RefLocForm, extra=0, can_delete=True)
 
-#BaseRefLocFormSet = modelformset_factory(location_join, form=RefLocForm, extra=0, can_delete=True)
-
-#class RefLocFormSet(BaseRefLocFormSet):
-    
-    #def __init__(self, *args, **kwargs):
-        #  create a location_01 attribute and take it out from kwargs
-        # so it doesn't messes up with the other formset kwargs
-        #self.businessprofile_id = kwargs.pop('businessprofile_id')
-        #super(RefLocFormSet, self).__init__(*args, **kwargs)
-        #for form in self.forms:
-            #form.empty_permitted = False
-
-    #def _construct_form(self, *args, **kwargs):
-        # inject location_01 in each form on the formset
-        #kwargs['businessprofile_id'] = self.businessprofile_id
-        #return super(RefLocFormSet, self)._construct_form(*args, **kwargs)
-           
 class RefNoteForm(ModelForm):
     class Meta:
-        model = reference_note
-        fields = ['note', 'user_id', 'resolved']
+        model = reference_join_reference_note
+        fields = ['note', 'fk_user_r_join_rn_id', 'resolved']
         #labels = {
             #'resolved': 'Resolved?',
         #}
@@ -243,7 +226,7 @@ class RefNoteFormSetHelper(FormHelper):
             Div(
                 Column(
                     Row(
-                        Column(PrependedText('user_id', 'User'), css_class='form-group col-md-8 mx-0'),
+                        Column(PrependedText('fk_user_r_join_rn_id', 'User'), css_class='form-group col-md-8 mx-0'),
                         Column(PrependedText('resolved', 'Resolved?', css_class='ml-2 mt-2'), css_class='form-group col-md-4 mx-0'),
                         css_class='form-row'
                     ),
@@ -258,7 +241,7 @@ class RefNoteFormSetHelper(FormHelper):
             ),
         )
         
-RefNoteFormSet = inlineformset_factory(reference, reference_note, form=RefNoteForm, extra=0, can_delete=True)
+RefNoteFormSet = inlineformset_factory(reference, reference_join_reference_note, form=RefNoteForm, extra=0, can_delete=True)
 
 class QuerySelectForm(forms.Form):
     
@@ -293,7 +276,7 @@ class QuerySelectForm(forms.Form):
         (4, 'Cattle'),
     ]
     
-    am_classes = forms.MultipleChoiceField(choices=AM_CLASS_CHOICES, widget=forms.CheckboxSelectMultiple, required=False)
+    am_classes = forms.MultipleChoiceField(choices=AM_CLASS_CHOICES, widget=forms.CheckboxSelectMultiple, required=False) # can change these to be querysets instead of manually defining options
     ams = forms.MultipleChoiceField(choices=AM_CHOICES, widget=forms.CheckboxSelectMultiple, required=False)
     microbes = forms.MultipleChoiceField(choices=MICROBE_CHOICES, widget=forms.CheckboxSelectMultiple, required=False)
     hosts = forms.MultipleChoiceField(choices=HOST_CHOICES)
@@ -329,44 +312,64 @@ class QuerySelectForm(forms.Form):
             ),
         )
 
-# Need to re-jig this form to pull from the resistance outcome table
-class FactorForm(ModelForm):
+# NEW: factor form with factor-level only fields
+"""class FactorForm(ModelForm):
     class Meta:
         model = factor
-        #No amu_id for now -- add in later
-        fields = ['resistance_id', 'factor_title', 'factor_description', 'place_in_text', 'host_01_id', 'host_02_id',
-                  'microbe_01_id', 'microbe_02_id', 'prod_stage_group_allocate_id', 'prod_stage_group_observe_id', 'group_exposed',
-                  'group_referent', 'moa_type_id', 'moa_unit_id', 'contable_a', 'contable_b', 'contable_c', 'contable_d',
+        fields = ['factor_title', 'factor_description', 'fk_host_01_id', 'fk_host_02_id', 
+                  'fk_group_allocate_prod_stage_id', 'group_exposed', 'group_referent']
+        help_texts = {}
+        for fieldname in ['fk_host_01_id', 'fk_host_02_id', 'group_exposed', 'group_referent']:
+            help_texts[fieldname] = None
+        labels = {
+            'factor_title': None,
+            'factor_description': None,
+            'fk_host_01_id': None,
+            'fk_host_02_id': None,
+            'fk_group_allocate_prod_stage_id': 'Allocated',
+        }
+"""
+
+# UPDATED: now pulls from res_outcome, res_outcome fields only
+# TO DO: make sure this isn't commented out once updated
+"""class FactorForm(ModelForm):
+    class Meta:
+        model = res_outcome
+        # TO DO: add factor_title, factor_description, host 01 and 02 ids, prod stage allocate, group exposed, group referent
+        fields = ['fk_resistance_id','place_in_text', 
+                  'fk_microbe_01_id', 'fk_microbe_02_id', 'fk_group_observe_prod_stage_id',
+                  'fk_moa_type_id', 'fk_moa_unit_id', 'contable_a', 'contable_b', 'contable_c', 'contable_d',
                   'prevtable_a', 'prevtable_b', 'prevtable_c', 'prevtable_d', 'table_n_exp', 'table_n_ref',
                   'odds_ratio', 'odds_ratio_lo', 'odds_ratio_up', 'odds_ratio_sig']
         help_texts = {}
         #help_texts['prod_stage_group_allocate'] = 'When the factor was applied'
-        for fieldname in ['contable_a', 'contable_b', 'contable_c', 'contable_d', 'resistance_id',
+        # TO DO: add host 02 id, host 01 id, group exp, group ref
+        for fieldname in ['contable_a', 'contable_b', 'contable_c', 'contable_d', 'fk_resistance_id',
                           'prevtable_a', 'prevtable_b', 'prevtable_c', 'prevtable_d',
-                          'table_n_exp', 'table_n_ref', 'microbe_02_id', 'host_02_id', 'host_01_id', 'group_exposed', 'group_referent',
-                          'odds_ratio', 'odds_ratio_lo', 'odds_ratio_up', 'microbe_01', 'odds_ratio_sig']:
+                          'table_n_exp', 'table_n_ref', 'fk_microbe_02_id',
+                          'odds_ratio', 'odds_ratio_lo', 'odds_ratio_up', 'fk_microbe_01_id', 'odds_ratio_sig']:
             if fieldname == 'odds_ratio_sig':
                 help_texts[fieldname] = 'The p-value associated with the odds ratio. If an odds ratio is provided, without a significance level, please report "NR" for "not reported".'
             else:
                 help_texts[fieldname] = None
         labels = {
-            'factor_title': None,
-            'factor_description': None,
-            'host_01_id': None,
-            'host_02_id': None,
-            'microbe_01_id': None,
-            'microbe_02_id': None,
+            #'factor_title': None,
+            #'factor_description': None,
+            #'host_01_id': None,
+            #'host_02_id': None,
+            'fk_microbe_01_id': None,
+            'fk_microbe_02_id': None,
             'place_in_text': None,
-            'moa_type_id': None,
-            'prod_stage_group_allocate_id': 'Allocated',
-            'prod_stage_group_observe_id': 'Observed',
-            'resistance_id': None,
+            'fk_moa_type_id': None,
+            #'prod_stage_group_allocate_id': 'Allocated',
+            'fk_group_observe_prod_stage_id': 'Observed',
+            'fk_resistance_id': None,
             'contable_a': None,
             'contable_b': None,
             'table_n_exp': None,
             'table_n_ref': None,
-            'group_exposed': None,
-            'group_referent': None,
+            #'group_exposed': None,
+            #'group_referent': None,
             'prevtable_a': None,
             'prevtable_b': None,
             'contable_c': None,
@@ -377,7 +380,7 @@ class FactorForm(ModelForm):
             'odds_ratio_lo': 'Lower CI',
             'odds_ratio_up': 'Upper CI',
             'odds_ratio_sig': 'Sig.',
-            'moa_unit_id': None,
+            'fk_moa_unit_id': None,
         }
 
     def __init__(self, *args, **kwargs):
@@ -385,57 +388,58 @@ class FactorForm(ModelForm):
         self.helper = FormHelper()
         self.helper.form_tag = False
         #self.helper.form_class = 'form_horizontal'
-        #to_exclude = ['odds_ratio_sig', 'odds_ratio', 'odds_ratio_lo', 'odds_ratio_up',
-                      #'contable_a', 'contable_b', 'table_n_exp']
-        to_exclude = ['resistance_id', 'factor_title', 'factor_description', 'place_in_text', 'host_01_id', 'host_02_id',
-                  'microbe_01_id', 'microbe_02_id', 'group_exposed', 'contable_a', 'contable_b',
-                  'group_referent', 'moa_type_id', 'moa_unit_id', 'contable_c', 'contable_d', 'table_n_exp',
-                  'prevtable_a', 'prevtable_b', 'prevtable_c', 'prevtable_d', 'table_n_ref', 'group_exposed', 'group_referent']
+        # TO DO: add back in factor_title, description, host 01 and 02, group exp, group ref
+        to_exclude = ['fk_resistance_id', 'place_in_text',
+                  'fk_microbe_01_id', 'fk_microbe_02_id', 'contable_a', 'contable_b',
+                  'fk_moa_type_id', 'fk_moa_unit_id', 'contable_c', 'contable_d', 'table_n_exp',
+                  'prevtable_a', 'prevtable_b', 'prevtable_c', 'prevtable_d', 'table_n_ref']
         for i in range(0,len(to_exclude)-1):
             self.fields[to_exclude[i]].label = False
         #self.helper.form_show_labels = False
         self.helper.layout = Layout(
             Div(
-                Div(
-                    PrependedText('factor_title', 'Title'),
-                    PrependedText('factor_description', 'Description'), 
-                    css_class='form-horizontal'
-                    #css_class='col-md-12'
-                ),
-                #HTML('''<hr>'''),
+                # TO DO: add back this div for the title & description
+                #Div(
+                    #PrependedText('factor_title', 'Title'),
+                    #PrependedText('factor_description', 'Description'), 
+                    #css_class='form-horizontal'
+                    ##css_class='col-md-12'
+                #),
+                ##HTML('''<hr>'''),
                 HTML(''' <br> '''),
                 Row(
-                    Column(
-                        Row(
-                            PrependedText('host_01_id', 'Host'),
-                            'host_02_id',
-                        ),
-                        css_class='col-md-5 ml-1',
-                    ),
+                    # TO DO: add back this column for host_01 and host_02
                     #Column(
-                        #HTML('''<div style="border-left: 2px solid white; height: 100px; margin-left: 80px;"></div>'''), #margin-left to offset automatic spacing of border style
-                        #css_class='col-md-2',
+                        #Row(
+                            #PrependedText('host_01_id', 'Host'),
+                            #'host_02_id',
+                        #),
+                        #css_class='col-md-5 ml-1',
                     #),
+                    ##Column(
+                        ##HTML('''<div style="border-left: 2px solid white; height: 100px; margin-left: 80px;"></div>'''), #margin-left to offset automatic spacing of border style
+                        ##css_class='col-md-2',
+                    ##),
                     Column(
                         Row(
-                            PrependedText('microbe_01_id', 'Microbe'), 
-                            'microbe_02_id',
+                            PrependedText('fk_microbe_01_id', 'Microbe'), 
+                            'fk_microbe_02_id',
                         ),
                         css_class='col-md-6',
                     ),
-                    #Column(
-                        #Row(
-                            #PrependedText('resistance', 'AMR'), 
-                            #css_class='col-md-3',
-                            #css_class='form-label-md-2'
-                        #),
-                    #),
-                    #css_class='form-group',
-                    #css_class='justify-content-center',
+                    ##Column(
+                        ##Row(
+                            ##PrependedText('resistance', 'AMR'), 
+                            ##css_class='col-md-3',
+                            ##css_class='form-label-md-2'
+                        ##),
+                    ##),
+                    ##css_class='form-group',
+                    ##css_class='justify-content-center',
                 ),
                 Row(
                     Column(
-                        PrependedText('resistance_id', 'AMR'), 
+                        PrependedText('fk_resistance_id', 'AMR'), 
                         css_class='col-md-10',
                         #css_class='form-label-md-2'
                     ),
@@ -444,12 +448,13 @@ class FactorForm(ModelForm):
                 HTML('''<br>'''),
                 Row(
                     HTML(''' <h5 class="col-2">Stage</h5> '''),
+                    # TO DO: add back this column for stage allocated
+                    #Column(
+                        #'prod_stage_group_allocate_id',
+                        #css_class='col-md-4',
+                    #),
                     Column(
-                        'prod_stage_group_allocate_id',
-                        css_class='col-md-4',
-                    ), 
-                    Column(
-                        'prod_stage_group_observe_id',
+                        'fk_group_observe_prod_stage_id',
                         css_class='col-md-4',
                     ),
                 ),
@@ -465,7 +470,7 @@ class FactorForm(ModelForm):
                 Row(
                     HTML(''' <h5 class="col-2">Result Unit</h5> '''),
                     Column(
-                        'moa_unit_id',
+                        'fk_moa_unit_id',
                         css_class='col-md-8',
                     ), 
                 ),
@@ -473,7 +478,7 @@ class FactorForm(ModelForm):
                 Row(
                     HTML(''' <h5 class="col-2">Grain/Type</h5> '''),
                     Column(
-                        Field('moa_type_id', css_id='moa_type_id'),
+                        Field('fk_moa_type_id', css_id='moa_type_id'),
                         css_class='col-md-8',
                     ), 
                 ),
@@ -498,7 +503,8 @@ class FactorForm(ModelForm):
                             <tr>
                                 <td rowspan="2"><h5>Exposed <br> Group</h5></td>
                                 <td rowspan="2">'''),
-                Field('group_exposed', style="height: 125px"),
+                # TO DO: put back group exposed by referencing the factor model
+                # Field('group_exposed', style="height: 125px"),
                 HTML('''        </td>
                                 <td>'''),
                 Field('contable_a', css_id='ct_a'),
@@ -521,7 +527,8 @@ class FactorForm(ModelForm):
                             <tr>
                                 <td rowspan="2"><h5>Referent <br> Group</h5></td>
                                 <td rowspan="2">'''),
-                Field('group_referent', style="height: 125px"),
+                # TO DO: put back group referent by referencing the factor model
+                # Field('group_referent', style="height: 125px"),
                 HTML('''        </td>
                                 <td>'''),
                 Field('contable_c', css_id='ct_c'),
@@ -575,11 +582,14 @@ class FactorForm(ModelForm):
                 ),
             ),
         )
-        
-class ConTableForm(ModelForm):
+"""
+
+# TO DO: UPDATE WITH ARCHITECTURE CHANGES
+"""class ConTableForm(ModelForm):
     class Meta:
-        model = factor
-        fields = ['resistance_id','group_exposed', 'group_referent', 'moa_type_id', 'contable_a', 'contable_b',
+        model = res_outcome
+        # TO DO: fix the deletion of group exp, group ref
+        fields = ['fk_resistance_id', 'fk_moa_type_id', 'contable_a', 'contable_b',
                   'contable_c', 'contable_d', 'table_n_exp', 'table_n_ref']
         help_texts = {}
         for fieldname in fields:
@@ -587,7 +597,7 @@ class ConTableForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['moa_type_id'].disabled = True
+        self.fields['fk_moa_type_id'].disabled = True
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.form_show_labels = False
@@ -607,7 +617,7 @@ class ConTableForm(ModelForm):
                                     <thead>
                                         <tr style="background-color: rgb(242, 247, 255);">
                                             <th style="border: none;">'''),
-            Field('resistance_id'),
+            Field('fk_resistance_id'),
             HTML('''                        </th>
                                         </tr>
                                     </thead>
@@ -623,7 +633,7 @@ class ConTableForm(ModelForm):
                                     <thead>
                                         <tr>
                                             <th>'''),
-            Field('moa_type_id', style="width: auto; height: auto;"),
+            Field('fk_moa_type_id', style="width: auto; height: auto;"),
             HTML('''                        </th>
                                             <th># AMR+</th>
                                             <th># AMR-</th>
@@ -672,12 +682,13 @@ class ConTableForm(ModelForm):
                     </table>
             '''),
         )
+"""
         
-        
-class PrevTableForm(ModelForm):
+# TO DO: UPDATE WITH ARCHITECTURE CHANGES   
+"""class PrevTableForm(ModelForm):
     class Meta:
-        model = factor
-        fields = ['resistance_id', 'moa_type_id', 'prevtable_a', 'prevtable_b',
+        model = res_outcome
+        fields = ['fk_resistance_id', 'fk_moa_type_id', 'prevtable_a', 'prevtable_b',
                   'prevtable_c', 'prevtable_d', 'table_n_exp', 'table_n_ref']
         help_texts = {}
         for fieldname in fields:
@@ -685,7 +696,7 @@ class PrevTableForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['moa_type_id'].disabled = True
+        self.fields['fk_moa_type_id'].disabled = True
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.form_show_labels = False
@@ -704,7 +715,7 @@ class PrevTableForm(ModelForm):
                                     <thead>
                                         <tr>
                                             <th style="border: none;">'''),
-            Field('resistance_id'),
+            Field('fk_resistance_id'),
             HTML('''                        </th>
                                         </tr>
                                     </thead>
@@ -715,7 +726,7 @@ class PrevTableForm(ModelForm):
                                     <thead>
                                         <tr>
                                             <th>'''),
-            Field('moa_type_id', style="width: auto; height: auto;"),
+            Field('fk_moa_type_id', style="width: auto; height: auto;"),
             HTML('''                        </th>
                                             <th>% AMR+</th>
                                             <th>% AMR-</th>
@@ -794,11 +805,13 @@ class PrevTableForm(ModelForm):
                     </script>
             '''),
         )
+"""
 
-class OddsTableForm(ModelForm):
+# TO DO: UPDATE WITH ARCHITECTURE CHANGES
+"""class OddsTableForm(ModelForm):
     class Meta:
-        model = factor
-        fields = ['resistance_id', 'moa_type_id',
+        model = res_outcome
+        fields = ['fk_resistance_id', 'fk_moa_type_id',
                   'odds_ratio', 'odds_ratio_lo', 'odds_ratio_up', 'odds_ratio_sig']
         help_texts = {}
         for fieldname in fields:
@@ -806,7 +819,7 @@ class OddsTableForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['moa_type_id'].disabled = True
+        self.fields['fk_moa_type_id'].disabled = True
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.form_show_labels = False
@@ -826,7 +839,7 @@ class OddsTableForm(ModelForm):
                                         <thead>
                                             <tr>
                                                 <th style="border: none;">'''),
-            Field('resistance_id'),
+            Field('fk_resistance_id'),
             HTML('''        
                                                 </th>
                                             </tr>
@@ -838,7 +851,7 @@ class OddsTableForm(ModelForm):
                                         <thead>
                                             <tr>
                                                 <th>'''),
-            Field('moa_type_id', style="width: auto; height: auto;"),
+            Field('fk_moa_type_id', style="width: auto; height: auto;"),
             HTML('''                            </th>
                                                 <th>Odds Ratio</th>
                                                 <th>Lower CI</th>
@@ -910,3 +923,4 @@ class OddsTableForm(ModelForm):
                     </script>
             '''),
         )
+"""

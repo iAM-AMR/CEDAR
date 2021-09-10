@@ -4,8 +4,10 @@ from django.urls import reverse_lazy
 
 from crispy_forms.utils import render_crispy_form
 
-from .models import reference, location_join, reference_note, factor, publisher
-from .forms import ReferenceForm, RefLocForm, RefNoteForm, FactorForm, RefLocFormSet, RefLocFormSetHelper, RefNoteFormSet, RefNoteFormSetHelper, ConTableForm, PrevTableForm, OddsTableForm, QuerySelectForm
+from .models import reference, reference_join_location, reference_join_reference_note, factor, publisher
+# TO DO: re-import FactorForm, ConTableForm, PrevTableForm, OddsTableForm
+
+from .forms import ReferenceForm, RefLocForm, RefLocFormSet, RefLocFormSetHelper, RefNoteForm, RefNoteFormSet, RefNoteFormSetHelper, QuerySelectForm
 
 from django.forms.models import model_to_dict, formset_factory, modelformset_factory
 from django.urls import reverse
@@ -138,9 +140,9 @@ def view_factors(request, ref_id):
     return render(request, 'cedar_core/view_factors.html', context)
 
 @login_required
+# TO DO: re-work the if POST statement to accommodate factor/res_outcome separation of models
 def export_query(request):
-    
-    if request.method == 'POST':
+    """if request.method == 'POST':
         
         print('ENTERED POST')
         query_form = QuerySelectForm(request.POST)
@@ -308,13 +310,15 @@ def export_query(request):
         else:
             print('QUERY FORM NOT VALID')
     else:
-        query_form = QuerySelectForm()
+        query_form = QuerySelectForm()"""
+    query_form = QuerySelectForm()
     
     context = {'query_form': query_form, 'page_title': 'Export a Query'}
     return render(request, 'cedar_core/export_query.html', context)
 
-@login_required
+"""@login_required
 @permission_required('cedar_core.add_factor')
+# TO DO: re-write this view as expanding a resistance outcome rather than a factor
 def expand_factor(request, ref_id, fac_id):
     
     ref = reference.objects.get(pk=ref_id)
@@ -323,7 +327,7 @@ def expand_factor(request, ref_id, fac_id):
     result_type = factor._meta.get_field('moa_type_id').value_from_object(main_fac)
     
     if request.method == 'POST':
-        # Create the appropriate factor data form depending on the result type. TO DO: account for Relative Risk
+        # Create the appropriate factor data form depending on the result type.
         if result_type == 4:
             exp_form = OddsTableForm(request.POST, initial=model_to_dict(main_fac), instance=main_fac)
         elif result_type == 2:
@@ -339,7 +343,7 @@ def expand_factor(request, ref_id, fac_id):
             output = exp_form.save()
 
     else:
-        # Create the appropriate factor data form depending on the result type. TO DO: account for Relative Risk
+        # Create the appropriate factor data form depending on the result type.
         if result_type == 4:
             exp_form = OddsTableForm(initial=model_to_dict(main_fac), instance=main_fac)
         elif result_type == 2:
@@ -354,6 +358,7 @@ def expand_factor(request, ref_id, fac_id):
         'page_title': 'View Factors',
     }
     return render(request, 'cedar_core/view_factors.html', context)
+"""
 
 @login_required
 @permission_required('cedar_core.add_factor')
@@ -399,14 +404,14 @@ def ref_detail(request, ref_id):
         ref_form = ReferenceForm(request.POST, initial=model_to_dict(ref), instance=ref)
         
         # Location tab
-        ref_locs = ref.location_join_set.all().order_by(F('location_01_id').asc(nulls_first=True))
+        ref_locs = ref.reference_join_location_set.all().order_by(F('fk_location_01_id').asc(nulls_first=True))
         loc_formset = RefLocFormSet(request.POST, instance=ref)
         loc_helper = RefLocFormSetHelper()
         #RefLocFormSet = modelformset_factory(location_join, form=RefLocForm, fields=('location_01', 'location_02', 'ref_loc_note'), extra=0)
         #loc_formset = RefLocFormSet(request.POST, queryset=ref_locs)
         
         # Notes and Issues tab
-        ref_notes = ref.reference_note_set.all()
+        ref_notes = ref.reference_join_reference_note_set.all()
         note_formset = RefNoteFormSet(request.POST, instance=ref)
         note_helper = RefNoteFormSetHelper()
         
@@ -447,33 +452,18 @@ def ref_detail(request, ref_id):
             for f in loc_formset:
                 print(f.cleaned_data)
             print(loc_formset.errors)
-        
-        # OLD: Save location form if valid
-        #if all(loc.is_valid() for loc in loc_forms):
-            #process the data in form.cleaned_data as required (i.e. save to database, etc.)
-            #...
-            
-            #for loc in loc_forms:
-                #loc.save(commit=False)
-                #print('SAVE LOCATION')
-                #print(loc.cleaned_data)
-
-            #redirect to a new URL:
-            #return HttpResponseRedirect(reverse('add_ref_success'))
-        #else:
-            #print('LOCATION FORM NOT VALID')
 
     # If request is a GET (or any other method) we'll create a blank form for each tab (pre-populated with fields that are not empty)
     else:
         ref_form = ReferenceForm(initial=model_to_dict(ref), instance=ref)
         
         # Location
-        ref_locs = ref.location_join_set.all().order_by(F('location_01_id').asc(nulls_first=True))
+        ref_locs = ref.reference_join_location_set.all().order_by(F('fk_location_01_id').asc(nulls_first=True))
         loc_formset = RefLocFormSet(instance=ref)
         loc_helper = RefLocFormSetHelper()
         
         # Notes
-        ref_notes = ref.reference_note_set.all()
+        ref_notes = ref.reference_join_reference_note_set.all()
         note_formset = RefNoteFormSet(instance=ref)
         note_helper = RefNoteFormSetHelper()
     
@@ -499,13 +489,13 @@ def add_ref_info(request, ref_id, form_type):
     # Create a new object linked to this reference
     #new_loc = location_join.objects.create(reference = ref)
     if form_type == 'loc':
-        new_obj = location_join(loc_ref_id = ref)
+        new_obj = reference_join_location(fk_reference_id = ref)
         redir_path = '/cedar_core/references/' + str(ref_id) + '/#loc-md'
     elif form_type == 'note':
-        new_obj = reference_note(note_ref_id = ref)
+        new_obj = reference_join_reference_note(note_ref_id = ref)
         redir_path = '/cedar_core/references/' + str(ref_id) + '/#notes-md'
     else:
-        new_obj = factor(factor_ref_id = ref)
+        new_obj = factor(fk_reference_id = ref)
         redir_path = '/cedar_core/references/' + str(ref_id) + '/factors'
     
     # Save new object and redirect
@@ -513,7 +503,8 @@ def add_ref_info(request, ref_id, form_type):
     
     return redirect(redir_path)
 
-@login_required
+# TO DO: rework this (right now, FactorForm is set up to pull from the res_outcome model only)
+"""@login_required
 @permission_required('cedar_core.add_factor')
 def factor_detail(request, ref_id, fac_id):
     
@@ -550,3 +541,4 @@ def factor_detail(request, ref_id, fac_id):
                'page_title': 'Edit Factor',
     }
     return render(request, 'cedar_core/factor_detail_new.html', context)
+"""

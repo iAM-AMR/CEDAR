@@ -60,38 +60,38 @@
 
       <table id="factorTable" class="table table-bordered table-sm" cellspacing="0" width="100%">
         <thead>
+          <!-- UPDATED: took out Microbe, AMR, Result Format columns (outcome level) -->
           <tr>
             <th>Title</th>
             <th>Description</th>
             <th>Host</th>
-            <th>Microbe</th>
+            <!-- <th>Microbe</th>
             <th>AMR</th>
-            <th>Result Format</th>
+            <th>Result Format</th> -->
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
           {% for factor in ref_factors %}
             <tr>
-              <td>
+              <!-- <td>
                 <a href="{% url 'expand_factor' ref_id=ref.id fac_id=factor.id %}" id="expFac">{{ factor.factor_title }}</a>
-              </td>
+              </td> -->
+              <td>{{ factor.factor_title }}</td>
               <td>{{ factor.factor_description }}</td>
-              <td>{{ factor.host_01_id }}</td>
-              <td>{{ factor.microbe_01_id }}</td>
+              <td>{{ factor.fk_host_01_id }}</td>
+              <!-- UPDATED: took out Microbe, AMR, Result Format columns (outcome level) -->
+              <!-- <td>{{ factor.microbe_01_id }}</td>
               <td>{{ factor.resistance_id }}</td>
-              <td>{{ factor.moa_type_id }}</td>
+              <td>{{ factor.moa_type_id }}</td> -->
               <td style='white-space: nowrap'>
-                <!-- <div class="container"> -->
-                  <!-- "/cedar_core/references/{{ ref.id }}/factors/{{ factor.id }}/edit" -->
-                  <a title="Edit All Factor Data" href="{% url 'factor_detail' ref_id=ref.id fac_id=factor.id %}" class="btn btn-info btn-xs" role="button">
+                  <!-- UPDATED: took edit factor data (factor_detail view), need to rework the form -->
+                  <!-- <a title="Edit All Factor Data" href="{% url 'factor_detail' ref_id=ref.id fac_id=factor.id %}" class="btn btn-info btn-xs" role="button">
                     <i class="fas fa-pencil-alt"></i>
-                  </a>
-                  <!-- "/cedar_core/references/{{ ref.id }}/factors/{{ factor.id }}/delete" -->
+                  </a> -->
                   <a title="Delete" href="{% url 'delete_factor' ref_id=ref.id fac_id=factor.id %}" class="btn btn-danger btn-xs" role="button">
                     <i class="far fa-trash-alt"></i>
-
-                <!-- </div> -->
+                  </a>
               </td>
             </tr>
           {% endfor %}
