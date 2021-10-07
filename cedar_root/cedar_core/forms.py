@@ -17,7 +17,7 @@ class ReferenceForm(ModelForm):
         model = reference
         fields = ['study_title','study_authors', 'publish_year', 'fk_publisher_id', 'publish_doi', 'publish_pmid', 
                   'exclude_extraction','exclude_extraction_reason', 'fk_study_design_id', 'study_design_detail',
-                  'study_sample_method', 'fk_ast_method_id', 'ref_has_ast_explicit_break', 'ref_has_ast_mic_table']
+                  'study_sample_method', 'fk_reference_ast_method_id', 'ref_has_ast_explicit_break', 'ref_has_ast_mic_table']
         widgets = {
             'fk_publisher_id': autocomplete.ModelSelect2(url='publish-id-autocomplete')
         }
@@ -130,7 +130,7 @@ class ReferenceForm(ModelForm):
                         """<h6>AST:</h6> <hr>"""
                     ),
                     Row(  
-                        Column(PrependedText('fk_ast_method_id', 'AST Method'), css_class='form-group col-md-4 mx-0'),
+                        Column(PrependedText('fk_reference_ast_method_id', 'AST Method'), css_class='form-group col-md-4 mx-0'),
                         Column(PrependedText('ref_has_ast_explicit_break', 'Has Explicit Breakpoints?'), css_class='form-group col-md-4 mb-0'),
                         Column(PrependedText('ref_has_ast_mic_table', 'Has MIC Table?'), css_class='form-group col-md-4 mb-0'),
                         css_class='form-row'
@@ -147,7 +147,7 @@ class ReferenceForm(ModelForm):
 class RefLocForm(ModelForm):
     class Meta:
         model = reference_join_location
-        fields = ['fk_location_01_id', 'fk_location_02_r_join_loc_id', 'ref_loc_note']
+        fields = ['fk_location_01_id', 'fk_reference_join_location_location_02_id', 'ref_loc_note']
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -177,7 +177,7 @@ class RefLocFormSetHelper(FormHelper):
                         Column(
                             Row(
                                 Column(
-                                    PrependedText('fk_location_02_r_join_loc_id', 'Region:'),
+                                    PrependedText('fk_reference_join_location_location_02_id', 'Region:'),
                                     'ref_loc_note',
                                     css_class='form-group col-md-8 mx-0'
                                 ),
@@ -200,7 +200,7 @@ RefLocFormSet = inlineformset_factory(reference, reference_join_location, form=R
 class RefNoteForm(ModelForm):
     class Meta:
         model = reference_join_reference_note
-        fields = ['note', 'fk_user_r_join_rn_id', 'resolved']
+        fields = ['note', 'fk_reference_join_note_user_id', 'resolved']
         #labels = {
             #'resolved': 'Resolved?',
         #}
@@ -226,7 +226,7 @@ class RefNoteFormSetHelper(FormHelper):
             Div(
                 Column(
                     Row(
-                        Column(PrependedText('fk_user_r_join_rn_id', 'User'), css_class='form-group col-md-8 mx-0'),
+                        Column(PrependedText('fk_reference_join_note_user_id', 'User'), css_class='form-group col-md-8 mx-0'),
                         Column(PrependedText('resolved', 'Resolved?', css_class='ml-2 mt-2'), css_class='form-group col-md-4 mx-0'),
                         css_class='form-row'
                     ),
