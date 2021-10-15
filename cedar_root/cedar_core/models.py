@@ -363,7 +363,7 @@ class reference(models.Model):
     DEP_ref_has_mdr = models.CharField(max_length=2, blank=True, null=True, choices=ANSWER_CHOICES, help_text='')
     OLD_status_ID = models.IntegerField(blank=True, null=True, help_text='')
     OLD_ref_has_wgs = models.CharField(max_length=2, blank=True, null=True, choices=ANSWER_CHOICES, help_text='')
-    OLD_pub_name = models.IntegerField(blank=True, null=True, help_text='')
+    #OLD_pub_name = models.IntegerField(blank=True, null=True, help_text='')
     dep_old_id = models.IntegerField(blank=True, null=True, help_text=data_dict['dep_old_id'])
     DEL_subdivision = models.CharField(blank=True, null=True, max_length=500, help_text=data_dict['DEL_subdivision'])
     DEL_OLD_countryID = models.IntegerField(blank=True, null=True, help_text='')
@@ -375,11 +375,12 @@ class reference(models.Model):
     
     t2_ast_breakID = models.IntegerField(blank=True, null=True, help_text=data_dict['t2_ast_breakID'])
     t2_ast_break = models.CharField(max_length=500, blank=True, null=True, help_text=data_dict['t2_ast_break'])
-    ref_has_ast_explicit_break = models.BooleanField(blank=True, null=True, help_text=data_dict['ref_has_ast_explicit_break'])
     DEL_journal_title = models.CharField(max_length=500, blank=True, null=True, help_text=data_dict['DEL_journal_title'])
     DEL_ID_study_location_01 = models.CharField(max_length=500, blank=True, null=True, help_text='')
     exclude_model = models.BooleanField(blank=True, null=True, help_text=data_dict['exclude_model'])
     exclude_model_reason = models.CharField(max_length=500, blank=True, null=True, help_text=data_dict['exclude_model_reason'])
+    
+    DEP_ID_study_location_01_num = models.IntegerField(blank=True, null=True, help_text='')
     
     cedar_extract_turkey_update = models.BooleanField(blank=True, null=True, help_text=data_dict['cedar_extract_turkey_update'])
     
@@ -387,7 +388,7 @@ class reference(models.Model):
         return '%s: %s' % (self.key_bibtex, self.study_title)
 
 class reference_join_location(models.Model):
-    fk_reference_join_location_reference_id = models.ForeignKey(reference, on_delete=models.CASCADE, blank=True, null=True, to_field='other_reference_id', help_text=data_dict['fk_reference_join_location_reference_id'])
+    fk_reference_join_location_reference_id = models.ForeignKey(reference, on_delete=models.CASCADE, blank=True, null=True, help_text=data_dict['fk_reference_join_location_reference_id'])
     fk_location_01_id = models.ForeignKey(location_01, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_location_01_id'])
     fk_reference_join_location_location_02_id = models.ForeignKey(location_02, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_reference_join_location_location_02_id'])
     ref_loc_note = models.TextField(blank=True, null=True, help_text=data_dict['ref_loc_note'])
@@ -458,7 +459,7 @@ class factor(models.Model):
     An individual factor associated with antimicrobial resistance.
     """
     ufid = models.PositiveIntegerField(blank=True, null=True, unique=True, help_text=data_dict['ufid']) # repeated in duplicate for each corresponding resistance outcome
-    fk_factor_reference_id = models.ForeignKey(reference, blank=True, null=True, on_delete=models.CASCADE, to_field='other_reference_id', help_text=data_dict['fk_factor_reference_id'])
+    fk_factor_reference_id = models.ForeignKey(reference, blank=True, null=True, on_delete=models.CASCADE, help_text=data_dict['fk_factor_reference_id'])
     
     factor_title = models.CharField(max_length=200, blank=True, null=True, help_text=data_dict['factor_title'])
     factor_description = models.TextField(blank=True, null=True, help_text=data_dict['factor_description'])
@@ -470,27 +471,11 @@ class factor(models.Model):
     
     group_exposed = models.CharField(max_length=200, blank=True, null=True, help_text=data_dict['group_exposed'])
     group_referent = models.CharField(max_length=200, blank=True, null=True, help_text=data_dict['group_referent'])
-
-    DEP_total_obs = models.CharField(blank=True, null=True, max_length=500, help_text='')
-    DEP_exclude_iam = models.BooleanField(blank=True, null=True, help_text='')
-    DEP_exclude_iam_reason = models.CharField(blank=True, null=True, max_length=500, help_text='')
-    OLD_short_name = models.CharField(blank=True, null=True, max_length=200, help_text='')
-    OLD_resistance_id = models.IntegerField(blank=True, null=True, help_text='')
-    OLD_use_id = models.IntegerField(blank=True, null=True, help_text='')
-    microbe_02_old_id = models.IntegerField(blank=True, null=True, help_text='')
-    TEMP_use_id = models.IntegerField(blank=True, null=True, help_text='')
+    
     exclude_cedar = models.BooleanField(blank=True, null=True, help_text=data_dict['exclude_cedar'])
     exclude_cedar_reason = models.CharField(blank=True, null=True, max_length=500, help_text=data_dict['exclude_cedar_reason'])
     
-    factor_v0_id = models.IntegerField(blank=True, null=True, help_text=data_dict['factor_v0_id'])
-    v12_is_v1_import = models.BooleanField(blank=True, null=True, help_text=data_dict['v12_is_v1_import'])
-    v12_ID_factor_v1 = models.IntegerField(blank=True, null=True, help_text=data_dict['v12_ID_factor_v1'])
-    v12_ID_reference_v1 = models.IntegerField(blank=True, null=True, help_text=data_dict['v12_ID_reference_v1'])
-    v12_ID_reference_v2_initial = models.IntegerField(blank=True, null=True, help_text=data_dict['v12_ID_reference_v2_initial'])
-    v12_solo_extraction_2016 = models.BooleanField(blank=True, null=True, help_text=data_dict['v12_solo_extraction_2016'])
-    
     fk_extract_factor_user_id = models.ForeignKey(legacy_user, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_extract_factor_user_id'])
-    extraction_num_factor = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['extraction_num_factor'])
     extract_date_factor = models.DateField(blank=True, null=True, help_text=data_dict['extract_date_factor'])
     extract_version_factor = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['extract_version_factor'])
     
@@ -592,9 +577,24 @@ class res_outcome(models.Model):
     fk_figure_extract_method_id = models.ForeignKey(figure_extract_method, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_figure_extract_method_id'])
     
     fk_extract_res_outcome_user_id = models.ForeignKey(legacy_user, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_extract_res_outcome_user_id'])
-    extraction_num_ro = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['extraction_num_ro'])
     extract_date_ro = models.DateField(blank=True, null=True, help_text=data_dict['extract_date_ro'])
     extract_version_ro = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['extract_version_ro'])
+    
+    DEP_total_obs = models.CharField(blank=True, null=True, max_length=500, help_text='')
+    DEP_exclude_iam = models.BooleanField(blank=True, null=True, help_text='')
+    DEP_exclude_iam_reason = models.CharField(blank=True, null=True, max_length=500, help_text='')
+    OLD_short_name = models.CharField(blank=True, null=True, max_length=200, help_text='')
+    OLD_resistance_id = models.IntegerField(blank=True, null=True, help_text='')
+    OLD_use_id = models.IntegerField(blank=True, null=True, help_text='')
+    microbe_02_old_id = models.IntegerField(blank=True, null=True, help_text='')
+    TEMP_use_id = models.IntegerField(blank=True, null=True, help_text='')
+    
+    factor_v0_id = models.IntegerField(blank=True, null=True, help_text=data_dict['factor_v0_id'])
+    v12_is_v1_import = models.BooleanField(blank=True, null=True, help_text=data_dict['v12_is_v1_import'])
+    v12_ID_factor_v1 = models.IntegerField(blank=True, null=True, help_text=data_dict['v12_ID_factor_v1'])
+    v12_ID_reference_v1 = models.IntegerField(blank=True, null=True, help_text=data_dict['v12_ID_reference_v1'])
+    v12_ID_reference_v2_initial = models.IntegerField(blank=True, null=True, help_text=data_dict['v12_ID_reference_v2_initial'])
+    v12_solo_extraction_2016 = models.BooleanField(blank=True, null=True, help_text=data_dict['v12_solo_extraction_2016'])
     
     def __str__(self):
         return '%s_%s_%s' % (self.ufid, self.factor_urid, self.fk_resistance_atc_vet_id)
@@ -635,7 +635,7 @@ class factor_join_res_outcome(models.Model):
         #return '%s_%s_%s_%d' % (self.reference, self.user, self.edit_date, self.other_reference_edit_id)
 
 class reference_join_reference_history(models.Model):
-    fk_reference_join_history_reference_id = models.ForeignKey(reference, on_delete=models.CASCADE, blank=True, null=True, to_field='other_reference_id', help_text='')
+    fk_reference_join_history_reference_id = models.ForeignKey(reference, on_delete=models.CASCADE, blank=True, null=True, help_text='')
     fk_reference_history_action_id = models.ForeignKey(reference_history_action, on_delete=models.SET_NULL, blank=True, null=True, help_text='')
     fk_user_r_join_rh_id = models.ForeignKey(legacy_user, on_delete=models.SET_NULL, blank=True, null=True, help_text='')
     action_date = models.DateField(blank=True, null=True, help_text='') #TO DO: timestamp i.e. yyyy-mm-dd 0:00
@@ -645,7 +645,7 @@ class reference_join_reference_note(models.Model): #former matrix table m_refere
     """
     A note written for a particular reference.
     """
-    fk_reference_join_note_reference_id = models.ForeignKey(reference, on_delete=models.CASCADE, blank=True, null=True, to_field='other_reference_id', help_text=data_dict['fk_reference_join_note_reference_id'])
+    fk_reference_join_note_reference_id = models.ForeignKey(reference, on_delete=models.CASCADE, blank=True, null=True, help_text=data_dict['fk_reference_join_note_reference_id'])
     note = models.TextField(blank=True, null=True, help_text=data_dict['note'])
     fk_reference_join_note_user_id = models.ForeignKey(legacy_user, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_reference_join_note_user_id'])
     resolved = models.BooleanField(default=False, help_text=data_dict['resolved'])
