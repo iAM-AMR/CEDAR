@@ -37,16 +37,16 @@ i {
   height: 10px;
 }
 
-#expFac {
+/* #expFac {
   color: blue;
   text-decoration: underline;
-}
+}*/
 
-#factorTable tbody tr:nth-child(odd) {
+#factorTable, #resistanceOutcomeTable tbody tr:nth-child(odd) {
   background-color: rgb(242, 247, 255);
 }
 
-#facTable, #facData, #amrData tbody {
+#facTable, #facData, #amrData, #roTable tbody {
   background-color: rgb(242, 247, 255);
 }
 

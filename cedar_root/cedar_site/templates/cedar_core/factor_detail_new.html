@@ -2,7 +2,14 @@
 
 {% load crispy_forms_tags %}
 
+{% load static %}
+
 {% load widget_tweaks %}
+
+{% block head_css %}
+  <!-- Your custom styles (optional) -->
+  <link rel="stylesheet" href="{% static 'cedar_core/fac_detail_style.css' %}">
+{% endblock head_css %}
 
 {% block content %}
     <div class="container">
@@ -10,6 +17,11 @@
             <div class="col-12">
                 <h1 class="mt-2">Edit Factor</h1>
                 <hr style="border-width:5px;">
+                <br>
+                <button type="button" id="openro">
+                    <a href="{% url 'view_resistance_outcomes' ref_id=ref.id fac_id=fac.id %}">Open Associations with Resistance List</a>
+                </button>
+                <br>
                 <br>
                 <form action="" method="post" id="facviewform" role="form">
                     {% csrf_token %}

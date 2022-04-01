@@ -37,7 +37,7 @@
           <tbody>
             <tr>
               <td style="text-align: center; height: 50px; border: none;">
-                <h4>Click on a factor's title to view or edit its core data here</h4>
+                <h4>The following are the factors that have been extracted for this reference</h4>
               </td>
               <td></td>
             </tr>
@@ -52,7 +52,7 @@
 
       <!-- Add new factors button -->
 
-      <a title="New Factor" href="{% url 'add_ref_info' ref_id=ref.id form_type='fac' %}" class="btn btn-success btn-lg" role="button">
+      <a title="New Factor" href="{% url 'add_new_obj' obj_id=ref.id form_type='fac' %}" class="btn btn-success btn-lg" role="button">
         <i class="fas fa-plus-square"></i>
       </a>
 
@@ -60,35 +60,26 @@
 
       <table id="factorTable" class="table table-bordered table-sm" cellspacing="0" width="100%">
         <thead>
-          <!-- UPDATED: took out Microbe, AMR, Result Format columns (outcome level) -->
           <tr>
             <th>Title</th>
             <th>Description</th>
             <th>Host</th>
-            <!-- <th>Microbe</th>
-            <th>AMR</th>
-            <th>Result Format</th> -->
+            <th>Host Type</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
           {% for factor in ref_factors %}
             <tr>
-              <!-- <td>
-                <a href="{% url 'expand_factor' ref_id=ref.id fac_id=factor.id %}" id="expFac">{{ factor.factor_title }}</a>
-              </td> -->
               <td>{{ factor.factor_title }}</td>
               <td>{{ factor.factor_description }}</td>
-              <td>{{ factor.fk_host_01_id }}</td>
-              <!-- UPDATED: took out Microbe, AMR, Result Format columns (outcome level) -->
-              <!-- <td>{{ factor.microbe_01_id }}</td>
-              <td>{{ factor.resistance_id }}</td>
-              <td>{{ factor.moa_type_id }}</td> -->
+              <td>{{ factor.fk_factor_host_01_id }}</td>
+              <td>{{ factor.fk_host_02_id }}</td>
+
               <td style='white-space: nowrap'>
-                  <!-- UPDATED: took edit factor data (factor_detail view), need to rework the form -->
-                  <!-- <a title="Edit All Factor Data" href="{% url 'factor_detail' ref_id=ref.id fac_id=factor.id %}" class="btn btn-info btn-xs" role="button">
+                  <a title="Edit Factor Data" href="{% url 'factor_detail' ref_id=ref.id fac_id=factor.id %}" class="btn btn-info btn-xs" role="button">
                     <i class="fas fa-pencil-alt"></i>
-                  </a> -->
+                  </a>
                   <a title="Delete" href="{% url 'delete_factor' ref_id=ref.id fac_id=factor.id %}" class="btn btn-danger btn-xs" role="button">
                     <i class="far fa-trash-alt"></i>
                   </a>
@@ -122,26 +113,6 @@
         "searching": false,
         "info": false,
       });
-    });
-  </script>
-
-  <script>
-    $(document).ready(function () {
-      $('#facData').DataTable({
-        "paging": false,
-        "searching": false,
-        "info": false,
-      });
-    });
-  </script>
-
-  <script>
-    $(document).ready(function () {
-        $('#amrData').DataTable({
-            "paging": false,
-            "searching": false,
-            "info": false,
-        });
     });
   </script>
 

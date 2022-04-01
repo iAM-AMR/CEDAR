@@ -1,0 +1,32 @@
+
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12">
+
+        <h1 class="mt-2">Query Papers Based on Host and Microbe</h1>
+        <hr style="border-width:5px;">
+        <br>
+        <br>
+
+        {% if message_text %}
+          <script>
+            alert('{{ message_text }}');
+          </script>
+        {% endif %}
+
+        <form action="" method="post">
+          {% csrf_token %}
+          {% crispy query_form %}
+        </form>
+        
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
