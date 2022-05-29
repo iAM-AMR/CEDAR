@@ -6,7 +6,7 @@ import sys
 
 def main():
     
-    settings_module = "cedar_site.production" if 'WEBSITE_HOSTNAME' in os.environ else 'cedar_site.settings'
+    settings_module = "cedar_site.settings_production" if 'WEBSITE_HOSTNAME' in os.environ else 'cedar_site.settings_stage'
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings_module)
     
     try:
