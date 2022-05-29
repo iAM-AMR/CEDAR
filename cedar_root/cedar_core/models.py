@@ -95,33 +95,36 @@ class location_01(models.Model): #TO DO: remaining help text
     """
     A location (a country).
     """
-    country_area = models.TextField(unique=True, help_text=data_dict['country_area'])
-    iso_country_code_3 = models.CharField(max_length=10, blank=True, null=True, help_text=data_dict['iso_country_code_3'])
-    iso_country_code_2 = models.CharField(max_length=10, blank=True, null=True, unique=True, help_text=data_dict['iso_country_code_2'])
-    iso_country_code_1 = models.IntegerField(blank=True, null=True, help_text=data_dict['iso_country_code_1'])
-    m49_code = models.IntegerField(blank=True, null=True, help_text=data_dict['m49_code'])
-    code_global = models.IntegerField(blank=True, null=True, help_text=data_dict['code_global'])
-    name_global = models.TextField(blank=True, null=True, help_text=data_dict['name_global'])
-    code_region = models.IntegerField(blank=True, null=True, help_text=data_dict['code_region'])
-    name_region = models.CharField(max_length=100, blank=True, null=True, help_text=data_dict['name_region'])
-    code_subregion = models.IntegerField(blank=True, null=True, help_text=data_dict['code_subregion'])
-    name_subregion = models.CharField(max_length=100, blank=True, null=True, help_text=data_dict['name_subregion'])
-    code_intermediate_subregion = models.IntegerField(blank=True, null=True, help_text=data_dict['code_intermediate_subregion'])
-    name_intermediate_subregion = models.CharField(max_length=100, blank=True, null=True, help_text=data_dict['name_intermediate_subregion'])
-    bin_least_developed_countries = models.BooleanField(blank=True, null=True, help_text=data_dict['bin_least_developed_countries'])
-    bin_land_lock_least_developed_countries = models.BooleanField(blank=True, null=True, help_text=data_dict['bin_land_lock_least_developed_countries'])
-    bin_small_island_developing_states = models.BooleanField(blank=True, null=True, help_text=data_dict['bin_small_island_developing_states'])
-    bin_developing = models.BooleanField(blank=True, null=True, help_text=data_dict['bin_developing'])
+    country            = models.CharField(max_length=100,  blank=False, null=False, unique=True,  help_text=data_dict['country_area'], default="N/A")
+    iso_3166_1_alpha3  = models.CharField(max_length=10,   blank=True,  null=True,  unique=True,  help_text=data_dict['iso_country_code_3'])
+    iso_3166_1_alpha2  = models.CharField(max_length=10,   blank=True,  null=True,  unique=True,  help_text=data_dict['iso_country_code_2'])
+    iso_3166_1_numeric = models.IntegerField(              blank=True,  null=True,  unique=True,  help_text=data_dict['iso_country_code_1'])
+    m49                = models.IntegerField(              blank=True,  null=True,  unique=True,  help_text=data_dict['m49_code'])
+    
+    loc_subregion_name     = models.CharField(max_length=100,   blank=True,  null=True,  help_text=data_dict['name_subregion'])
+    loc_subregion_code     = models.IntegerField(               blank=True,  null=True,  help_text=data_dict['code_subregion'])
+
+    loc_intermediate_subregion_name = models.CharField(max_length=100,   blank=True,  null=True,  help_text=data_dict['name_intermediate_subregion'])
+    loc_intermediate_subregion_code = models.IntegerField(               blank=True,  null=True,  help_text=data_dict['code_intermediate_subregion'])
+  
+    loc_region_name        = models.CharField(max_length=100,   blank=True,  null=True,  help_text=data_dict['name_region'])
+    loc_region_code        = models.IntegerField(               blank=True,  null=True,  help_text=data_dict['code_region'])
+
+    is_least_developed_countries           = models.BooleanField(blank=True, null=True, help_text=data_dict['bin_least_developed_countries'])
+    is_land_lock_least_developed_countries = models.BooleanField(blank=True, null=True, help_text=data_dict['bin_land_lock_least_developed_countries'])
+    is_small_island_developing_states      = models.BooleanField(blank=True, null=True, help_text=data_dict['bin_small_island_developing_states'])
+    is_developing                          = models.BooleanField(blank=True, null=True, help_text=data_dict['bin_developing'])
     
     def __str__(self):
-        return self.country_area
+        return self.country
 
 class location_02(models.Model):
     """
     A location (a subdivision below a country, i.e. a state, province, parish, etc.)
     """
-    fk_location_02_location_01_id = models.ForeignKey(location_01, on_delete=models.SET_NULL, blank=True, null=True, to_field='iso_country_code_2', help_text=data_dict['fk_location_02_location_01_id'])
-    subdivision_code = models.CharField(max_length=3, help_text=data_dict['subdivision_code'])
+    
+    fk_location_02_location_01_id = models.ForeignKey(location_01, on_delete=models.DO_NOTHING, blank=True, null=True, to_field='iso_3166_1_alpha2')
+    subdivision_code = models.CharField(max_length=3)
     subdivision = models.CharField(max_length=100, help_text=data_dict['subdivision'])
     subdivision_type = models.CharField(max_length=200, blank=True, null=True, help_text=data_dict['subdivision_type'])
     cipars_region_national = models.BooleanField(help_text=data_dict['cipars_region_national'])
@@ -131,6 +134,37 @@ class location_02(models.Model):
     
     def __str__(self):
         return '%s (%s)' % (self.subdivision, self.subdivision_type)
+
+
+class location_sub(models.Model):
+
+    iso_3166_1_alpha2 = models.ForeignKey(to=location_01, 
+                                          on_delete=models.DO_NOTHING, 
+                                          blank=False, 
+                                          null=False, 
+                                          to_field='iso_3166_1_alpha2', 
+                                          db_column='iso_3166_1_alpha2',
+                                          help_text=data_dict['iso_3166_1_alpha2'])
+
+    subdivision_type = models.CharField(max_length=100, 
+                                        blank=True, 
+                                        null=True, 
+                                        help_text=data_dict['subdivision_type'])
+
+    subdivision      = models.CharField(max_length=100, 
+                                        help_text=data_dict['subdivision'])
+
+    iso_3166_2       = models.CharField(max_length=3, 
+                                        help_text=data_dict['iso_3166_2'])
+
+    cipars_region_national  = models.BooleanField(help_text=data_dict['cipars_region_national'])
+    cipars_region_atlantic  = models.BooleanField(help_text=data_dict['cipars_region_atlantic'])
+    cipars_region_maritimes = models.BooleanField(help_text=data_dict['cipars_region_maritimes'])
+    cipars_region_prairies  = models.BooleanField(help_text=data_dict['cipars_region_prairies'])
+    
+    def __str__(self):
+        return '%s (%s)' % (self.subdivision, self.subdivision_type)
+
 
 class microbe_01(models.Model):
     """
@@ -386,11 +420,34 @@ class reference(models.Model):
         return '%s: %s' % (self.key_bibtex, self.study_title)
 
 class reference_join_location(models.Model):
-    fk_reference_join_location_reference_id = models.ForeignKey(reference, on_delete=models.CASCADE, blank=True, null=True, help_text=data_dict['fk_reference_join_location_reference_id'])
-    fk_location_01_id = models.ForeignKey(location_01, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_location_01_id'])
-    fk_reference_join_location_location_02_id = models.ForeignKey(location_02, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_reference_join_location_location_02_id'])
-    ref_loc_note = models.TextField(blank=True, null=True, help_text=data_dict['ref_loc_note'])
     
+    reference_id         = models.ForeignKey(to=reference,
+                                             db_column='reference_id', 
+                                             on_delete=models.CASCADE, 
+                                             blank=True, 
+                                             null=True, 
+                                             help_text=data_dict['fk_reference_join_location_reference_id'])
+    
+    location_main_id     = models.ForeignKey(to=location_01, 
+                                             db_column='location_main_id', 
+                                             on_delete=models.SET_NULL, 
+                                             blank=True, 
+                                             null=True, 
+                                             help_text=data_dict['fk_location_01_id'])
+
+    location_sub_id      = models.ForeignKey(to=location_sub, 
+                                             db_column='location_sub_id', 
+                                             on_delete=models.SET_NULL, 
+                                             blank=True, 
+                                             null=True, 
+                                             help_text=data_dict['fk_reference_join_location_location_02_id'])
+    
+
+    location_detail      = models.TextField(blank=True, null=True, help_text=data_dict['ref_loc_note'])
+    
+    location_alpha3_dep  = models.TextField(blank=True, null=True)
+
+
     #def __str__(self):
         #return '%s:%s (%s)' % (self.location_01, self.location_02, self.reference)
 

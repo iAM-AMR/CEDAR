@@ -153,7 +153,7 @@ class ReferenceForm(ModelForm):
 class RefLocForm(ModelForm):
     class Meta:
         model = reference_join_location
-        fields = ['fk_location_01_id', 'fk_reference_join_location_location_02_id', 'ref_loc_note']
+        fields = ['location_main_id', 'location_sub_id', 'location_detail']
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -173,14 +173,14 @@ class RefLocFormSetHelper(FormHelper):
         self.layout = Layout(
             Div(
                 Column(
-                    PrependedText('fk_location_01_id', 'Country'),
+                    PrependedText('location_main_id', 'Country'),
                     HTML("""<br>"""),
                     Column(
                         Column(
                             Row(
                                 Column(
-                                    PrependedText('fk_reference_join_location_location_02_id', 'Region:'),
-                                    'ref_loc_note',
+                                    PrependedText('location_sub_id', 'Region:'),
+                                    'location_detail',
                                     css_class='form-group col-md-8 mx-0'
                                 ),
                                 #Column('note', css_class='form-group col-md-8 mx-0'),

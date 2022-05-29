@@ -540,7 +540,7 @@ def ref_detail(request, ref_id):
         ref_form = ReferenceForm(request.POST, initial=model_to_dict(ref), instance=ref)
         
         # Location tab
-        ref_locs = ref.reference_join_location_set.all().order_by(F('fk_location_01_id').asc(nulls_first=True))
+        ref_locs = ref.reference_join_location_set.all().order_by(F('location_main_id').asc(nulls_first=True))
         loc_formset = RefLocFormSet(request.POST, instance=ref)
         loc_helper = RefLocFormSetHelper()
         
@@ -590,7 +590,7 @@ def ref_detail(request, ref_id):
         ref_form = ReferenceForm(initial=model_to_dict(ref), instance=ref)
         
         # Location
-        ref_locs = ref.reference_join_location_set.all().order_by(F('fk_location_01_id').asc(nulls_first=True))
+        ref_locs = ref.reference_join_location_set.all().order_by(F('location_main_id').asc(nulls_first=True))
         loc_formset = RefLocFormSet(instance=ref)
         loc_helper = RefLocFormSetHelper()
         
