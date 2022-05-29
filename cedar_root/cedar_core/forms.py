@@ -20,16 +20,16 @@ from dal import autocomplete
 class ReferenceForm(ModelForm):
     class Meta:
         model = reference
-        fields = ['study_title','study_authors', 'publish_year', 'fk_publisher_id', 'publish_doi', 'publish_pmid', 
+        fields = ['ref_title','ref_author', 'publish_year', 'publisher', 'publish_doi', 'publish_pmid', 
                   'exclude_extraction','exclude_extraction_reason', 'fk_study_design_id', 'study_design_detail',
                   'study_sample_method', 'fk_reference_ast_method_id', 'ref_has_ast_explicit_break', 'ref_has_ast_mic_table']
         widgets = {
-            'fk_publisher_id': autocomplete.ModelSelect2(url='publish-id-autocomplete')
+            'publisher': autocomplete.ModelSelect2(url='publish-id-autocomplete')
         }
         
         # Replaced by prepended text below
         #labels = {
-            #'study_title': 'Title',
+            #'ref_title': 'Title',
             #'name_author': 'Author Name(s)',
             #'publication_year': 'Publication Year',
             #'ident_doi': 'DOI:',
@@ -68,8 +68,8 @@ class ReferenceForm(ModelForm):
                         HTML(
                             """<h6>Bibliographic Information:</h6> <hr>"""
                         ),
-                        PrependedText('study_title', 'Title', placeholder="Study Title Here"), 
-                        PrependedText('study_authors', 'Author Name(s)', placeholder="Author Name(s) Here"),
+                        PrependedText('ref_title', 'Title', placeholder="Study Title Here"), 
+                        PrependedText('ref_author', 'Author Name(s)', placeholder="Author Name(s) Here"),
                     ),            
                     Div(
                         Row(
@@ -78,7 +78,7 @@ class ReferenceForm(ModelForm):
                                 css_class='col-md-6'
                             ),
                             Column(
-                                PrependedText('fk_publisher_id', 'Publisher', placeholder="Publisher Here"), #form-text styles oddly
+                                PrependedText('publisher', 'Publisher', placeholder="Publisher Here"), #form-text styles oddly
                                 css_class='col-md-6'
                             ),
                             #HTML(

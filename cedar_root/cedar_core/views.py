@@ -222,7 +222,7 @@ def topic_tab_query(request):
             if len(export_refs) == 0:
                 return render(request, 'cedar_core/query_topic_tab.html', {'query_form': TopicTabForm(), 'page_title': 'Query Papers', 'message_text': 'No factors exist that meet the chosen criteria. Please try broadening your query'})
 
-            #query_header = ['id', 'key_bibtex', 'study_authors', 'study_title', 'exclude_extraction', 'exclude_extraction_reason', 'fk_cedar_exclude_id']
+            #query_header = ['id', 'key_bibtex', 'ref_author', 'ref_title', 'exclude_extraction', 'exclude_extraction_reason', 'fk_cedar_exclude_id']
             
             ref_fields_dict = model_to_dict(export_refs[0])
             query_header = list(ref_fields_dict.keys())
@@ -363,7 +363,7 @@ def query_timber(request):
             
             # Prepare all required fields for a .csv file export (raw timber)
             
-            timber_header = ['RWID', 'ident_doi', 'ident_pmid', 'name_bibtex', 'study_title',
+            timber_header = ['RWID', 'ident_doi', 'ident_pmid', 'name_bibtex', 'ref_title',
                             'factor_title', 'factor_description', 'host_01', 'host_02', 
                             'group_exposed', 'group_referent', 'stage_allocate',
                             'ID_factor', 'association_with_resistance_id', 'AMR', 'gene', 'microbe_01', 'microbe_02',
