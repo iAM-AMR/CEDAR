@@ -557,6 +557,8 @@ class reference_join_location(models.Model):
                                              blank=True, 
                                              null=True, 
                                              help_text=data_dict['fk_reference_join_location_location_02_id'])
+
+    hist_join_id         = models.IntegerField(blank=True, null=True)
     
 
     location_detail      = models.TextField(blank=True, null=True, help_text=data_dict['ref_loc_note'])
@@ -566,7 +568,6 @@ class reference_join_location(models.Model):
 
     #def __str__(self):
         #return '%s:%s (%s)' % (self.location_01, self.location_02, self.reference)
-
 
 
 
