@@ -300,9 +300,9 @@ def query_timber(request):
                 
                 # If cattle, need to select multiple hosts (cattle, dairy cattle, and beef cattle)
                 if host_name == '4':
-                    query_string += 'filter(fk_factor_id__fk_factor_host_01_id__host_name__contains="Cattle")'
+                    query_string += '.filter(fk_factor_id__fk_factor_host_01_id__host_name__contains="Cattle")'
                 else:
-                    query_string += 'filter(fk_factor_id__fk_factor_host_01_id=host_name)'
+                    query_string += '.filter(fk_factor_id__fk_factor_host_01_id=host_name)'
 
                 # Filter by host and microbe
                 
@@ -418,14 +418,23 @@ def query_timber(request):
                 # Replace ids with values for foreign key fields in the raw data
                 raw_ro_dict['fk_factor_id'] = ro.fk_factor_id
                 raw_ro_dict['fk_resistance_atc_vet_id'] = ro.fk_resistance_atc_vet_id.levelname_5
-                raw_ro_dict['fk_genetic_element_id'] = ro.fk_genetic_element_id.element_name
+                
+                try:
+                    raw_ro_dict['fk_genetic_element_id'] = ro.fk_genetic_element_id.element_name
+                except AttributeError:
+                    continue
+
                 raw_ro_dict['fk_microbe_01_id'] = ro.fk_microbe_01_id.microbe_name
                 raw_ro_dict['fk_res_outcome_microbe_02_id'] = ro.fk_res_outcome_microbe_02_id.microbe_subtype_name
                 raw_ro_dict['fk_group_observe_production_stage_id'] = ro.fk_group_observe_production_stage_id.stage
                 raw_ro_dict['fk_moa_type_id'] = ro.fk_moa_type_id.res_format
                 raw_ro_dict['fk_moa_unit_id'] = ro.fk_moa_unit_id.res_unit
-                raw_ro_dict['fk_figure_extract_method_id'] = ro.fk_figure_extract_method_id.method_name
                 
+                try:
+                    raw_ro_dict['fk_figure_extract_method_id'] = ro.fk_figure_extract_method_id.method_name
+                except AttributeError:
+                    continue
+
                 # Populate the query_dict with raw data
                 for field in timber_header:
                     

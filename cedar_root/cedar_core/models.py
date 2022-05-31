@@ -244,6 +244,8 @@ class moa_type(models.Model): # ------------------------------------------------
     """
     A format of extracted measure of association data.
     """
+    # TODO: Change this name. This sounds like "resistance format", and it's actually "result format".
+
     res_format = models.CharField(max_length=50, unique=True, help_text=data_dict['res_format'])
     
     def __str__(self):
@@ -497,16 +499,14 @@ class reference(models.Model): # -----------------------------------------------
     cedar_extract_turkey_update = models.BooleanField(blank=True, null=True, help_text=data_dict['cedar_extract_turkey_update'])
 
     ref_has_ast_explicit_break = models.CharField(max_length=2, blank=True, null=True, choices=ANSWER_CHOICES, help_text=data_dict['ref_has_ast_explicit_break'])
-    ref_has_ast_mic_table = models.CharField(max_length=2, blank=True, null=True, choices=ANSWER_CHOICES, help_text=data_dict['ref_has_ast_mic_table'])
-    ast_free = models.CharField(blank=True, null=True, max_length=500, help_text='')
+    ref_has_ast_mic_table      = models.CharField(max_length=2, blank=True, null=True, choices=ANSWER_CHOICES, help_text=data_dict['ref_has_ast_mic_table'])
+    
+    ref_ast_method_id          = models.ForeignKey(ast_method, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_reference_ast_method_id'])
 
     ref_has_data_pheno_level = models.CharField(max_length=2, blank=True, null=True, choices=ANSWER_CHOICES, help_text=data_dict['ref_has_data_pheno_level'])
     ref_has_data_geno_level = models.CharField(max_length=2, blank=True, null=True, choices=ANSWER_CHOICES, help_text=data_dict['ref_has_data_geno_level'])
     ref_has_esbl_factor = models.CharField(max_length=2, blank=True, null=True, choices=ANSWER_CHOICES, help_text=data_dict['ref_has_esbl_factor'])
 
-    fk_reference_ast_method_id = models.ForeignKey(ast_method, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_reference_ast_method_id'])
-    t2_ast_breakID = models.IntegerField(blank=True, null=True, help_text=data_dict['t2_ast_breakID'])
-    t2_ast_break = models.CharField(max_length=500, blank=True, null=True, help_text=data_dict['t2_ast_break'])
     
     topic_tab_cattle = models.BooleanField(blank=True, null=True, help_text=data_dict['topic_tab_cattle'])
     topic_tab_chicken = models.BooleanField(blank=True, null=True, help_text=data_dict['topic_tab_chicken'])
@@ -517,7 +517,6 @@ class reference(models.Model): # -----------------------------------------------
     topic_tab_salmonella = models.BooleanField(blank=True, null=True, help_text=data_dict['topic_tab_salmonella'])
     topic_tab_campylobacter = models.BooleanField(blank=True, null=True, help_text=data_dict['topic_tab_campylobacter'])
 
-    study_location_01_num = models.IntegerField(blank=True, null=True, help_text='')
 
     v12_is_v1_import = models.BooleanField(blank=True, null=True, help_text=data_dict['v12_is_v1_import'])
     v12_v1_id = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['v12_v1_id'])
@@ -535,7 +534,14 @@ class reference(models.Model): # -----------------------------------------------
     def __str__(self):
         return '%s: %s' % (self.key_bibtex, self.ref_title)
 
-class reference_join_location(models.Model):
+
+
+class reference_join_location(models.Model): # ====================================================
+    #                                          ---------------------------- reference_join_location
+    # =============================================================================================
+    """
+    The location(s) of reference creation.
+    """
     
     reference_id         = models.ForeignKey(to=reference,
                                              db_column='reference_id', 
@@ -585,7 +591,7 @@ class genetic_element(models.Model):
     to_review = models.BooleanField(blank=True, null=True, help_text=data_dict['to_review'])
     
     def __str__(self):
-        return '%s: %s' % (self.element_accession_no, self.element_name)
+        return '%s: %s' % (self.element_accno, self.element_name)
 
 class factor_family(models.Model):
     """

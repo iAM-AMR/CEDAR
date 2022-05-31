@@ -22,7 +22,7 @@ class ReferenceForm(ModelForm):
         model = reference
         fields = ['ref_title','ref_author', 'publish_year', 'publisher', 'publish_doi', 'publish_pmid', 
                   'exclude_extraction','exclude_extraction_reason', 'fk_study_design_id', 'study_design_detail',
-                  'study_sample_method', 'fk_reference_ast_method_id', 'ref_has_ast_explicit_break', 'ref_has_ast_mic_table']
+                  'study_sample_method', 'ref_ast_method_id', 'ref_has_ast_explicit_break', 'ref_has_ast_mic_table']
         widgets = {
             'publisher': autocomplete.ModelSelect2(url='publish-id-autocomplete')
         }
@@ -136,7 +136,7 @@ class ReferenceForm(ModelForm):
                         """<h6>AST:</h6> <hr>"""
                     ),
                     Row(  
-                        Column(PrependedText('fk_reference_ast_method_id', 'AST Method'), css_class='form-group col-md-4 mx-0'),
+                        Column(PrependedText('ref_ast_method_id', 'AST Method'), css_class='form-group col-md-4 mx-0'),
                         Column(PrependedText('ref_has_ast_explicit_break', 'Has Explicit Breakpoints?'), css_class='form-group col-md-4 mb-0'),
                         Column(PrependedText('ref_has_ast_mic_table', 'Has MIC Table?'), css_class='form-group col-md-4 mb-0'),
                         css_class='form-row'
