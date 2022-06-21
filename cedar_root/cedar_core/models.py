@@ -1,3 +1,20 @@
+
+# MODELS for CEDAR_forest
+
+"""
+Version Control (Git) Policy:
+    When making changes during development:
+        1) Make migrations (e.g., "python .\cedar_root\manage.py makemigrations").
+        2) Commit and copy Commit ID.
+        3) Commit backup of database to CEDAR_forest_floor.
+            Format: "Dump pre-migration <COMMIT ID>"
+        4) Migrate (e.g., "python .\cedar_root\manage.py migrate")
+        5) Commit backup of database to CEDAR_forest_floor.
+            Format: "Dump post-migration <COMMIT ID>"
+"""
+
+
+
 from pickle import TRUE
 from sre_constants import NOT_LITERAL
 from django.db import models
@@ -100,12 +117,40 @@ class host_02(models.Model): # -------------------------------------------------
     DEP_sel_beef = models.BooleanField(blank=True, null=True, help_text=data_dict['DEP_sel_beef'])
     DEP_sel_broil = models.BooleanField(blank=True, null=True, help_text=data_dict['DEP_sel_broil'])
 
+    # These fields will be removed when the host_production_stream and host_life_stage are linked 
+    # directly to the factor table.
+
+    host_production_stream     = models.ForeignKey(to        = 'production_stream',   # String as model is defined later.
+                                                   null      = True,
+                                                   on_delete = models.SET_NULL)
+    
+    host_life_stage            = models.ForeignKey(to        = 'host_life_stage',     # String as model is defined later.
+                                                   null      = True,
+                                                   on_delete = models.SET_NULL)
+    
+    
     # The host_01_id before Beef Cattle (6) and Dairy Cattle (5) are collapsed into Cattle. 
     HIST_host_01_id = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.host_subtype_name
     
+
+class host_life_stage(models.Model): # ------------------------------------------------------------
+    #                                  -------------------------------------------- host_life_stage
+    # ---------------------------------------------------------------------------------------------
+    """
+    The life stage of the host.
+    """
+    
+    host_life_stage_name =       models.CharField(max_length = 100)
+    applies_to_hosts     = models.ManyToManyField(to         = host_01,
+                                                  db_table   = 'host_life_stage_join_host_level_01')
+    
+    def __str__(self):
+        return self.host_life_stage_name
+
+
 
 
 class production_stream(models.Model): # ----------------------------------------------------------
