@@ -438,9 +438,9 @@ class ResistanceOutcomeForm(ModelForm):
     class Meta:
         model = res_outcome
 
-        fields = ['fk_resistance_atc_vet_id', 'fk_genetic_element_id', 'place_in_text', 
-                  'fk_microbe_01_id', 'fk_res_outcome_microbe_02_id', 'fk_group_observe_production_stage_id',
-                  'fk_moa_type_id', 'fk_moa_unit_id', 'contable_a', 'contable_b', 'contable_c', 'contable_d',
+        fields = ['resistance', 'resistance_gene', 'place_in_text', 
+                  'microbe_level_01', 'microbe_level_02', 'group_observe_production_stage',
+                  'moa_type', 'moa_unit', 'contable_a', 'contable_b', 'contable_c', 'contable_d',
                   'prevtable_a', 'prevtable_b', 'prevtable_c', 'prevtable_d', 'table_n_exp', 'table_n_ref',
                   'odds_ratio', 'odds_ratio_lo', 'odds_ratio_up', 'odds_ratio_sig', 'is_figure_extract',
                   'figure_extract_method', 'extract_user_legacy']
@@ -452,20 +452,20 @@ class ResistanceOutcomeForm(ModelForm):
         for fieldname in ['contable_a', 'contable_b', 'contable_c', 'contable_d', 'fk_resistance_id',
                           'prevtable_a', 'prevtable_b', 'prevtable_c', 'prevtable_d',
                           'table_n_exp', 'table_n_ref', 'fk_microbe_02_id',
-                          'odds_ratio', 'odds_ratio_lo', 'odds_ratio_up', 'fk_microbe_01_id', 'odds_ratio_sig']:
+                          'odds_ratio', 'odds_ratio_lo', 'odds_ratio_up', 'microbe_level_01', 'odds_ratio_sig']:
             if fieldname == 'odds_ratio_sig':
                 help_texts[fieldname] = 'The p-value associated with the odds ratio. If an odds ratio is provided, without a significance level, please report "NR" for "not reported".'
             else:
                 help_texts[fieldname] = None
 
         labels = {
-            'fk_microbe_01_id': None,
-            'fk_res_outcome_microbe_02_id': None,
+            'microbe_level_01': None,
+            'microbe_level_02': None,
             'place_in_text': None,
-            'fk_moa_type_id': None,
-            'fk_group_observe_production_stage_id': 'Observed',
-            'fk_resistance_atc_vet_id': None,
-            'fk_genetic_element_id': None,
+            'moa_type': None,
+            'group_observe_production_stage': 'Observed',
+            'resistance': None,
+            'resistance_gene': None,
             'contable_a': None,
             'contable_b': None,
             'table_n_exp': None,
@@ -480,7 +480,7 @@ class ResistanceOutcomeForm(ModelForm):
             'odds_ratio_lo': 'Lower CI',
             'odds_ratio_up': 'Upper CI',
             'odds_ratio_sig': 'Sig.',
-            'fk_moa_unit_id': None,
+            'moa_unit': None,
             'is_figure_extract': 'Figure Extract?',
             'figure_extract_method': 'Figure Extract Method',
             'extract_user_legacy': 'User',
@@ -492,9 +492,9 @@ class ResistanceOutcomeForm(ModelForm):
         self.helper.form_tag = False
         #self.helper.form_class = 'form_horizontal'
 
-        to_exclude = ['fk_resistance_atc_vet_id', 'place_in_text',
-                  'fk_microbe_01_id', 'fk_res_outcome_microbe_02_id', 'contable_a', 'contable_b',
-                  'fk_moa_type_id', 'fk_moa_unit_id', 'contable_c', 'contable_d', 'table_n_exp',
+        to_exclude = ['resistance', 'place_in_text',
+                  'microbe_level_01', 'microbe_level_02', 'contable_a', 'contable_b',
+                  'moa_type', 'moa_unit', 'contable_c', 'contable_d', 'table_n_exp',
                   'prevtable_a', 'prevtable_b', 'prevtable_c', 'prevtable_d', 'table_n_ref']
         for i in range(0,len(to_exclude)-1):
             self.fields[to_exclude[i]].label = False
@@ -505,8 +505,8 @@ class ResistanceOutcomeForm(ModelForm):
                 Row(
                     Column(
                         Row(
-                            PrependedText('fk_microbe_01_id', 'Microbe'), 
-                            'fk_res_outcome_microbe_02_id',
+                            PrependedText('microbe_level_01', 'Microbe'), 
+                            'microbe_level_02',
                         ),
                         css_class='col-md-6',
                     ),
@@ -520,7 +520,7 @@ class ResistanceOutcomeForm(ModelForm):
                 ),
                 Row(
                     Column(
-                        PrependedText('fk_genetic_element_id', 'Gene'), 
+                        PrependedText('resistance_gene', 'Gene'), 
                         css_class='col-md-10',
                         #css_class='form-label-md-2'
                     ),
@@ -546,7 +546,7 @@ class ResistanceOutcomeForm(ModelForm):
                 Row(
                     HTML(''' <h5 class="col-2">Result Unit</h5> '''),
                     Column(
-                        'fk_moa_unit_id',
+                        'moa_unit',
                         css_class='col-md-8',
                     ), 
                 ),
@@ -554,7 +554,7 @@ class ResistanceOutcomeForm(ModelForm):
                 Row(
                     HTML(''' <h5 class="col-2">Grain/Type</h5> '''),
                     Column(
-                        Field('fk_moa_type_id', css_id='moa_type_id'),
+                        Field('moa_type', css_id='moa_type_id'),
                         css_class='col-md-8',
                     ), 
                 ),
@@ -663,7 +663,7 @@ class ResistanceOutcomeForm(ModelForm):
     class Meta:
         model = res_outcome
         # TO DO: fix the deletion of group exp, group ref
-        fields = ['fk_resistance_id', 'fk_moa_type_id', 'contable_a', 'contable_b',
+        fields = ['fk_resistance_id', 'moa_type', 'contable_a', 'contable_b',
                   'contable_c', 'contable_d', 'table_n_exp', 'table_n_ref']
         help_texts = {}
         for fieldname in fields:
@@ -671,7 +671,7 @@ class ResistanceOutcomeForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['fk_moa_type_id'].disabled = True
+        self.fields['moa_type'].disabled = True
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.form_show_labels = False
@@ -707,7 +707,7 @@ class ResistanceOutcomeForm(ModelForm):
                                     <thead>
                                         <tr>
                                             <th>'''),
-            Field('fk_moa_type_id', style="width: auto; height: auto;"),
+            Field('moa_type', style="width: auto; height: auto;"),
             HTML('''                        </th>
                                             <th># AMR+</th>
                                             <th># AMR-</th>
@@ -762,7 +762,7 @@ class ResistanceOutcomeForm(ModelForm):
 """class PrevTableForm(ModelForm):
     class Meta:
         model = res_outcome
-        fields = ['fk_resistance_id', 'fk_moa_type_id', 'prevtable_a', 'prevtable_b',
+        fields = ['fk_resistance_id', 'moa_type', 'prevtable_a', 'prevtable_b',
                   'prevtable_c', 'prevtable_d', 'table_n_exp', 'table_n_ref']
         help_texts = {}
         for fieldname in fields:
@@ -770,7 +770,7 @@ class ResistanceOutcomeForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['fk_moa_type_id'].disabled = True
+        self.fields['moa_type'].disabled = True
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.form_show_labels = False
@@ -800,7 +800,7 @@ class ResistanceOutcomeForm(ModelForm):
                                     <thead>
                                         <tr>
                                             <th>'''),
-            Field('fk_moa_type_id', style="width: auto; height: auto;"),
+            Field('moa_type', style="width: auto; height: auto;"),
             HTML('''                        </th>
                                             <th>% AMR+</th>
                                             <th>% AMR-</th>
@@ -885,7 +885,7 @@ class ResistanceOutcomeForm(ModelForm):
 """class OddsTableForm(ModelForm):
     class Meta:
         model = res_outcome
-        fields = ['fk_resistance_id', 'fk_moa_type_id',
+        fields = ['fk_resistance_id', 'moa_type',
                   'odds_ratio', 'odds_ratio_lo', 'odds_ratio_up', 'odds_ratio_sig']
         help_texts = {}
         for fieldname in fields:
@@ -893,7 +893,7 @@ class ResistanceOutcomeForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['fk_moa_type_id'].disabled = True
+        self.fields['moa_type'].disabled = True
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.form_show_labels = False
@@ -925,7 +925,7 @@ class ResistanceOutcomeForm(ModelForm):
                                         <thead>
                                             <tr>
                                                 <th>'''),
-            Field('fk_moa_type_id', style="width: auto; height: auto;"),
+            Field('moa_type', style="width: auto; height: auto;"),
             HTML('''                            </th>
                                                 <th>Odds Ratio</th>
                                                 <th>Lower CI</th>

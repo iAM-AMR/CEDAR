@@ -786,7 +786,7 @@ class res_outcome(models.Model): # =============================================
     An measured association with a resistance outcome.
     """
 
-    fk_factor_id             =           models.ForeignKey(to        = factor, 
+    factor                             = models.ForeignKey(to        = factor, 
                                                            on_delete = models.CASCADE, 
                                                            blank     = True, 
                                                            null      = True,                           # SHOULD BOTH BE FALSE
@@ -796,41 +796,55 @@ class res_outcome(models.Model): # =============================================
                                                            null      = True, 
                                                            help_text = data_dict['soid'])
     
-    fk_resistance_atc_vet_id =           models.ForeignKey(to        = atc_vet, 
+    resistance                         = models.ForeignKey(to        = atc_vet, 
                                                            on_delete = models.SET_NULL, 
                                                            blank     = True, 
                                                            null      = True, 
                                                            help_text = data_dict['fk_resistance_atc_vet_id'])
 
-    fk_genetic_element_id    =           models.ForeignKey(to        = genetic_element, 
+    resistance_gene                    = models.ForeignKey(to        = genetic_element, 
                                                            on_delete = models.SET_NULL, 
                                                            blank     = True, 
                                                            null      = True, 
                                                            help_text = data_dict['fk_genetic_element_id'])
     
-    fk_microbe_01_id                   = models.ForeignKey(to        = microbe_01, 
+    microbe_level_01                   = models.ForeignKey(to        = microbe_01, 
                                                            on_delete = models.SET_NULL, 
                                                            blank     = True, 
                                                            null      = True, 
                                                            help_text = data_dict['fk_microbe_01_id'])
 
-    fk_res_outcome_microbe_02_id       = models.ForeignKey(to        = microbe_02, 
+    microbe_level_02                   = models.ForeignKey(to        = microbe_02, 
                                                            on_delete = models.SET_NULL, 
                                                            blank     = True, 
                                                            null      = True, 
                                                            help_text = data_dict['fk_res_outcome_microbe_02_id'])
     
-    fk_group_observe_production_stage_id=models.ForeignKey(production_stage, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_group_observe_production_stage_id'])
-    
-
-    fk_moa_type_id = models.ForeignKey(moa_type, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_moa_type_id'])
-    fk_moa_unit_id = models.ForeignKey(moa_unit, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_moa_unit_id'])
-    
-    place_in_text = models.TextField(blank=True, null=True, help_text=data_dict['place_in_text'])
-    
+    group_observe_production_stage     = models.ForeignKey(to        = production_stage, 
+                                                           on_delete = models.SET_NULL, 
+                                                           blank     = True, 
+                                                           null      = True, 
+                                                           help_text = data_dict['fk_group_observe_production_stage_id'])
+        
 
     # Quantitative Data ---------------------------------------------------------------------------
     # =============================================================================================
+
+    moa_type                           = models.ForeignKey(to        = moa_type, 
+                                                           on_delete = models.SET_NULL, 
+                                                           blank     = True, 
+                                                           null      = True, 
+                                                           help_text = data_dict['fk_moa_type_id'])
+
+    moa_unit                           = models.ForeignKey(to        = moa_unit, 
+                                                           on_delete = models.SET_NULL, 
+                                                           blank     = True, 
+                                                           null      = True, 
+                                                           help_text = data_dict['fk_moa_unit_id'])
+    
+    place_in_text                       = models.TextField(blank     = True, 
+                                                           null      = True, 
+                                                           help_text = data_dict['place_in_text'])
 
     # Contingency Table
     contable_a = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['contable_a'])
@@ -932,7 +946,7 @@ class res_outcome(models.Model): # =============================================
     v12_solo_extraction_2016 = models.BooleanField(blank=True, null=True, help_text=data_dict['v12_solo_extraction_2016'])
     
     def __str__(self):
-        return '%s_%s' % (self.fk_factor_id, self.fk_resistance_atc_vet_id)
+        return '%s_%s' % (self.factor, self.fk_resistance_atc_vet_id)
     
     # The clean method is called automatically when model is used in a form. These are commented out for now, as extracted data may have errors that mean these conditions are rarely met
     #def clean(self):
