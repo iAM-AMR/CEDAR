@@ -300,9 +300,9 @@ def query_timber(request):
                 
                 # If cattle, need to select multiple hosts (cattle, dairy cattle, and beef cattle)
                 if host_name == '4':
-                    query_string += '.filter(fk_factor_id__fk_factor_host_01_id__host_name__contains="Cattle")'
+                    query_string += '.filter(fk_factor_id__host_level_01__host_name__contains="Cattle")'
                 else:
-                    query_string += '.filter(fk_factor_id__fk_factor_host_01_id=host_name)'
+                    query_string += '.filter(fk_factor_id__host_level_01=host_name)'
 
                 # Filter by host and microbe
                 
@@ -448,7 +448,7 @@ def query_timber(request):
                         elif field == 'host_02':
                             query_dict[field] = ro.fk_factor_id.host_02_id.host_subtype_name
                         elif field == 'stage_allocate':
-                            query_dict[field] = ro.fk_factor_id.fk_group_allocate_production_stage_id.stage
+                            query_dict[field] = ro.fk_factor_id.group_allocate_production_stage.stage
                         else:
                             query_dict[field] = eval("ro.fk_factor_id.%s" % (field))
                     elif field not in null_fields:

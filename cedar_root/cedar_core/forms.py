@@ -367,16 +367,16 @@ class FactorForm(ModelForm):
     class Meta:
         model = factor
 
-        fields = ['factor_title', 'factor_description', 'fk_factor_host_01_id', 'fk_host_02_id', 'fk_group_allocate_production_stage_id',
+        fields = ['factor_title', 'factor_description', 'host_level_01', 'host_level_02', 'group_allocate_production_stage',
                     'group_exposed', 'group_referent']
         help_texts = {}
 
         labels = {
             'factor_title': '',
             'factor_description': '',
-            'fk_factor_host_01_id': '',
-            'fk_host_02_id': '',
-            'fk_group_allocate_production_stage_id': 'Stage of Factor Application or Presence',
+            'host_level_01': '',
+            'host_level_02': '',
+            'group_allocate_production_stage': 'Stage of Factor Application or Presence',
             'group_exposed': '',
             'group_referent': '',
         }
@@ -388,7 +388,7 @@ class FactorForm(ModelForm):
 
         # Potential code in case you would like to exclude labels from showing up on the page
         # one alternative
-        #to_exclude = ['fk_factor_host_01_id']
+        #to_exclude = ['host_level_01']
         #for i in range(0,len(to_exclude)-1):
             #self.fields[to_exclude[i]].label = False
         
@@ -407,8 +407,8 @@ class FactorForm(ModelForm):
                 Row(
                     Column(
                         Row(
-                            PrependedText('fk_factor_host_01_id', 'Host'),
-                            'fk_host_02_id',
+                            PrependedText('host_level_01', 'Host'),
+                            'host_level_02',
                         ),
                         css_class='col-md-5 ml-1',
                     ),
@@ -416,7 +416,7 @@ class FactorForm(ModelForm):
                 HTML('''<br>'''),
                 Row(
                     Column(
-                        'fk_group_allocate_production_stage_id',
+                        'group_allocate_production_stage',
                         css_class='col-md-4',
                     ),
                 ),

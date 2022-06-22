@@ -680,17 +680,32 @@ class factor(models.Model): # --------------------------------------------------
     A factor associated with antimicrobial resistance.                                       factor
     ===============================================================================================
     """
+    
+    reference                  = models.ForeignKey(to        = reference, 
+                                                   default   = 99999, 
+                                                   on_delete = models.CASCADE, 
+                                                   help_text = data_dict['fk_factor_reference_id'])
 
-    sfid = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['sfid']) # repeated in duplicate across different extraction versions. This may be able to be deleted, as we are not using it correctly
-    fk_factor_reference_id = models.ForeignKey(reference, default=99999, on_delete=models.CASCADE, help_text=data_dict['fk_factor_reference_id'])
+    pid_factor       = models.PositiveIntegerField(blank     = True, 
+                                                   null      = True, 
+                                                   help_text = data_dict['sfid']) 
+
+    factor_title                = models.TextField(blank     = True, 
+                                                   null      = True, # To Change
+                                                   help_text = data_dict['factor_title'])
+
+    factor_description          = models.TextField(blank     = True, 
+                                                   null      = True, # To Change
+                                                   help_text = data_dict['factor_description'])
     
-    factor_title = models.TextField(blank=True, null=True, help_text=data_dict['factor_title'])
-    factor_description = models.TextField(blank=True, null=True, help_text=data_dict['factor_description'])
-    
-    fk_factor_host_01_id = models.ForeignKey(host_01, blank=True, null=True, on_delete=models.SET_NULL, help_text=data_dict['fk_factor_host_01_id'])
+    host_level_01              = models.ForeignKey(to        = host_01, 
+                                                   blank     = True, 
+                                                   null      = True, 
+                                                   on_delete = models.SET_NULL, 
+                                                   help_text = data_dict['fk_factor_host_01_id'])
 
     # To be depreciated; see scheme_update_new_subhost
-    fk_host_02_id              = models.ForeignKey(to        = host_02, 
+    host_level_02              = models.ForeignKey(to        = host_02, 
                                                    on_delete = models.SET_NULL, 
                                                    blank     = True, 
                                                    null      = True, 
@@ -708,9 +723,13 @@ class factor(models.Model): # --------------------------------------------------
                                                    on_delete = models.SET_NULL,
                                                    help_text = data_dict['host_life_stage_id'])
     
-    fk_group_allocate_production_stage_id = models.ForeignKey(production_stage, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_group_allocate_production_stage_id'])
+    group_allocate_production_stage = models.ForeignKey(to = production_stage, 
+                                                        null      = True, 
+                                                        blank     = True, 
+                                                        on_delete = models.SET_NULL,                                       
+                                                        help_text =data_dict['fk_group_allocate_production_stage_id'])
     
-    group_exposed = models.TextField(blank=True, null=True, help_text=data_dict['group_exposed'])
+    group_exposed  = models.TextField(blank=True, null=True, help_text=data_dict['group_exposed'])
     group_referent = models.TextField(blank=True, null=True, help_text=data_dict['group_referent'])
     
     exclude_cedar = models.BooleanField(blank=True, null=True, help_text=data_dict['exclude_cedar']) # to do: rename to depreciated
@@ -725,13 +744,16 @@ class factor(models.Model): # --------------------------------------------------
     #extract_date_factor = models.DateField(blank=True, null=True, help_text=data_dict['extract_date_factor'])
     
     def __str__(self):
-        return '%s (Reference %s)' % (self.factor_title, self.fk_factor_reference_id)
+        return '%s (Reference %s)' % (self.factor_title, self.reference)
+
 
 
 
 class factor_parent_join_factor(models.Model):
     fk_parent_join_factor_factor_parent_id = models.ForeignKey(factor_parent, on_delete=models.CASCADE, blank=True, null=True, help_text=data_dict['fk_parent_join_factor_factor_parent_id'])
     fk_parent_join_factor_factor_id = models.ForeignKey(factor, on_delete=models.CASCADE, blank=True, null=True, help_text=data_dict['fk_parent_join_factor_factor_id'])
+
+
 
 class factor_parent_metadata(models.Model):
     """
@@ -762,6 +784,7 @@ class factor_parent_metadata(models.Model):
     
     def __str__(self):
         return 'Metadata entry for parent factor %s (entered by %s)' % (self.fk_metadata_factor_parent_id, self.fk_entry_user_id)
+
 
     
 class figure_extract_method(models.Model):
@@ -821,9 +844,9 @@ class res_outcome(models.Model): # =============================================
                                                            help_text = data_dict['fk_res_outcome_microbe_02_id'])
     
     group_observe_production_stage     = models.ForeignKey(to        = production_stage, 
-                                                           on_delete = models.SET_NULL, 
-                                                           blank     = True, 
                                                            null      = True, 
+                                                           blank     = True, 
+                                                           on_delete = models.SET_NULL, 
                                                            help_text = data_dict['fk_group_observe_production_stage_id'])
         
 
@@ -946,7 +969,7 @@ class res_outcome(models.Model): # =============================================
     v12_solo_extraction_2016 = models.BooleanField(blank=True, null=True, help_text=data_dict['v12_solo_extraction_2016'])
     
     def __str__(self):
-        return '%s_%s' % (self.factor, self.fk_resistance_atc_vet_id)
+        return '%s_%s' % (self.factor, self.resistance)
     
     # The clean method is called automatically when model is used in a form. These are commented out for now, as extracted data may have errors that mean these conditions are rarely met
     #def clean(self):
