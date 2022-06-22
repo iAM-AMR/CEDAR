@@ -14,13 +14,21 @@ from cedar_core.models import reference, reference_join_location, reference_join
 # the attributes. Note the syntax for FKs: fk_col__attribute or fk_col__next_fk_col__attribute
 
 # Using values "Returns a QuerySet that returns dictionaries, rather than model instances, when used as an iterable."
+
+
+
+
+# Generate timber for all resistance outcomes. At present, multiple records are returned per resistance outcome because 
+
 timber_qs_all = res_outcome.objects.all().values(
 
+    'id',
     'fk_factor_id__fk_factor_reference_id__refwk',
     'fk_factor_id__fk_factor_reference_id__publish_doi',
     'fk_factor_id__fk_factor_reference_id__publish_pmid',
     'fk_factor_id__fk_factor_reference_id__key_bibtex',
     'fk_factor_id__fk_factor_reference_id__ref_title',
+    'fk_factor_id__fk_factor_reference_id__reference_join_location__location_main_id__country',   # Will result in return of multiple records per resistance outcome.
     'fk_factor_id__id',
     'fk_factor_id__factor_title',
     'fk_factor_id__factor_description',
@@ -54,8 +62,25 @@ timber_qs_all = res_outcome.objects.all().values(
     )
 
 
+
+
+
+
 # Check a Record
 timber_qs_all.all().get(pk=10002)
+
+# https://docs.djangoproject.com/en/4.0/topics/db/queries/#the-pk-lookup-shortcut
+
+# https://docs.djangoproject.com/en/dev/ref/models/querysets/#distinct
+
+# https://docs.djangoproject.com/en/4.0/topics/db/aggregation/
+
+# https://docs.djangoproject.com/en/4.0/topics/db/models/#extra-fields-on-many-to-many-relationships
+
+# https://docs.djangoproject.com/en/4.0/ref/models/fields/#django.db.models.ForeignKey
+
+
+
 
 # Filter ----------
 
@@ -64,10 +89,29 @@ timber_qs_all.all().get(pk=10002)
 timber_qs = timber_qs_all.filter(fk_factor_id__fk_factor_reference_id__exclude_extraction = False,
                                  fk_factor_id__fk_factor_reference_id__archived = False)
 
+
+
+timber_qs_order = timber_qs.order_by('id', 'fk_factor_id__fk_factor_reference_id__reference_join_location__id')
+
+
+
+
+
+timber_qs.distinct('fk_factor_id__fk_factor_reference_id__reference_join_location__reference_id').count()
+
+
+
+timber_qs.all().get(id=10033).count()
+
+
 # Check that the filter operation reduced the count of objects.
 
 timber_qs_all.count()
 timber_qs.count()
+
+
+t2 = timber_qs_all.distinct('id')
+t2.count()
 
 
 now = datetime.datetime.now()
@@ -81,6 +125,7 @@ appendnow = now.strftime("%Y_%m_%d_%H_%M")
 
 write_timber_csv(timber_qs, "timber_all_%s.csv" % (appendnow))
 
+write_timber_csv(timber_qs_order, "timber_order_all_%s.csv" % (appendnow))
 
 
 """ ----- Write Timber == lridge ----------------------------------------- """

@@ -10,11 +10,13 @@ import csv
 
 tmbr_default_field_names = [
     # See write_timber_csv() for description. 
+    'id',
     'fk_factor_id__fk_factor_reference_id__refwk',
     'fk_factor_id__fk_factor_reference_id__publish_doi',
     'fk_factor_id__fk_factor_reference_id__publish_pmid',
     'fk_factor_id__fk_factor_reference_id__key_bibtex',
     'fk_factor_id__fk_factor_reference_id__ref_title',
+    'fk_factor_id__fk_factor_reference_id__reference_join_location__location_main_id__country',
     'fk_factor_id__id',
     'fk_factor_id__factor_title',
     'fk_factor_id__factor_description',
@@ -48,12 +50,14 @@ tmbr_default_field_names = [
     ] 
 
 tmbr_default_col_names = [
-    # See write_timber_csv() for description. 
+    # See write_timber_csv() for description.
+    'res_outcome_id',
     'REFWK',
     'ref_doi',
     'ref_pmid',
     'ref_bibtex_key',
     'ref_title',
+    'country',
     'factor_id',
     'factor_title',
     'factor_description',

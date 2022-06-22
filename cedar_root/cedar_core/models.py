@@ -30,7 +30,7 @@ from django.utils import timezone
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 colnames = ['table', 'field', 'caption', 'description', 'help_text', 'analysis_notes']
-file_path = BASE_DIR / 'CEDAR_Dictionary_Main_2021.08.20.csv'
+file_path = BASE_DIR / 'CEDAR_forest_dictionary.csv'
 data_file = pandas.read_csv(file_path, names=colnames, encoding='cp1252')
 field_names = data_file.field.tolist()[1:]
 field_descs = data_file.description.tolist()[1:]
@@ -140,7 +140,7 @@ class host_life_stage(models.Model): # -----------------------------------------
     #                                  -------------------------------------------- host_life_stage
     # ---------------------------------------------------------------------------------------------
     """
-    The life stage of the host.
+    The host animal life stage (e.g., "Egg", "Chick", "Adult"; "Calf", "Heifer", "Backgrounder").
     """
     
     host_life_stage_name =       models.CharField(max_length = 100)
@@ -154,19 +154,19 @@ class host_life_stage(models.Model): # -----------------------------------------
 
 
 class production_stream(models.Model): # ----------------------------------------------------------
+    #                                    ---------------------------------------- production_stream
+    # ---------------------------------------------------------------------------------------------
     """
-    ===============================================================================================
-    The host animal production stream.                                            production_stream
-                                                                    production_stream_join_host_sub
-    ===============================================================================================
+    The host animal production stream (e.g., "Beef Cattle", "Dairy Cattle").                               
     """
 
-    production_stream_name = models.CharField(max_length=100)
-    host_main              = models.ForeignKey(to=host_01, 
-                                               on_delete=models.CASCADE)
+    production_stream_name =  models.CharField(max_length = 100)
+    host_level_01          = models.ForeignKey(to         = host_01, 
+                                               on_delete  = models.CASCADE)
+    # Cascade delete; a production stream does not exist without a host.
 
-    host_subs = models.ManyToManyField(host_02, db_table='production_stream_join_host_sub')
-
+    def __str__(self):
+        return self.production_stream_name
 
 
 class location_01(models.Model): # ----------------------------------------------------------------
@@ -587,6 +587,8 @@ class reference_join_location(models.Model): # =================================
     """
     The location(s) of reference creation.
     """
+
+    #  ManyToManyField.through¶
     
     reference_id         = models.ForeignKey(to=reference,
                                              db_column='reference_id', 
@@ -686,7 +688,25 @@ class factor(models.Model): # --------------------------------------------------
     factor_description = models.TextField(blank=True, null=True, help_text=data_dict['factor_description'])
     
     fk_factor_host_01_id = models.ForeignKey(host_01, blank=True, null=True, on_delete=models.SET_NULL, help_text=data_dict['fk_factor_host_01_id'])
-    fk_host_02_id = models.ForeignKey(host_02, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_host_02_id'])
+
+    # To be depreciated; see scheme_update_new_subhost
+    fk_host_02_id              = models.ForeignKey(to        = host_02, 
+                                                   on_delete = models.SET_NULL, 
+                                                   blank     = True, 
+                                                   null      = True, 
+                                                   help_text = data_dict['fk_host_02_id'])
+    
+    # Not yet in use; see scheme_update_new_subhost
+    host_production_stream     = models.ForeignKey(to        = production_stream,
+                                                   null      = True,
+                                                   on_delete = models.SET_NULL,
+                                                   help_text = data_dict['host_production_stream_id'])
+
+    # Not yet in use; see scheme_update_new_subhost
+    host_life_stage            = models.ForeignKey(to        = host_life_stage,
+                                                   null      = True,
+                                                   on_delete = models.SET_NULL,
+                                                   help_text = data_dict['host_life_stage_id'])
     
     fk_group_allocate_production_stage_id = models.ForeignKey(production_stage, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_group_allocate_production_stage_id'])
     
@@ -759,59 +779,151 @@ class figure_extract_method(models.Model):
 
 
 
-class res_outcome(models.Model):
+class res_outcome(models.Model): # ====================================================================================
+    # ----------------------------------------------------------------------------------------------------- RES_OUTCOME
+    # =================================================================================================================
     """
     An measured association with a resistance outcome.
     """
-    fk_factor_id = models.ForeignKey(factor, on_delete=models.CASCADE, blank=True, null=True, help_text=data_dict['fk_factor_id'])
-    soid = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['soid']) # this can be repeated in duplicate if a resistance outcome is extracted multiple times
+
+    fk_factor_id             =           models.ForeignKey(to        = factor, 
+                                                           on_delete = models.CASCADE, 
+                                                           blank     = True, 
+                                                           null      = True,                           # SHOULD BOTH BE FALSE
+                                                           help_text = data_dict['fk_factor_id'])
     
-    fk_resistance_atc_vet_id = models.ForeignKey(atc_vet, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_resistance_atc_vet_id'])
-    fk_genetic_element_id = models.ForeignKey(genetic_element, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_genetic_element_id'])
+    pid                      = models.PositiveIntegerField(blank     = True, 
+                                                           null      = True, 
+                                                           help_text = data_dict['soid'])
     
-    fk_microbe_01_id = models.ForeignKey(microbe_01, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_microbe_01_id'])
-    fk_res_outcome_microbe_02_id = models.ForeignKey(microbe_02, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_res_outcome_microbe_02_id'])
+    fk_resistance_atc_vet_id =           models.ForeignKey(to        = atc_vet, 
+                                                           on_delete = models.SET_NULL, 
+                                                           blank     = True, 
+                                                           null      = True, 
+                                                           help_text = data_dict['fk_resistance_atc_vet_id'])
+
+    fk_genetic_element_id    =           models.ForeignKey(to        = genetic_element, 
+                                                           on_delete = models.SET_NULL, 
+                                                           blank     = True, 
+                                                           null      = True, 
+                                                           help_text = data_dict['fk_genetic_element_id'])
     
-    fk_group_observe_production_stage_id = models.ForeignKey(production_stage, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_group_observe_production_stage_id'])
+    fk_microbe_01_id                   = models.ForeignKey(to        = microbe_01, 
+                                                           on_delete = models.SET_NULL, 
+                                                           blank     = True, 
+                                                           null      = True, 
+                                                           help_text = data_dict['fk_microbe_01_id'])
+
+    fk_res_outcome_microbe_02_id       = models.ForeignKey(to        = microbe_02, 
+                                                           on_delete = models.SET_NULL, 
+                                                           blank     = True, 
+                                                           null      = True, 
+                                                           help_text = data_dict['fk_res_outcome_microbe_02_id'])
     
+    fk_group_observe_production_stage_id=models.ForeignKey(production_stage, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_group_observe_production_stage_id'])
+    
+
     fk_moa_type_id = models.ForeignKey(moa_type, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_moa_type_id'])
     fk_moa_unit_id = models.ForeignKey(moa_unit, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_moa_unit_id'])
     
     place_in_text = models.TextField(blank=True, null=True, help_text=data_dict['place_in_text'])
     
-    contable_a = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['contable_a']) #
-    contable_b = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['contable_b']) #
-    contable_c = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['contable_c']) #
-    contable_d = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['contable_d']) #
 
+    # Quantitative Data ---------------------------------------------------------------------------
+    # =============================================================================================
+
+    # Contingency Table
+    contable_a = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['contable_a'])
+    contable_b = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['contable_b'])
+    contable_c = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['contable_c'])
+    contable_d = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['contable_d'])
+
+    # Prevalence Table
     # MinValueValidator at 0.01 ensures no negative numbers can be entered
     prevtable_a = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))], blank=True, null=True, help_text=data_dict['prevtable_a'])
     prevtable_b = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))], blank=True, null=True, help_text=data_dict['prevtable_b'])
     prevtable_c = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))], blank=True, null=True, help_text=data_dict['prevtable_c'])
     prevtable_d = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))], blank=True, null=True, help_text=data_dict['prevtable_d'])
     
+    # Contingency / Prevalence Table Margin Totals
     table_n_exp = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['table_n_exp']) #
     table_n_ref = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['table_n_ref']) #
     
-    odds_ratio = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))], blank=True, null=True, help_text=data_dict['odds_ratio']) #
-    odds_ratio_lo = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))], blank=True, null=True, help_text=data_dict['odds_ratio_lo']) #
-    odds_ratio_up = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))], blank=True, null=True, help_text=data_dict['odds_ratio_up']) #
-    odds_ratio_sig = models.CharField(max_length=20, blank=True, null=True, help_text=data_dict['odds_ratio_sig'])
+    # Odds Ratios
+    odds_ratio            = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))], blank=True, null=True, help_text=data_dict['odds_ratio']) #
+    odds_ratio_lo         = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))], blank=True, null=True, help_text=data_dict['odds_ratio_lo']) #
+    odds_ratio_up         = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))], blank=True, null=True, help_text=data_dict['odds_ratio_up']) #
+    odds_ratio_sig        =    models.CharField(max_length=20, blank=True, null=True, help_text=data_dict['odds_ratio_sig'])
     odds_ratio_confidence = models.DecimalField(blank=True, null=True, max_digits=5, decimal_places=3, help_text=data_dict['odds_ratio_confidence'])
     
-    fk_res_outcome_ast_method_id = models.ForeignKey(ast_method, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_res_outcome_ast_method_id'])
-    fk_ast_breakpoint_source_id = models.ForeignKey(ast_breakpoint_source, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_ast_breakpoint_source_id'])
-    breakpoint_explicit = models.CharField(max_length=50, blank=True, null=True, help_text=data_dict['breakpoint_explicit'])
-    
-    figure_extract = models.BooleanField(blank=True, null=True, help_text=data_dict['figure_extract'])
-    figure_extract_reproducible = models.BooleanField(blank=True, null=True, help_text=data_dict['figure_extract_reproducible'])
-    fk_figure_extract_method_id = models.ForeignKey(figure_extract_method, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_figure_extract_method_id'])
-    
-    fk_extract_res_outcome_user_id = models.ForeignKey(legacy_user, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_extract_res_outcome_user_id'])
-    extract_date_ro = models.DateField(default=timezone.now, help_text=data_dict['extract_date_ro'])
-    
-    # ADD status field (name = "fk_status_id") when resistance outcome status field is made
 
+    # AST Method and Details ----------------------------------------------------------------------
+    # =============================================================================================
+
+    ast_method                         = models.ForeignKey(to        = ast_method, 
+                                                           on_delete = models.SET_NULL, 
+                                                           blank     = True, 
+                                                           null      = True, 
+                                                           help_text = data_dict['fk_res_outcome_ast_method_id'])
+
+    ast_breakpoint_source              = models.ForeignKey(to        = ast_breakpoint_source, 
+                                                           on_delete = models.SET_NULL, 
+                                                           blank     = True, 
+                                                           null      = True, 
+                                                           help_text = data_dict['fk_ast_breakpoint_source_id'])
+
+    ast_breakpoint_version             = models.ForeignKey(to        = ast_breakpoint_version,
+                                                           on_delete = models.SET_NULL, 
+                                                           blank     = True, 
+                                                           null      = True, 
+                                                           help_text = data_dict['ast_breakpoint_version'])
+
+    ast_breakpoint_is_explicit       = models.BooleanField(blank     = True, 
+                                                           null      = True, 
+                                                           help_text = data_dict['breakpoint_explicit'])
+    
+
+    # Figure Extraction Method and Details --------------------------------------------------------
+    # =============================================================================================
+
+    is_figure_extract                = models.BooleanField(blank     = True, 
+                                                           null      = True, 
+                                                           help_text = data_dict['figure_extract'])
+
+    figure_extract_method              = models.ForeignKey(to        = figure_extract_method,
+                                                           on_delete = models.SET_NULL, 
+                                                           blank     = True, 
+                                                           null      = True, 
+                                                           help_text = data_dict['fk_figure_extract_method_id'])
+
+    figure_extract_reproducible      = models.BooleanField(blank     = True, 
+                                                           null      = True, 
+                                                           help_text = data_dict['figure_extract_reproducible'])
+    
+
+    # User, Project, and Date of Extraction -------------------------------------------------------
+    # =============================================================================================
+
+    extract_user_legacy                = models.ForeignKey(to        = legacy_user, 
+                                                           on_delete = models.SET_NULL, 
+                                                           blank     = True, 
+                                                           null      = True, 
+                                                           help_text = data_dict['fk_extract_res_outcome_user_id'])
+                                                           
+    extract_project                     = models.ForeignKey(to        = source_project, 
+                                                            on_delete = models.SET_NULL, 
+                                                            blank     = True, 
+                                                            null      = True, 
+                                                            help_text = data_dict['extract_project'])
+
+    extract_date                       =  models.DateField(default   = timezone.now, 
+                                                           help_text = data_dict['extract_date_ro'])
+    
+
+    # Historical Fields ---------------------------------------------------------------------------
+    # =============================================================================================
+
+    # ADD status field (name = "fk_status_id") when resistance outcome status field is made
     factor_v0_id = models.IntegerField(blank=True, null=True, help_text=data_dict['factor_v0_id'])
     v12_is_v1_import = models.BooleanField(blank=True, null=True, help_text=data_dict['v12_is_v1_import'])
     v12_ID_factor_v1 = models.IntegerField(blank=True, null=True, help_text=data_dict['v12_ID_factor_v1'])
@@ -820,7 +932,7 @@ class res_outcome(models.Model):
     v12_solo_extraction_2016 = models.BooleanField(blank=True, null=True, help_text=data_dict['v12_solo_extraction_2016'])
     
     def __str__(self):
-        return '%s_%s_%s_%s' % (self.fk_factor_id, self.fk_resistance_atc_vet_id, self.fk_extract_res_outcome_user_id, self.extract_date_ro)
+        return '%s_%s' % (self.fk_factor_id, self.fk_resistance_atc_vet_id)
     
     # The clean method is called automatically when model is used in a form. These are commented out for now, as extracted data may have errors that mean these conditions are rarely met
     #def clean(self):

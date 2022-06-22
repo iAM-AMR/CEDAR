@@ -442,8 +442,8 @@ class ResistanceOutcomeForm(ModelForm):
                   'fk_microbe_01_id', 'fk_res_outcome_microbe_02_id', 'fk_group_observe_production_stage_id',
                   'fk_moa_type_id', 'fk_moa_unit_id', 'contable_a', 'contable_b', 'contable_c', 'contable_d',
                   'prevtable_a', 'prevtable_b', 'prevtable_c', 'prevtable_d', 'table_n_exp', 'table_n_ref',
-                  'odds_ratio', 'odds_ratio_lo', 'odds_ratio_up', 'odds_ratio_sig', 'figure_extract',
-                  'fk_figure_extract_method_id', 'fk_extract_res_outcome_user_id']
+                  'odds_ratio', 'odds_ratio_lo', 'odds_ratio_up', 'odds_ratio_sig', 'is_figure_extract',
+                  'figure_extract_method', 'extract_user_legacy']
         
         help_texts = {}
 
@@ -481,9 +481,9 @@ class ResistanceOutcomeForm(ModelForm):
             'odds_ratio_up': 'Upper CI',
             'odds_ratio_sig': 'Sig.',
             'fk_moa_unit_id': None,
-            'figure_extract': 'Figure Extract?',
-            'fk_figure_extract_method_id': 'Figure Extract Method',
-            'fk_extract_res_outcome_user_id': 'User',
+            'is_figure_extract': 'Figure Extract?',
+            'figure_extract_method': 'Figure Extract Method',
+            'extract_user_legacy': 'User',
         }
 
     def __init__(self, *args, **kwargs):
