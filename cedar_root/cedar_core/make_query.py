@@ -17,33 +17,60 @@ from cedar_core.models import reference, reference_join_location, reference_join
 
 
 
+# https://docs.djangoproject.com/en/4.0/topics/db/queries/#the-pk-lookup-shortcut
 
-# Generate timber for all resistance outcomes. At present, multiple records are returned per resistance outcome because 
+# https://docs.djangoproject.com/en/dev/ref/models/querysets/#distinct
+
+# https://docs.djangoproject.com/en/4.0/topics/db/aggregation/
+
+# https://docs.djangoproject.com/en/4.0/topics/db/models/#extra-fields-on-many-to-many-relationships
+
+# https://docs.djangoproject.com/en/4.0/ref/models/fields/#django.db.models.ForeignKey
+
+
+
+
+
+# Generate All Timber ---------------------------------------------------------
+# =============================================================================
+
+# Generate timber for all resistance outcomes.
+# This returns multiple records per resistance outcome due to join w. multiple locations.
 
 timber_qs_all = res_outcome.objects.all().values(
-
     'id',
-    'fk_factor_id__fk_factor_reference_id__refwk',
-    'fk_factor_id__fk_factor_reference_id__publish_doi',
-    'fk_factor_id__fk_factor_reference_id__publish_pmid',
-    'fk_factor_id__fk_factor_reference_id__key_bibtex',
-    'fk_factor_id__fk_factor_reference_id__ref_title',
-    'fk_factor_id__fk_factor_reference_id__reference_join_location__location_main_id__country',   # Will result in return of multiple records per resistance outcome.
-    'fk_factor_id__id',
-    'fk_factor_id__factor_title',
-    'fk_factor_id__factor_description',
-    'fk_factor_id__group_exposed',
-    'fk_factor_id__group_referent',
-    'fk_factor_id__fk_factor_host_01_id__host_name',
-    'fk_factor_id__fk_host_02_id__host_subtype_name',
-    'fk_factor_id__fk_group_allocate_production_stage_id__stage',
-    'fk_group_observe_production_stage_id__stage',
-    'fk_moa_type_id__res_format',
-    'fk_moa_unit_id__res_unit',
-    'fk_resistance_atc_vet_id__levelname_5',
-    'fk_microbe_01_id__microbe_name',
-    'fk_res_outcome_microbe_02_id__microbe_subtype_name',
-    'fk_figure_extract_method_id__method_name',
+    'pid_ro',
+    'factor__reference__id',
+    'factor__reference__pid_reference',
+    'factor__reference__refwk',
+    'factor__reference__publish_doi',
+    'factor__reference__publish_pmid',
+    'factor__reference__key_bibtex',
+    'factor__reference__ref_title',
+    'factor__reference__reference_join_location__location_main_id__country',   # Will result in return of multiple records per resistance outcome.
+    'factor__reference__study_design__design',
+    'factor__id',
+    'factor__pid_factor',
+    'factor__factor_title',
+    'factor__factor_description',
+    'factor__group_factor',
+    'factor__group_comparator',
+    'factor__host_level_01__host_name',
+    'factor__host_level_02__host_subtype_name',
+    'factor__host_production_stream',
+    'factor__host_life_stage',
+    'factor__group_allocate_production_stage__stage',
+    'group_observe_production_stage__stage',
+    'moa_type__res_format',
+    'moa_unit__res_unit',
+    'resistance__levelname_4_coarse',
+    'resistance__levelname_5',
+    'resistance_gene__element_name',
+    'microbe_level_01__microbe_name',
+    'microbe_level_02__microbe_subtype_name',
+    'is_figure_extract',
+    'figure_extract_method__method_name',
+    'figure_extract_reproducible',
     'contable_a',
     'contable_b',
     'contable_c', 
@@ -61,71 +88,69 @@ timber_qs_all = res_outcome.objects.all().values(
     'odds_ratio_confidence',
     )
 
+# You can check that the QuerySet returns the expected values.
 
-
-
-
-
-# Check a Record
 timber_qs_all.all().get(pk=10002)
 
-# https://docs.djangoproject.com/en/4.0/topics/db/queries/#the-pk-lookup-shortcut
-
-# https://docs.djangoproject.com/en/dev/ref/models/querysets/#distinct
-
-# https://docs.djangoproject.com/en/4.0/topics/db/aggregation/
-
-# https://docs.djangoproject.com/en/4.0/topics/db/models/#extra-fields-on-many-to-many-relationships
-
-# https://docs.djangoproject.com/en/4.0/ref/models/fields/#django.db.models.ForeignKey
 
 
+# Filter and Deduplicate Timber Returns ---------------------------------------
+# =============================================================================
 
+# Remove resistance outcomes belonging to references that are archived, or 
+# excluded from extraction in CEDAR.
 
-# Filter ----------
+timber_qs = timber_qs_all.filter(factor__reference__is_excluded_extract = False,
+                                 factor__reference__is_archived         = False)
 
-# Remove outcomes from references excluded from CEDAR.
-
-timber_qs = timber_qs_all.filter(fk_factor_id__fk_factor_reference_id__exclude_extraction = False,
-                                 fk_factor_id__fk_factor_reference_id__archived = False)
-
-
-
-timber_qs_order = timber_qs.order_by('id', 'fk_factor_id__fk_factor_reference_id__reference_join_location__id')
-
-
-
-
-
-timber_qs.distinct('fk_factor_id__fk_factor_reference_id__reference_join_location__reference_id').count()
-
-
-
-timber_qs.all().get(id=10033).count()
-
-
-# Check that the filter operation reduced the count of objects.
+# Check that the number of records i reduced by filter().
 
 timber_qs_all.count()
 timber_qs.count()
 
+# Order the QuerySet by the ID and the ID of the reference_join_location. This 
+# should ensure the first location entry (by order of entry) is selected, as the ID
+# is an ascending integer -- a proxy for order (or date-time order).
 
-t2 = timber_qs_all.distinct('id')
-t2.count()
+timber_qs = timber_qs.order_by('factor__id', 
+                               'id', 
+                               'factor__reference__reference_join_location__id')
+
+# Select only one record for each resistance outcome.
+# At present, the join with location results in duplicates.
+# Note, if more fields are added to the Timber, care should be taken to ensure 
+# deduplication considers these fields.
+
+timber_qs_distinct = timber_qs.distinct('factor__id','id')
+
+# Check that the number of records is reduced by distinct().
+
+timber_qs.count()
+timber_qs_distinct.count()
 
 
-now = datetime.datetime.now()
 
+# Write Timber ----------------------------------------------------------------
+# =============================================================================
+
+# Set Time and Date
+now       = datetime.datetime.now()
 appendnow = now.strftime("%Y_%m_%d_%H_%M")
 
 
 
+# Write Complete QuerySet -------------
+# =====================================
 
-""" ----- Write all resistance outcomes. ----- """
+# Project: iAM.AMR.SEARCH
+# Archived: NO
+# Excluded: NO
+# Host: Any
+# Microbe: Any
+# Resistance: Any
 
-write_timber_csv(timber_qs, "timber_all_%s.csv" % (appendnow))
+write_timber_csv(timber_qs_distinct, "timber_all_%s.csv" % (appendnow))
 
-write_timber_csv(timber_qs_order, "timber_order_all_%s.csv" % (appendnow))
 
 
 """ ----- Write Timber == lridge ----------------------------------------- """
@@ -134,9 +159,7 @@ write_timber_csv(timber_qs_order, "timber_order_all_%s.csv" % (appendnow))
 # Resistance: Any
 # Project: //unknown//
 
-timber_lridge = timber_qs.filter(fk_factor_id__fk_factor_host_01_id__host_name = "Chicken")
-
-timber_lridge.count()
+timber_lridge = timber_qs_distinct.filter(factor__host_level_01__host_name = "Chicken")
 
 write_timber_csv(timber_lridge, "timber_lridge_%s.csv" % (appendnow))
 
@@ -151,7 +174,7 @@ write_timber_csv(timber_lridge, "timber_lridge_%s.csv" % (appendnow))
 # Resistance: Third-Generation Cephalosporins
 # Project: CH-SAL-3GC
 
-timber_CH_SAL_3GC = timber_qs.filter(fk_factor_id__fk_factor_host_01_id__host_name = "Chicken",
+timber_CH_SAL_3GC = timber_qs_distinct.filter(factor__fk_factor_host_01_id__host_name = "Chicken",
                                      fk_microbe_01_id__microbe_name = "Salmonella",
                                      fk_resistance_atc_vet_id__levelname_4 = "Third-generation cephalosporins")
 

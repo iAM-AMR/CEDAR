@@ -492,19 +492,62 @@ class reference(models.Model): # -----------------------------------------------
         ('4', 'Needs Review'),
     ]
     
-    archived        = models.BooleanField(blank=True, null=True, default=False, help_text=data_dict['archived'])
-    archived_reason =    models.CharField(blank=True, null=True, max_length=200, help_text=data_dict['archived_reason'])
+
+    # ID ------------------------------------------------------------------------------------------
+    # =============================================================================================
+
+    pid_reference       = models.PositiveIntegerField(null       = True,
+                                                      blank      = True,) 
+
+    key_bibtex                     = models.CharField(default    = '', 
+                                                      max_length = 200, 
+                                                      help_text  = data_dict['key_bibtex'])
+
+    refwk               = models.PositiveIntegerField(null       = True, 
+                                                      blank      = True, 
+                                                      help_text = data_dict['refwk'])
+
+
+    # Omissions -----------------------------------------------------------------------------------
+    # =============================================================================================
+
+    # Archive -----------------------------------
+    is_archived                 = models.BooleanField(null       = True,
+                                                      blank      = True, 
+                                                      default    = False, 
+                                                      help_text  = data_dict['archived'])
+
+    archived_reason                = models.CharField(null       = True, 
+                                                      blank      = True, 
+                                                      max_length = 200, 
+                                                      help_text  = data_dict['archived_reason'])
     
-    exclude_extraction        = models.BooleanField(default=False, help_text=data_dict['exclude_extraction'])
-    exclude_extraction_reason =    models.TextField(blank=True, null=True, help_text=data_dict['exclude_extraction_reason'])
-    fk_cedar_exclude_id       =   models.ForeignKey(cedar_exclude, on_delete=models.SET_NULL, blank=True, null=True, help_text=data_dict['fk_cedar_exclude_id'])
+    # Exclude Extract ---------------------------
+    is_excluded_extract         = models.BooleanField(default    = False, 
+                                                      help_text  = data_dict['exclude_extraction'])
+
+    excluded_extract_reason        = models.TextField(null       = True, 
+                                                      blank      = True, 
+                                                      help_text  = data_dict['exclude_extraction_reason'])
+
+    excluded_extract_reason_type  = models.ForeignKey(to         = cedar_exclude, 
+                                                      null       = True, 
+                                                      blank      = True, 
+                                                      on_delete  = models.SET_NULL, 
+                                                      help_text  = data_dict['fk_cedar_exclude_id'])                                                    
     
-    exclude_model        = models.BooleanField(blank=True, null=True, help_text=data_dict['exclude_model'])
-    exclude_model_reason =    models.CharField(max_length=500, blank=True, null=True, help_text=data_dict['exclude_model_reason'])
+    # Exclude Model -----------------------------
+    is_excluded_model           = models.BooleanField(null       = True, 
+                                                      blank      = True, 
+                                                      help_text  = data_dict['exclude_model'])
+
+    excluded_model_reason          = models.CharField(null       = True, 
+                                                      blank      = True, 
+                                                      max_length = 500, 
+                                                      help_text = data_dict['exclude_model_reason'])
     
-    key_bibtex = models.CharField(max_length=200, default='', help_text=data_dict['key_bibtex'])
-    refwk = models.PositiveIntegerField(blank=True, null=True, help_text=data_dict['refwk'])
-    
+
+    # Meta-data ---------------------------------
     publisher          = models.ForeignKey(to=publisher, 
                                            on_delete=models.SET_NULL, 
                                            blank=True, 
@@ -520,7 +563,7 @@ class reference(models.Model): # -----------------------------------------------
     ref_author   = models.TextField(blank=True, help_text=data_dict['study_authors'])
     ref_abstract = models.TextField(blank=True, help_text=data_dict['ref_abstract'])
 
-    fk_study_design_id = models.ForeignKey(to=study_design, 
+    study_design = models.ForeignKey(to=study_design, 
                                            on_delete=models.SET_NULL, 
                                            blank=True, 
                                            null=True, 
@@ -674,11 +717,11 @@ class factor_family_join_parent_factor(models.Model):
 
 
 
-class factor(models.Model): # ---------------------------------------------------------------------
+class factor(models.Model): # =========================================================================================
+    # ---------------------------------------------------------------------------------------------------------- FACTOR
+    # =================================================================================================================
     """
-    ===============================================================================================
-    A factor associated with antimicrobial resistance.                                       factor
-    ===============================================================================================
+    A factor associated with antimicrobial resistance.
     """
     
     reference                  = models.ForeignKey(to        = reference, 
@@ -690,6 +733,10 @@ class factor(models.Model): # --------------------------------------------------
                                                    null      = True, 
                                                    help_text = data_dict['sfid']) 
 
+
+    # Factor Details ------------------------------------------------------------------------------
+    # =============================================================================================
+
     factor_title                = models.TextField(blank     = True, 
                                                    null      = True, # To Change
                                                    help_text = data_dict['factor_title'])
@@ -698,6 +745,25 @@ class factor(models.Model): # --------------------------------------------------
                                                    null      = True, # To Change
                                                    help_text = data_dict['factor_description'])
     
+
+    group_factor                = models.TextField(null      = True, 
+                                                   blank     = True, 
+                                                   help_text = data_dict['group_exposed'])
+
+    group_comparator            = models.TextField(null      = True, 
+                                                   blank     = True, 
+                                                   help_text = data_dict['group_referent'])
+
+    group_allocate_production_stage = models.ForeignKey(to        = production_stage, 
+                                                        null      = True, 
+                                                        blank     = True, 
+                                                        on_delete = models.SET_NULL,                                       
+                                                        help_text = data_dict['fk_group_allocate_production_stage_id'])
+    
+
+    # Factor Host Details -------------------------------------------------------------------------
+    # =============================================================================================
+
     host_level_01              = models.ForeignKey(to        = host_01, 
                                                    blank     = True, 
                                                    null      = True, 
@@ -723,14 +789,6 @@ class factor(models.Model): # --------------------------------------------------
                                                    on_delete = models.SET_NULL,
                                                    help_text = data_dict['host_life_stage_id'])
     
-    group_allocate_production_stage = models.ForeignKey(to = production_stage, 
-                                                        null      = True, 
-                                                        blank     = True, 
-                                                        on_delete = models.SET_NULL,                                       
-                                                        help_text =data_dict['fk_group_allocate_production_stage_id'])
-    
-    group_exposed  = models.TextField(blank=True, null=True, help_text=data_dict['group_exposed'])
-    group_referent = models.TextField(blank=True, null=True, help_text=data_dict['group_referent'])
     
     exclude_cedar = models.BooleanField(blank=True, null=True, help_text=data_dict['exclude_cedar']) # to do: rename to depreciated
 
@@ -815,7 +873,7 @@ class res_outcome(models.Model): # =============================================
                                                            null      = True,                           # SHOULD BOTH BE FALSE
                                                            help_text = data_dict['fk_factor_id'])
     
-    pid                      = models.PositiveIntegerField(blank     = True, 
+    pid_ro                   = models.PositiveIntegerField(blank     = True, 
                                                            null      = True, 
                                                            help_text = data_dict['soid'])
     

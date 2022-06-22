@@ -21,7 +21,7 @@ class ReferenceForm(ModelForm):
     class Meta:
         model = reference
         fields = ['ref_title','ref_author', 'publish_year', 'publisher', 'publish_doi', 'publish_pmid', 
-                  'exclude_extraction','exclude_extraction_reason', 'fk_study_design_id', 'study_design_detail',
+                  'is_excluded_extract','excluded_extract_reason', 'study_design', 'study_design_detail',
                   'study_sample_method', 'ref_ast_method_id', 'ref_has_ast_explicit_break', 'ref_has_ast_mic_table']
         widgets = {
             'publisher': autocomplete.ModelSelect2(url='publish-id-autocomplete')
@@ -113,8 +113,8 @@ class ReferenceForm(ModelForm):
                         HTML(
                             """<br> <h6>Exclusion Status:</h6> <hr>"""
                         ),
-                        PrependedText('exclude_extraction', 'Exclude?', css_class='ml-2 mt-2'),
-                        PrependedText('exclude_extraction_reason', 'Is Excluded Because:', placeholder="Reason Here", css_class='form-group'),
+                        PrependedText('is_excluded_extract', 'Exclude?', css_class='ml-2 mt-2'),
+                        PrependedText('excluded_extract_reason', 'Is Excluded Because:', placeholder="Reason Here", css_class='form-group'),
                     ),
                     FormActions(
                         Submit('save', 'Save changes')
@@ -129,7 +129,7 @@ class ReferenceForm(ModelForm):
                     HTML(
                         """<br> <h6>Study Design:</h6> <hr>"""
                     ),          
-                    PrependedText('fk_study_design_id', 'Study Design:'),
+                    PrependedText('study_design', 'Study Design:'),
                     PrependedText('study_design_detail', 'Design Detail:'), 
                     PrependedText('study_sample_method', 'Sampling Method:'), 
                     HTML(
@@ -368,7 +368,7 @@ class FactorForm(ModelForm):
         model = factor
 
         fields = ['factor_title', 'factor_description', 'host_level_01', 'host_level_02', 'group_allocate_production_stage',
-                    'group_exposed', 'group_referent']
+                    'group_factor', 'group_comparator']
         help_texts = {}
 
         labels = {
@@ -377,8 +377,8 @@ class FactorForm(ModelForm):
             'host_level_01': '',
             'host_level_02': '',
             'group_allocate_production_stage': 'Stage of Factor Application or Presence',
-            'group_exposed': '',
-            'group_referent': '',
+            'group_factor': '',
+            'group_comparator': '',
         }
 
     def __init__(self, *args, **kwargs):
@@ -423,8 +423,8 @@ class FactorForm(ModelForm):
                 HTML('''<hr style="border-width:5px;">'''),
                 HTML(''' <br> '''),
                 Div(
-                    PrependedText('group_exposed', 'Factor Group'),
-                    PrependedText('group_referent', 'Comparator Group'), 
+                    PrependedText('group_factor', 'Factor Group'),
+                    PrependedText('group_comparator', 'Comparator Group'), 
                     css_class='form-horizontal'
                 ),
                 FormActions(
