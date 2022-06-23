@@ -62,6 +62,7 @@ tmbr_default_field_names = [
 
 tmbr_default_col_names = [
     # See write_timber_csv() for description.
+    # Note, missing comma will silently fail.
     'id_res_out',
     'pid_res_out',
     'id_reference',
@@ -72,7 +73,7 @@ tmbr_default_col_names = [
     'ref_bibtex_key',
     'ref_title',
     'country',
-    'study_design'
+    'study_design',
     'id_factor',
     'pid_factor',
     'factor_title',
