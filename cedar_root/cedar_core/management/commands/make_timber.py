@@ -25,7 +25,7 @@ tmbr_default_field_names = [
     'factor__reference__publish_pmid',
     'factor__reference__key_bibtex',
     'factor__reference__ref_title',
-    'factor__reference__reference_join_location__location_main_id__country',   # Will result in return of multiple records per resistance outcome.
+    'factor__reference__ref_country__country',
     'factor__reference__study_design__design',
     'factor__id',
     'factor__pid_factor',
@@ -117,7 +117,6 @@ tmbr_default_col_names = [
     'odds_ratio_up',
     'odds_ratio_sig',
     'odds_ratio_confidence',
-    'meta_analysis_group',
     ] 
 
 def write_timber_csv(tmbr_qs, write_path, tmbr_field_names = tmbr_default_field_names, tmbr_col_names = tmbr_default_col_names):
@@ -214,7 +213,7 @@ timber_qs_all = res_outcome.objects.all().values(
     'factor__reference__publish_pmid',
     'factor__reference__key_bibtex',
     'factor__reference__ref_title',
-    'factor__reference__reference_join_location__location_main_id__country',   # Will result in return of multiple records per resistance outcome.
+    'factor__reference__ref_country__country',
     'factor__reference__study_design__design',
     'factor__id',
     'factor__pid_factor',
@@ -275,26 +274,6 @@ timber_qs = timber_qs_all.filter(factor__reference__is_excluded_extract = False,
 timber_qs_all.count()
 timber_qs.count()
 
-# Order the QuerySet by the ID and the ID of the reference_join_location. This 
-# should ensure the first location entry (by order of entry) is selected, as the ID
-# is an ascending integer -- a proxy for order (or date-time order).
-
-timber_qs = timber_qs.order_by('factor__id', 
-                               'id', 
-                               'factor__reference__reference_join_location__id')
-
-# Select only one record for each resistance outcome.
-# At present, the join with location results in duplicates.
-# Note, if more fields are added to the Timber, care should be taken to ensure 
-# deduplication considers these fields.
-
-timber_qs_distinct = timber_qs.distinct('factor__id','id')
-
-# Check that the number of records is reduced by distinct().
-
-timber_qs.count()
-timber_qs_distinct.count()
-
 
 
 # Write Timber ----------------------------------------------------------------
@@ -316,7 +295,7 @@ appendnow = now.strftime("%Y_%m_%d_%H_%M")
 # Microbe: Any
 # Resistance: Any
 
-write_timber_csv(timber_qs_distinct, "timber_all_%s.csv" % (appendnow))
+write_timber_csv(timber_qs, "timber_all_%s.csv" % (appendnow))
 
 
 
@@ -326,7 +305,7 @@ write_timber_csv(timber_qs_distinct, "timber_all_%s.csv" % (appendnow))
 # Resistance: Any
 # Project: //unknown//
 
-timber_lridge = timber_qs_distinct.filter(factor__host_level_01__host_name = "Chicken")
+timber_lridge = timber_qs.filter(factor__host_level_01__host_name = "Chicken")
 
 write_timber_csv(timber_lridge, "timber_lridge_%s_raw.csv" % (appendnow))
 
@@ -341,7 +320,7 @@ write_timber_csv(timber_lridge, "timber_lridge_%s_raw.csv" % (appendnow))
 # Resistance: Third-Generation Cephalosporins
 # Project: CH-SAL-3GC
 
-timber_CH_SAL_3GC = timber_qs_distinct.filter(factor__host_level_01__host_name = "Chicken",
+timber_CH_SAL_3GC = timber_qs.filter(factor__host_level_01__host_name = "Chicken",
                                      microbe_level_01__microbe_name = "Salmonella",
                                      resistance__levelname_4 = "Third-generation cephalosporins")
 

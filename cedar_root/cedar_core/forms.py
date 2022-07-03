@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from cedar_core.models import factor, reference, reference_join_location, reference_join_reference_note, res_outcome, location_01, location_02, host_01, microbe_01, atc_vet
+from cedar_core.models import factor, reference, reference_join_location, reference_join_reference_note, res_outcome, location_01, location_02, host_01, microbe_01, atc_vet, dict_help, dict_capt
 from django.utils.translation import gettext_lazy as _
 
 from crispy_forms.bootstrap import Tab, TabHolder, FormActions, PrependedText, AppendedText
@@ -22,7 +22,7 @@ class ReferenceForm(ModelForm):
         model = reference
         fields = ['ref_title','ref_author', 'publish_year', 'publisher', 'publish_doi', 'publish_pmid', 
                   'is_excluded_extract','excluded_extract_reason', 'study_design', 'study_design_detail',
-                  'study_sample_method', 'ref_ast_method_id', 'ref_has_ast_explicit_break', 'ref_has_ast_mic_table']
+                  'study_sample_method', 'ref_ast_method', 'ref_has_ast_explicit_break', 'ref_has_ast_mic_table']
         widgets = {
             'publisher': autocomplete.ModelSelect2(url='publish-id-autocomplete')
         }
@@ -55,7 +55,7 @@ class ReferenceForm(ModelForm):
         #Create FormHelper from crispy forms for layout
         self.helper = FormHelper()
         self.helper.form_tag = False
-        self.helper.form_show_labels = False
+        self.helper.form_show_labels = True
 
         #can have class='sr-only' to hide labels
         #but how to add w/in Layout?
@@ -68,8 +68,8 @@ class ReferenceForm(ModelForm):
                         HTML(
                             """<h6>Bibliographic Information:</h6> <hr>"""
                         ),
-                        PrependedText('ref_title', 'Title', placeholder="Study Title Here"), 
-                        PrependedText('ref_author', 'Author Name(s)', placeholder="Author Name(s) Here"),
+                        PrependedText('ref_title', dict_capt['ref_title'], placeholder="Study Title Here"), 
+                        PrependedText('ref_author', dict_capt['ref_author'], placeholder="Author Name(s) Here"),
                     ),            
                     Div(
                         Row(
@@ -136,7 +136,7 @@ class ReferenceForm(ModelForm):
                         """<h6>AST:</h6> <hr>"""
                     ),
                     Row(  
-                        Column(PrependedText('ref_ast_method_id', 'AST Method'), css_class='form-group col-md-4 mx-0'),
+                        Column(PrependedText('ref_ast_method', 'AST Method'), css_class='form-group col-md-4 mx-0'),
                         Column(PrependedText('ref_has_ast_explicit_break', 'Has Explicit Breakpoints?'), css_class='form-group col-md-4 mb-0'),
                         Column(PrependedText('ref_has_ast_mic_table', 'Has MIC Table?'), css_class='form-group col-md-4 mb-0'),
                         css_class='form-row'

@@ -1,273 +1,265 @@
-table,field,caption,description,help_text,analysis_notes
-reference,other_reference_id,Legacy Ref ID,"An additional identifier for the study, from the legacy database",,
-,key_bibtex,Bibtex Key,"An abbreviated identifier for the study in the format of an in-text citation, given by Bibtex, i.e. ""Jones2013"". A lowercase letter is appended to the date where multiple items may be confused.",,This does not correspond to the Bibtex key in Mendeley (yet).
-,refwk,RefWorks ID,The corresponding RefWorks ID for the study,,
-,study_authors,Author Name(s),"The name(s) or surname(s) of the authors, in the form of a comma-separated or semi-colon-separated list, i.e. ""Chapman, Smith, Otten, Fazil"" or ""Howe, K.; Linton, A. H.; Osborne, A. D.""","The name(s) or surname(s) of the authors, in the form of a comma-separated or semi-colon-separated list, i.e. ""Chapman, Smith, Otten, Fazil"" or ""Howe, K.; Linton, A. H.; Osborne, A. D.""",
-,fk_publisher_id,Publisher,The outlet which published the study,The outlet which published the study,
-,publish_name_alt,,"The name of the publisher as provided in the source material, if different than the publisher indicated by publish_id. ","If the publisher or journal is not available in the provided list, list the actual journal here. ","An alternate name is only provided where the publisher indicated by publish_id is different than specified by the source material, or is ""Other"". Generally, the publisher name has been updated (i.e. the journal was continued under a new name), or the publisher is not available in the publisher list."
-,publish_year,Publication Year,The year in which the study was published,The year in which the study was published,
-,publish_doi,DOI,"The DOI associated with the reference, i.e. 10.3168/jds.2014-8432","The DOI associated with the reference, i.e. 10.3168/jds.2014-8432",
-,publish_pmid,PMID,"The eight-digit PMID associated with the reference, i.e. 84889799","The eight-digit PMID associated with the reference, i.e. 84889799","DEPRECIATED. Formerly ""ident_pmid""."
-,study_title,Title,"The title of the study, in sentence case","The title of the study, in sentence case",
-,fk_study_design_id,Study Design,The type of study design used in the study,The type of study design used in the study,
-,study_design_detail,Design Detail,"The details of the study design. Often, this can be copied from the study directly","The details of the study design. Often, this can be copied from the study directly",
-,study_sample_method,Sampling Method,A description of the sampling method (i.e. how samples were selected and collected) used in the study,A description of the sampling method (i.e. how samples were selected and collected) used in the study,
-,ref_has_ast_explicit_break,Has Explicit Breakpoints?,Specifies whether the study explicitly reports the MIC values used in its susceptibility tests,Does the study explicitly report the MIC values used in its susceptibility tests?,
-,ref_has_ast_mic_table,Has MIC Table?,Specifies whether the study includes an MIC table,Does the study include an MIC table?,
-,capture_search_2016,Found 2016,The reference was captured in the 2016 literature search,,
-,capture_search_2019,Found 2019,The reference was captured in the 2019 literature search,,
-,capture_snowball,Found Snowball,"The reference was captured through snowballing (searching cited papers, and or reverse citations)",,
-,capture_submit,Found Submit,The reference was captured through a direct submission to CEDAR,,
-,fk_reference_ast_method_id,AST Method,The antimicrobial susceptibility test type applied in the study,The antimicrobial susceptibility test type applied in the study,
-,DEP_study_objective,Objective,The stated objective of the resource,,
-,exclude_extraction,Exclude?,"Specifies whether or not to exclude the reference from extraction. If true, it is not returned in model-building queries or statistics.",Should the reference be excluded from extraction?,
-,exclude_extraction_reason,Is Excluded Because,"If the reference is to be excluded, the reason for doing so","If the reference is to be excluded, the reason for doing so",
-,ref_abstract,Abstract,,,
-,dep_CEDAR_extract_east,Extracted by CEDAR East,"Specifies whether this reference is to be extracted by the ""east"" team (i.e. Guelph/ON)",,
-,dep_CEDAR_extract_west,Extracted by CEDAR West,"Specifies whether this reference is to be extracted by the ""west"" team (i.e. Alberta)",,
-,cedar_extract_esr,Extracted by CEDAR Enterococcus Scoping Review,"Specifies whether this reference was extracted by the ESR team (i.e. ""Enterococcus Scoping Review""). References marked cedar_extract_esr = TRUE were either: a) identified by both the ESR and the 2019 literature search (and extracted by the ESR team) or b) identified by the ESR only.",,
-,topic_tab_cattle,Has Cattle,"The title or abstract of this reference contains keywords related to this topic (animal, or microbe).",,
-,topic_tab_chicken,Has Chicken,"The title or abstract of this reference contains keywords related to this topic (animal, or microbe).",,
-,topic_tab_swine,Has Swine,"The title or abstract of this reference contains keywords related to this topic (animal, or microbe).",,
-,topic_tab_turkey,Has Turkey,"The title or abstract of this reference contains keywords related to this topic (animal, or microbe).",,
-,topic_tab_ecoli,Has E. coli,"The title or abstract of this reference contains keywords related to this topic (animal, or microbe).",,
-,topic_tab_enterococcus,Has Enterococcus,"The title or abstract of this reference contains keywords related to this topic (animal, or microbe).",,
-,topic_tab_salmonella,Has Salmonella,"The title or abstract of this reference contains keywords related to this topic (animal, or microbe).",,
-,topic_tab_campylobacter,Has Campylobacter,"The title or abstract of this reference contains keywords related to this topic (animal, or microbe).",,
-,dep_topic_tab_has_topic,Has Host and/or Microbe,The title and abstract of this reference has been keyword-searched to identify putative topics,,
-,dep_topic_tab_host_free,Host,A free-text description of the hosts identified through the title and abstract keyword-search,,
-,dep_topic_tab_microbe_free,Microbe,A description of the microbes identified through the title and abstract keyword-search,,
-,archived,,The reference is archived; it is not returned in queries or statistics,,
-,archived_reason,,Why is the reference archived?,,
-,v12_is_v1_import,,The record was imported from CEDAR_v1 into CEDAR_v2. ,,
-,v12_v1_id,,The reference ID used within CEDAR v1. This only exists when the reference is an import from v1.,,
-,v12_is_in_v1_and_v2,,This reference exists in both v1 and v2.,,
-,v12_migrated_from,,"For v2 references, this is the  v1 reference which matched during factor migration from v1 to v2. Factors were migrated from this record.",,
-,v12_migrated_to,,"For v1 references, this is the v2 reference which matched during factor migration from v1 to v2. Factors were migrated to this record.",,
-,v12_solo_extraction_2016,,"These are v2 references - with imported factors from a v1 match - that do not need to be dual extracted, as they were reviewed thoroughly by Ashley or Daniella in v1.",,
-,DEP_other_genomics,,,,
-,DEP_analysis_unit_ID,,,,
-,DEP_ref_has_mdr,,,,
-,OLD_status_ID,,,,
-,OLD_ref_has_wgs,,,,
-,dep_old_id,,"DEPRECIATED: Formerly ""OLD_ID"". Unclear which ID - likely V0",,
-,DEL_subdivision,,"""OLD_subdivision"": was imported free text, location_02, already importd.",,
-,DEL_OLD_countryID,,"""OLD_countryID""",,
-,OLD_has_plasmid_type,,,,
-,ast_free,,A free-text description of the AST methodology and breakpoint selection,,
-,ref_has_data_pheno_level,,,Does the reference include phenotypically-derived level (or concentration) data?,
-,ref_has_data_geno_level,,,"Does the reference include genotypically-derived level (gene copies, concentration) data?",
-,ref_has_esbl_factor,,,Does the reference include factors related to ESBL-producing organisms?,
-,fk_cedar_exclude_id,,,,
-,t2_ast_breakID,,,,
-,t2_ast_break,,,,
-,DEL_journal_title,,"""journal_title"" was imported free text journal, all info copied.",,
-,DEL_ID_study_location_01,,"DEP: Formerly ""ID_study_location_01"". Was used for import. to be deleted",,
-,exclude_model,,,,
-,exclude_model_reason,,,,
-,cedar_extract_turkey_update,,True if identified by the August 2021 update to the search (focused on turkeys only),,
-,v2_fk_m_reference_history_id,,The ID of the m_reference_history table for the latest action entry,,
-,v2_fk_reference_history_last_action,,The ID of the last action associated with the reference in the v2 reference_history scheme. This is for migration to CW reference history and status.,,
-,v2_fk_user_reference_history_last_action,,The ID of the user who was associated with the last action in the v2 reference_history scheme. This is for migration to CW reference history and status,,
-,fk_reference_status_id,,The foreign key from the reference_status table. This is being implemented in v3 (CEDAR Web).,,
-,capture_2019_reject,,"The reference was captured in the 2019 literature search. It was initially included at secondary screening, but was later excluded at secondary screening during screening validation.",,
-reference_join_reference_history,reference_join_history_reference_id,,"The reference ID corresponding to this history entry. This was formerly a foreign key to the reference table. Since the reference table now has a foreign key for this table's primary id instead, the former foreign key to the reference table can no longer exist. Now that this reference_join_reference_history table is depreciated (purely a legacy table), the foreign key to the reference table is not necessary anyway.",,
-factor,sfid,,"This is the canonical factor ID, or FID",,
-,fk_factor_reference_id,Ref ID,The reference that describes the factor,,
-,factor_title,Title,"A title that describes the factor, in title case. The title should be simple and direct, with no experimental context. The goal is to be able to understand what the factor is, while leaving the name as generic as possible; comparable factors from different studies should be easily indentifiable as comparable. Common abbreviations are acceptable. Factors including antimicrobial use should be formatted as ""AntiX Use"" where AntiX is the antimicrobial(s) administered (e.g. Bambermycin Use, Ceftiofur Use). Factors comparing organic / no antimicrobial use / free-range / conventional production should be titled ""Production Type"", and a precise description provided in the description field","A title that describes the factor, in title case. Factors including antimicrobial use should be formatted as ""AntiX Use"" where AntiX is the antimicrobial(s) administered (e.g. Bambermycin Use, Ceftiofur Use). Factors comparing organic / no antimicrobial use / free-range / conventional production should be titled ""Production Type""",
-,factor_description,Description,"A brief description of the factor, in sentence case. Additional information and experimental conditions related to the factor are included here. This includes details such as level of antimicrobial use (dosage), serovar, time period of administration, prior antimicrobial use, etc. The description field can be left blank where there is no detail to be added beyond the title.","A brief description of the factor, in sentence case. Additional information and experimental conditions related to the factor are included here. This includes details such as level of antimicrobial use (dosage), serovar, time period of administration, prior antimicrobial use, etc.",
-,fk_factor_host_01_id,Host,The host animal from which the microbe was isolated,,
-,fk_host_02_id,,The host subtype from which the microbe was isolated,,
-,host_production_stream_id,Host Production Stream,"[ID] The host animal production stream (e.g., ""Beef Cattle"", ""Dairy Cattle"").",,
-,host_life_stage_id,Host Life Stage,"[ID] The host animal life stage (e.g., ""Egg"", ""Chick"", ""Adult""; ""Calf"", ""Heifer"", ""Backgrounder"").",,
-,fk_group_allocate_production_stage_id,Stage Allocated,The production stage at which the groups were allocated (i.e. factor applied),The production stage at which the groups were allocated (i.e. factor applied),
-,group_exposed,Exposed Group,"A brief description of the exposed group, in title case. The description should again, be simple and direct.  Comparison groups are allocated as described in the literature. If no allocation is provided, the less interventionist (or default practice) should be used as the referent. Factors including antimicrobial use are always given with the less interventionist as the referent (i.e. with ""No Use"" as the referent group or the lower dose as the referent, and ""AntiX Use"" for the exposed group,  where AntiX is the antimicrobial(s) administered). The dose should be provided in the main factor description, unless the factor is a comparison of two doses",,
-,group_referent,Referent Group,"A brief description of the referent (unexposed) group, in title case. The description should again, be simple and direct. Comparison groups are allocated as described in the literature. If no allocation is provided, the less interventionist (or default practice) should be used as the referent. Factors including antimicrobial use are always given with the less interventionist as the referent (i.e. with ""No Use"" as the referent group or the lower dose as the referent, and ""AntiX Use"" for the exposed group,  where AntiX is the antimicrobial(s) administered). The dose should be provided in the main factor description, unless the factor is a comparison of two doses",,
-,exclude_cedar,,Exclude this factor from CEDAR and timber,,
-,exclude_cedar_reason,,Reason for exclusion of factor from CEDAR and timber,,
-,extraction_num_factor,,,,
-,fk_extract_factor_user_id,,The user that extracted the resistance outcome,,
-,extract_date_factor,,The date at which the resistance outcome was extracted,,
-host_01,host_name,Host,"The host from which the assayed microbe originated, i.e. ""Chicken""",,
-,cedar_esr_host_01_id,,,,
-host_02,host_subtype_name,Host Subtype,"The host subtype from which the assayed microbe originated, i.e. ""Eggs"" for a parent host ""Chicken""",,
-,fk_host_02_host_01_id,Host ID,The ID of the parent host,,
-,DEP_sel_beef,Model Selection - Beef Models,,,
-,DEP_sel_broil,Model Selection - Broiler Models,,,
-location_01,country_area,Country,The country or area,,
-,iso_country_code_3,ISO3 Country Code,ISO country code (3 characters): the country specified by the iso_3166-1_alpha_3 code,,
-,iso_country_code_2,ISO2 Country Code,ISO country code (2 characters): the country specified by the iso_3166-1_alpha_2 code,,
-,iso_country_code_1,ISO1 Country Code,ISO country code (numerical): the country specified by the iso_3166-1_num code.,,
-,m49_code,M49 Code,M49 code,,
-,code_global,Global Code,Global code,,
-,name_global,Global Name,Global name,,
-,code_region,Region Code,Region code,,
-,name_region,Region Name,Region name,,
-,code_subregion,Subregion Code,Subregion code,,
-,name_subregion,Subregion Name,Subregion name,,
-,code_intermediate_subregion,Intermediate Subregion Code,Intermediate subregion code,,
-,name_intermediate_subregion,Intermediate Subregion Name,Intermediate subregion name,,
-,bin_least_developed_countries,Least Developed Country,,,
-,bin_land_lock_least_developed_countries,Landlocked Least Developed Country,,,
-,bin_small_island_developing_states,Small Island Developing State,,,
-,bin_developing,Developing Country,,,
-location_02,iso_3166_1_alpha2,Country Code,"The ISO 3166 alpha-2 country code, i.e. ""CA"" for Canada",,
-,iso_3166_2,Subdivision Code,"The subdivision code specified by the iso_3166_2 code. Normally two or three letters (i.e. ""ON"" for Ontario), but the numerals 2-9 may also be used",,
-,subdivision,Subdivision  ,"The name of the subdivision, i.e. ""Ontario""",,
-,subdivision_type,Subdivision Type,"The type of subdivision within the country, i.e. ""Province""",,
-,cipars_region_national,CIPARS National Region,The location is within the CIPARS national region,,
-,cipars_region_atlantic,CIPARS Atlantic Region,The location is within the CIPARS atlantic region,,
-,cipars_region_maritimes,CIPARS Maritimes Region,The location is within the CIPARS maritimes region,,
-,cipars_region_prairies,CIPARS Prairies Region,The location is within the CIPARS prairies region,,
-microbe_01,microbe_name,Microbe,"The microbe subjected to AST, i.e. ""Escherichia""",,
-microbe_02,fk_microbe_02_microbe_01_id,Microbe ID,The ID of the parent microbe,,
-,microbe_subtype_name,Microbe Subtype,"The species or subtype of the microbe subjected to AST, i.e. ""coli"" for parent microbe ""Escherichia""",,
-,DEP_old_id,,,,
-,cedar_esr_microbe_02_id,,,,
-moa_type,res_format,Result Format,The format of the extracted measure of association data,"Result format, i.e. ""Contingency Table""",
-moa_unit,res_unit,Result Unit,The unit of analysis of the extracted measure of association data,"Result unit, i.e. ""Pooled Sample""",
-production_stage,stage,Production Stage,"The production stage to which the factor applies, or where the effect of a factor is observed, i.e. ""Farm""",,
-,cedar_esr_production_stage_id,,,,
-publisher,pub_type,Type,"The type of publication, i.e. ""Journal""",,
-,pub_title,Title,"The title of the publication, i.e. ""Nature Reviews Immunology""",,
-,pub_rank,Rank,The Scimago rank at the time of import (2018),,
-,pub_issn,ISSN,"The ISSN of the publication, i.e. ""15424863, 00079235""",,
-study_design,design,Design,The overall study design of the study,,
-atc_vet,levelname_1,First Level Group,The anatomical group to which the preparation belongs.,"The anatomical group to which the preparation belongs, i.e. ""General antiinfectives for systemic use""","There are 15 anatomical groups, QA - QV, and these are generally created from their ATC counterparts by prepending a ""Q"" to the code."
-,levelname_2,Second Level Group,The therapeutic main group to which the preparation belongs.,"The therapeutic main group to which the preparation belongs, i.e. ""Antibacterials for systemic use""",
-,levelname_3,Third Level Group,The chemical/therapeutic/pharmacological subgroup (top-level) to which the preparation belongs.,"The chemical/therapeutic/pharmacological subgroup (top-level) to which the preparation belongs, i.e. ""Beta-lactam antibacterials, penicillins""",
-,levelname_4,Fourth Level Group,The chemical/therapeutic/pharmacological subgroup (bottom-level) to which the preparation belongs.,"The chemical/therapeutic/pharmacological subgroup (bottom-level) to which the preparation belongs, i.e. ""Penicillins with extended spectrum""",
-,levelname_4_coarse,Simple Fourth Level Group,A coarser classification at the fourth level (chemical/therapeutic/pharmacological subgroup) to simplify record retrieval.,"A coarser classification at the fourth level (chemical/therapeutic/pharmacological subgroup) to simplify record retrieval, i.e. ""Penicillins"" if the fourth level group is ""Beta-lactamase sensitive penicillins""","This selection is not based on specific criteria, and is not used at this time. Useful for the penicillins, which are heavily sub-divided into level 4 sub-groups."
-,levelname_5,Fifth Level Group,The chemical substance in the preparation.,"The chemical substance in the preparation, i.e. ""Ampicillin""",
-,levelname_5_alt,Alternative Fifth Level Group,"An alternative name(s) for the preparation (e.g. USAN, BAN, ubiquitous priprietary name).","An alternative name(s) for the preparation (e.g. USAN, BAN, ubiquitous priprietary name), i.e. ""Penicillin G"" for the fifth level group ""benzylpenicillin""",
-,levelname_5_comb_example,Specific Fifth Level Group Combination Example,An example of a specific combination-preparation representative of the generic combination represented in the ATCvet.,"An example of a specific combination-preparation representative of the generic combination represented in the ATCvet, i.e. ""piperacillin w. tazobactam"" for the fifth level group ""piperacillin and beta-lactamase inhibitor""",
-,levelcode_1,First Level Code,The portion of the ATCvet code that describes the preparation's anatomical group.,The code for the first level group (2 characters in length),
-,levelcode_2,Second Level Code,The portion of the ATCvet code that describes the preparation's therapeutic main group.,The code for the second level group (4 characters/digits in length),
-,levelcode_3,Third Level Code,The portion of the ATCvet code that describes the preparation's top-level therapeutic subgroup.,The code for the third level group (5 characters/digits in length),
-,levelcode_4,Fourth Level Code,The portion of the ATCvet code that describes the preparation's bottom-level therapeutic subgroup.,The code for the fourth level group (6 characters/digits in length),
-,levelcode_5,Fifth Level Code,The ATCvet code that describes the preparation.,The code for the fifth level group (8 characters/digits in length),
-,is_added,Agent is Part of ATCvet Index,"The preparation/gene was added by the CEDAR team, and is not reflected in the published ATCvet index.",,
-,is_gene,Agent is a Gene,The preparation/gene is a gene.,,
-,aro_number,ARO Number,The preparation/gene's ARO number (from CARD).,,
-,is_duplicate,Agent is a Duplicate,There is another ATCvet code which include the same preparation(s). Use the alternate ATCvet code.,,"There are a number of ATCvet codes that appear multiple times, differentiated by high-level categories (e.g. an antimicrobial used systemically vs topically). We've tagged these as duplicates to avoid users specifying preparations using both codes."
-legacy_user,name_user,Name of User,"The user's full name, i.e. ""John Smith""",,
-,cedar_esr_user_id,,The user in CEDAR ESR,,
-model,model_name,Model Name,"The name of the iAM.AMR model, i.e. ""iAM.AMR.CHI""",,
-,model_description,Model Description,A simple and brief description or 'caption' of the model,,
-,fk_model_create_user_id,Model Creator,The user who created the model/query,,
-,model_create_date,Creation Date,"The date the model/query was created, in <em>YYYY-MM-DD</em> format",,
-,fk_model_maintain_user_id,Model Maintainer,The user who maintains the model/query,,
-,model_maintain_date,Last Maintaince Date,"The date the model/query was last updated, in <em>YYYY-MM-DD</em> format",,
-ast_method,method,AST Method,Laboratory test method used to determine antimicrobial susceptibility,,
-reference_join_location,fk_reference_join_location_reference_id,Related Ref ID,The reference pertaining to this location,,
-,fk_location_01_id,Country,,,
-,fk_reference_join_location_location_02_id,Region,,,
-,ref_loc_note,Additional Details,"A free-text description of the subdivision, allowing users to specify custom subdivisions like ""east"", ""Mid-atlantic region"" or ""Nationwide""","A free-text description of the subdivision, allowing users to specify custom subdivisions like ""east"", ""Mid-atlantic region"" or ""Nationwide""",
-reference_join_reference_note,fk_reference_join_note_reference_id,Related Ref ID,The reference that this note refers to,,
-,note,Note,"A free-text note describing any challenges with interpreting the study, or extracting the data","A free-text note describing any challenges with interpreting the study, or extracting the data",
-,fk_reference_join_note_user_id,User,The user who made the note,,
-,resolved,Resolved?,Specifies whether or not the note was resolved or addressed,,
-,is_apply_factor,,"The note relates to factor-level information, and should be included as a note with all factors",,
-reference_history_action,action,,What happened to the reference?,,
-,action_level_coarse,,,,
-,action_level_coarse_num,,,,
-,action_description,,A detailed description of what happened to the reference,,
-,action_level_fine,,The resultant status level. This refers to how the factor can be used,,
-res_outcome,fk_factor_id,,,,
-,soid,,The canonical resistance outcome ID. The URID is shared between resistance outcomes (ROs) that have been extracted in duplicate,,
-,fk_resistance_atc_vet_id,AMR,The resistance that was assayed,,
-,fk_genetic_element_id,,The genomic resistance assayed as a measure of resistance,,
-,fk_microbe_01_id,Microbe,The microbe assayed for resistance,,
-,fk_res_outcome_microbe_02_id,,The subtype of the microbe assayed for resistance,,
-,fk_group_observe_production_stage_id,Stage Observed,The production stage at which the observations were recorded (i.e. factor observed),The production stage at which the observations were recorded (i.e. factor observed),
-,fk_moa_type_id,Grain/Type,The type of measure of association reported for the resistance outcome,The type of measure of association reported for the resistance outcome,
-,fk_moa_unit_id,Result Unit,The experimental unit or level of analysis for which the measure of association is presented,The experimental unit or level of analysis for which the measure of association is presented,
-,place_in_text,Location,"The location of the resistance outcome data in-text, i.e. ""Table 2"". If the data is from the body of the text, use the page and paragraph numbers (Pg. and Para. respectively)","The location of the resistance outcome data in-text, i.e. ""Table 2"". If the data is from the body of the text, use the page and paragraph numbers, using the abbreviations Pg. and Para. respectively.",
-,contable_a,Count of AMR(+) | Exposed,The number (count) of observations of resistance in the exposed group,,
-,contable_b,Count of AMR(-) | Exposed,The number (count) of observations of susceptibility in the exposed group,,
-,contable_c,Count of AMR(+) | Referent,The number (count) of observations of resistance in the referent group,,
-,contable_d,Count of AMR(-) | Referent,The number (count) of observations of susceptibility in the referent group,,
-,prevtable_a,Proportion of AMR(+) | Exposed,"The proportion of observations of resistance in the exposed group, up to 2 decimal places",,
-,prevtable_b,Proportion of AMR(-) | Exposed,"The proportion of observations of susceptibility in the exposed group, up to 2 decimal places",,
-,prevtable_c,Proportion of AMR(+) | Referent,"The proportion of observations of resistance in the referent group, up to 2 decimal places",,
-,prevtable_d,Proportion of AMR(-) | Referent,"The proportion of observations of susceptibility in the referent group, up to 2 decimal places",,
-,table_n_exp,Total Exposed,The total number of observations in the exposed group,,
-,table_n_ref,Total Referent,The total number of observations in the referent group,,
-,odds_ratio,OR,"The odds ratio that describes the factor, up to 2 decimal places",,
-,odds_ratio_lo,Lower CI,"The lower (usually 95%) confidence interval of the odds ratio that describes the factor, up to 2 decimal places",,
-,odds_ratio_up,Upper CI,"The upper (usually 95%) confidence interval of the odds ratio that describes the factor, up to 2 decimal places",,
-,odds_ratio_sig,Sig.,"The significance (p-value) associated with the odds ratio that describes the factor, i.e. ""< 0.05"". May include symbols, numbers, and letters. There is no significance associated with count or prevalence data, only Odds Ratios. If an odds ratio is provided, without a significance level, please report ""NR"" for ""not reported""","The p-value associated with the odds ratio. If an odds ratio is provided, without a significance level, please report ""NR"" for ""not reported""",
-,odds_ratio_confidence,Confidence Level,"The confidence level associated with the confidence interval (as a percentage, most commonly 95%)",,
-,figure_extract,,True where the figure was extracted from a figure. This excludes cases where the figure is captioned with values,,
-,figure_extract_reproducible,,True where a copy of the data extraction tool output is available,,
-,fk_figure_extract_method_id,,The method used to extract the resistance outcome (RO) from the reference,,
-,fk_res_outcome_ast_method_id,,The AST method used to assay resistance,,
-,fk_ast_breakpoint_source_id,,,,
-,ast_breakpoint_version,AST Breakpoint Version,The breakpoint version used to interpret the results of the AST. ,,
-,breakpoint_explicit,,"The breakpoint (if explicit, but not from standard breakpoint source).  This field is not necessary to complete if breakpoint source is true. Set to NA if not assessed",,
-,extraction_num_ro,,,,
-,fk_extract_res_outcome_user_id,,The user that extracted the resistance outcome,,
-,extract_date_ro,,The date at which the resistance outcome was extracted,,
-,extract_project,Source Project,The project in which the object was extracted. ,,
-,factor_v0_id,,"The factor ID from v0 of CEDAR (CEDAR 2016), often used in model identifiers prior to 2020.",,
-,v12_is_v1_import,,The factor is imported from v1.,,
-,v12_ID_factor_v1,,The factor ID used within CEDAR v1.,,
-,v12_ID_reference_v1,,The reference ID to which the factor belonged in v1.,,
-,v12_ID_reference_v2_initial,,"The reference ID assigned during import of v1 to v2, prior to reassignment of duplicates.",,
-,v12_solo_extraction_2016,,"These are v1 factors that were migrated to v2 references, that will not be dual extracted, as they were thoroughly reviewed by Ashley or Daniella in v1",,
-genetic_element,element_uid,,,,
-,element_name,,,,
-,element_alias,,,,
-,element_type,,,,
-,element_accno,,,,
-,element_family_accno,,,,
-,to_review,,,,
-factor_join_res_outcome,fk_factor_join_res_outcome_factor_id,,,,
-,fk_res_outcome_id,,,,
-cedar_exclude,exclusion,,,,
-,exclusion_type,,,,
-figure_extract_method,method_name,,,,
-,method_description,,,,
-,method_wpd,,,,
-,method_convert_to_count,,,,
-factor_family,factor_family_name,,The factor family name,,
-factor_parent,factor_parent_name,,The parent factor name,,
-factor_family_join_parent_factor,fk_family_join_parent_factor_parent_id,,"The parent factor identifier, or PFID",,
-,fk_family_join_parent_factor_family_id,,"The factor family identifier, or FFID",,
-factor_parent_join_factor,fk_parent_join_factor_factor_parent_id,,"The parent factor identifier, or PFID",,
-,fk_parent_join_factor_factor_id,,"The factor identifier, or FID",,
-factor_parent_metadata,fk_metadata_factor_parent_id,,"The parent factor identifier, or PFID",,
-,fk_metadata_location_02_id,,The ID of the location from the location_02 table,,
-,fk_entry_user_id,,The user who added the frequency information,,
-,fk_review_user_id,,The user who reviewed the frequency information,,
-,frequency,,The frequency of factor implementation,,
-,frequency_distribution,,"(optional) if a point value is not provided for frequency, a distribution name can be specified with parameters in other fields",,
-,frequency_param_a,,"First distribution parameter. Beta = a. Lower limit for uniform (i.e. range), pareto, triangular, etc.",,
-,frequency_param_b,,"Second distribtuion parameter. Normal/log-normal = mean. Beta = b. Poisson = lambda. Mid or most-likely value for pareto, triangular, etc.",,
-,frequency_param_c,,"Third distribution parameter. Normal/log-normal = SD/s, Upper limit for uniform (i.e. range), pareto, triangular, etc.",,
-,frequency_data_apply_start_year,,"The first year this frequency applies to; if NULL, all years",,
-,frequency_data_apply_end_year,,"The last year this frequency applies to; if NULL, all years from start",,
-,frequency_data_source,,"The reference, or the person who provided the estimate",,
-,frequency_data_source_added_year,,"The year the reference was queried (if personal communication), or year published (if document)",,
-,fk_frequency_evidence_type_quality_id,,"The reference or source type ID, as an estimation of source quality (e.g. personal communication, surveillence, small study)",,
-,note,,Notes,,
-,is_applicable_past,,Applicability in past,,
-,is_applicable_present,,Applicability in present,,
-,is_applicable_future,,Applicability in future,,
-,applicable_data_source,,"The reference, or the person who assessed applicability",,
-,applicable_data_source_added_year,,"The year the reference was queried (if personal communication), or year published (if document)",,
-,fk_applicable_evidence_type_quality_id,,"The reference or source type ID, as an estimation of source quality (e.g. personal communication, surveillence, small study)",,
-ast_breakpoint_source,ast_breakpoint_std,,,,
-,ast_breakpoint_std_acronym,,,,
-,ast_breakpoint_std_accno,,,,
-,ast_breakpoint_std_desc,,,,
-ast_breakpoint_version,date_publish,,,,
-,date_last_valid,,,,
-,ast_breakpoint_std,,,,
-,ast_breakpoint_version,,,,
-,clsi_std_type,,,,
-evidence_type_quality,evidence_type,,,,
-,evidence_type_accno,,,,
-,evidence_type_description,,,,
-factor_parent_join_atc_vet,fk_amu_factor_parent_id,,,,
-,fk_amu_atc_vet_id,,,,
+ï»¿table,field,caption,description
+reference,id,Reference ID,The reference ID.
+reference,pid_reference,Reference PID,The physical ID of the reference.
+reference,key_bibtex,Bibtex Key,"AnÂ abbreviatedÂ identifierÂ forÂ theÂ study in the format of an in-text citation,Â givenÂ byÂ Bibtex, i.e. ""Jones2013"". A lowercase letter is appended to the date where multiple items may be confused."
+reference,refwk,RefWorks ID,TheÂ correspondingÂ RefWorksÂ IDÂ forÂ theÂ study
+reference,is_archived,Reference is Archived,"Where TRUE, the reference is archived. "
+reference,archived_reason,Is Archived Reason,A reason why the reference was archived.
+reference,is_excluded_extract,Reference is Excluded from Data Extraction,"Where TRUE, the reference was excluded from further data extraction."
+reference,excluded_extract_reason,Excluded Reason,The reason(s) why the reference was excluded from further data extraction.
+reference,excluded_extract_reason_type,Excluded Reason Type,The type of reason why the reference was excluded from further data extraction.
+reference,is_excluded_model,,
+reference,excluded_model_reason,,
+reference,publisher,Publisher,The publisher of the reference.
+reference,publisher_name_alt,Publisher (Alt.),"The name of the publisher at the time of publication, if different from publisher."
+reference,publish_year,Publication Year,The year of reference publication.
+reference,publish_doi,DOI,"TheÂ DOIÂ associatedÂ withÂ theÂ reference, i.e. 10.3168/jds.2014-8432"
+reference,publish_pmid,PMID,"TheÂ eight-digitÂ PMIDÂ associatedÂ withÂ theÂ reference, i.e. 84889799"
+reference,ref_title,Title,The title of the reference.
+reference,ref_author,Author(s),The author(s) of the reference.
+reference,ref_abstract,Abstract,The abstract of the reference.
+reference,ref_country,Source Country,The source country of the reference.
+reference,study_design,Study Design,TheÂ typeÂ ofÂ studyÂ design reported in the reference.
+reference,study_design_detail,Study Design Description ,A description of the study design reported in the reference.
+reference,study_sample_method,Sampling Method,A description of the sampling method reported in the reference.
+reference,capture_search_2016,Found 2016,"Where TRUE, the reference was captured in the iAM.AMR.SEARCH_2016 project."
+reference,capture_search_2019,Found 2019,"Where TRUE, the reference was captured in the iAM.AMR.SEARCH_2019 project."
+reference,capture_2019_reject,,"The reference was captured in the 2019 literature search. It was initially included at secondary screening, but was later excluded at secondary screening during screening validation."
+reference,capture_snowball,Found Snowball,"The reference was captured through snowballing (searching cited papers, and or reverse citations)"
+reference,capture_submit,Found Submit,The reference was captured through a direct submission to CEDAR
+reference,source_project,,
+reference,cedar_extract_esr,Extracted by CEDAR Enterococcus Scoping Review,"Specifies whether this reference was extracted by the ESR team (i.e. ""Enterococcus Scoping Review""). References marked cedar_extract_esr = TRUE were either: a) identified by both the ESR and the 2019 literature search (and extracted by the ESR team) or b) identified by the ESR only."
+reference,cedar_extract_turkey_update,,True if identified by the August 2021 update to the search (focused on turkeys only)
+reference,ref_has_ast_explicit_break,Has Explicit Breakpoints?,Specifies whether the study explicitly reports the MIC values used in its susceptibility tests
+reference,ref_has_ast_mic_table,Has MIC Table?,Specifies whether the study includes an MIC table
+reference,ref_ast_method,AST Method,TheÂ antimicrobialÂ susceptibilityÂ testÂ typeÂ appliedÂ inÂ theÂ study
+reference,ref_has_data_pheno_level,,
+reference,ref_has_data_geno_level,,
+reference,ref_has_esbl_factor,,
+reference,topic_tab_cattle,Has Cattle,"The title or abstract of this reference contains keywords related to this topic (animal, or microbe)."
+reference,topic_tab_chicken,Has Chicken,"The title or abstract of this reference contains keywords related to this topic (animal, or microbe)."
+reference,topic_tab_swine,Has Swine,"The title or abstract of this reference contains keywords related to this topic (animal, or microbe)."
+reference,topic_tab_turkey,Has Turkey,"The title or abstract of this reference contains keywords related to this topic (animal, or microbe)."
+reference,topic_tab_ecoli,Has E. coli,"The title or abstract of this reference contains keywords related to this topic (animal, or microbe)."
+reference,topic_tab_enterococcus,Has Enterococcus,"The title or abstract of this reference contains keywords related to this topic (animal, or microbe)."
+reference,topic_tab_salmonella,Has Salmonella,"The title or abstract of this reference contains keywords related to this topic (animal, or microbe)."
+reference,topic_tab_campylobacter,Has Campylobacter,"The title or abstract of this reference contains keywords related to this topic (animal, or microbe)."
+reference,v12_is_v1_import,,The record was imported from CEDAR_v1 into CEDAR_v2. 
+reference,v12_v1_id,,The reference ID used within CEDAR v1. This only exists when the reference is an import from v1.
+reference,v12_is_in_v1_and_v2,,This reference exists in both v1 and v2.
+reference,v12_migrated_from,,"For v2 references, this is the  v1 reference which matched during factor migration from v1 to v2. Factors were migrated from this record."
+reference,v12_migrated_to,,"For v1 references, this is the v2 reference which matched during factor migration from v1 to v2. Factors were migrated to this record."
+reference,v12_solo_extraction_2016,,"These are v2 references - with imported factors from a v1 match - that do not need to be dual extracted, as they were reviewed thoroughly by Ashley or Daniella in v1."
+reference,v2_fk_m_reference_history_id,,The ID of the m_reference_history table for the latest action entry
+reference,v2_fk_reference_history_last_action,,The ID of the last action associated with the reference in the v2 reference_history scheme. This is for migration to CW reference history and status.
+reference,v2_fk_user_reference_history_last_action,,The ID of the user who was associated with the last action in the v2 reference_history scheme. This is for migration to CW reference history and status
+reference,fk_reference_status_id,,The foreign key from the reference_status table. This is being implemented in v3 (CEDAR Web).
+factor,id,Factor ID,The factor ID.
+factor,pid_factor,Factor PID,The physical ID of the factor.
+factor,factor_record_version,,The record version number (default: 1).
+factor,reference,REF ID,TheÂ referenceÂ thatÂ reports theÂ factor.
+factor,is_archived,Archived?,"Where TRUE, the factor is archived. "
+factor,archived_reason,,A reason why the factor was archived.
+factor,is_excluded_extract,,"Where TRUE, the factor was excluded from further data extraction."
+factor,excluded_extract_reason,,The reason(s) why the factor was excluded from further data extraction.
+factor,factor_title,Title,A title for the factor.
+factor,factor_description,Description,A description of the factor.
+factor,group_factor,Factor (exposed) Group,"AÂ briefÂ descriptionÂ ofÂ theÂ factor (i.e., exposed, case)Â  group."
+factor,group_comparator,Comparator (un-exposed) Group,"AÂ briefÂ descriptionÂ ofÂ theÂ comparator (i.e., un-exposed, control, referent)Â  group."
+factor,group_allocate_production_stage,Stage (Allocated),TheÂ productionÂ stageÂ atÂ whichÂ theÂ groupsÂ wereÂ allocatedÂ (i.e.Â factorÂ applied)
+factor,host_level_01,Host,The host (level 1) from which the assayed samples were isolated.
+factor,host_level_02,Host (sub-type),TheÂ hostÂ (level 2) from which the assayed samples were isolated.
+factor,host_production_stream,Host Production Stream,The production stream of the host.
+factor,host_life_stage,Host Life Stage,The life stage of the host.
+factor,extract_user,,The user that extracted the resistance outcome
+factor,extract_project,,
+factor,extract_date,,The date at which the resistance outcome was extracted
+factor,HIST_ESR_host_01_id,,
+res_outcome,id,,
+res_outcome,pid_ro,,The canonical resistance outcome ID. The URID is shared between resistance outcomes (ROs) that have been extracted in duplicate
+res_outcome,ro_record_version,,
+res_outcome,factor,,
+res_outcome,is_archived,Archived?,"Where TRUE, the resistance-outcome is archived. "
+res_outcome,archived_reason,,A reason why the resistance-outcome was archived.
+res_outcome,resistance,AMR,TheÂ resistance thatÂ wasÂ assayed
+res_outcome,resistance_gene,,The genomic resistance assayed as a measure of resistance
+res_outcome,microbe_level_01,Microbe,TheÂ microbeÂ assayedÂ forÂ resistance
+res_outcome,microbe_level_02,,TheÂ subtypeÂ ofÂ theÂ microbeÂ assayedÂ forÂ resistance
+res_outcome,group_observe_production_stage,Stage Observed,TheÂ productionÂ stageÂ atÂ whichÂ theÂ observationsÂ wereÂ recordedÂ (i.e.Â factorÂ observed)
+res_outcome,moa_type,Grain/Type,TheÂ typeÂ ofÂ measureÂ ofÂ associationÂ reportedÂ forÂ theÂ resistance outcome
+res_outcome,moa_unit,Result Unit,TheÂ experimentalÂ unitÂ orÂ levelÂ ofÂ analysisÂ forÂ whichÂ theÂ measureÂ ofÂ associationÂ isÂ presented
+res_outcome,place_in_text,Location,"TheÂ locationÂ ofÂ theÂ resistance outcomeÂ dataÂ in-text,Â i.e.Â ""TableÂ 2"".Â IfÂ theÂ dataÂ isÂ fromÂ theÂ bodyÂ ofÂ theÂ text,Â useÂ theÂ pageÂ andÂ paragraphÂ numbersÂ (Pg.Â andÂ Para. respectively)"
+res_outcome,contable_a,Count of AMR(+) | Exposed,TheÂ number (count)Â ofÂ observationsÂ ofÂ resistanceÂ inÂ theÂ exposedÂ group
+res_outcome,contable_b,Count of AMR(-) | Exposed,TheÂ number (count)Â ofÂ observationsÂ ofÂ susceptibilityÂ inÂ theÂ exposedÂ group
+res_outcome,contable_c,Count of AMR(+) | Referent,TheÂ numberÂ (count) ofÂ observationsÂ ofÂ resistanceÂ inÂ theÂ referentÂ group
+res_outcome,contable_d,Count of AMR(-) | Referent,TheÂ numberÂ (count) ofÂ observationsÂ ofÂ susceptibilityÂ inÂ theÂ referentÂ group
+res_outcome,prevtable_a,Proportion of AMR(+) | Exposed,"TheÂ proportionÂ ofÂ observationsÂ ofÂ resistanceÂ inÂ theÂ exposedÂ group,Â upÂ toÂ 2Â decimalÂ places"
+res_outcome,prevtable_b,Proportion of AMR(-) | Exposed,"TheÂ proportionÂ ofÂ observationsÂ ofÂ susceptibilityÂ inÂ theÂ exposedÂ group,Â upÂ toÂ 2Â decimalÂ places"
+res_outcome,prevtable_c,Proportion of AMR(+) | Referent,"TheÂ proportionÂ ofÂ observationsÂ ofÂ resistanceÂ inÂ theÂ referentÂ group,Â upÂ toÂ 2Â decimalÂ places"
+res_outcome,prevtable_d,Proportion of AMR(-) | Referent,"TheÂ proportionÂ ofÂ observationsÂ ofÂ susceptibilityÂ inÂ theÂ referentÂ group,Â upÂ toÂ 2Â decimalÂ places"
+res_outcome,table_n_exp,Total Exposed,TheÂ totalÂ numberÂ ofÂ observationsÂ inÂ theÂ exposedÂ group
+res_outcome,table_n_ref,Total Referent,TheÂ totalÂ numberÂ ofÂ observationsÂ inÂ theÂ referentÂ group
+res_outcome,odds_ratio,OR,"TheÂ oddsÂ ratioÂ thatÂ describesÂ theÂ factor,Â upÂ toÂ 2Â decimalÂ places"
+res_outcome,odds_ratio_lo,Lower CI,"TheÂ lowerÂ (usuallyÂ 95%)Â confidenceÂ intervalÂ ofÂ theÂ oddsÂ ratioÂ thatÂ describesÂ theÂ factor,Â upÂ toÂ 2Â decimalÂ places"
+res_outcome,odds_ratio_up,Upper CI,"The upper (usually 95%) confidence interval of the odds ratio that describes the factor, up to 2 decimal places"
+res_outcome,odds_ratio_sig,Sig.,"TheÂ significanceÂ (p-value)Â associatedÂ withÂ theÂ oddsÂ ratioÂ thatÂ describesÂ theÂ factor,Â i.e.Â ""<Â 0.05"".Â MayÂ includeÂ symbols,Â numbers,Â andÂ letters.Â ThereÂ isÂ noÂ significanceÂ associatedÂ withÂ countÂ orÂ prevalenceÂ data,Â onlyÂ OddsÂ Ratios.Â IfÂ anÂ oddsÂ ratioÂ isÂ provided,Â withoutÂ aÂ significanceÂ level,Â pleaseÂ reportÂ ""NR""Â forÂ ""notÂ reported"""
+res_outcome,odds_ratio_confidence,Confidence Level,"The confidence level associated with the confidence interval (as a percentage, most commonly 95%)"
+res_outcome,ast_method,,The AST method used to assay resistance
+res_outcome,ast_breakpoint_source,,
+res_outcome,ast_breakpoint_version,AST Breakpoint Version,The breakpoint version used to interpret the results of the AST. 
+res_outcome,ast_breakpoint_is_explicit,,"The breakpoint (if explicit, but not from standard breakpoint source).  This field is not necessary to complete if breakpoint source is true. Set to NA if not assessed"
+res_outcome,is_figure_extract,,True where the figure was extracted from a figure. This excludes cases where the figure is captioned with values
+res_outcome,figure_extract_method,,The method used to extract the resistance outcome (RO) from the reference
+res_outcome,figure_extract_reproducible,,True where a copy of the data extraction tool output is available
+res_outcome,extract_user,,The user that extracted the resistance outcome
+res_outcome,extract_project,Source Project,The project in which the object was extracted. 
+res_outcome,extract_date,,The date at which the resistance outcome was extracted
+res_outcome,factor_v0_id,,"The factor ID from v0 of CEDAR (CEDAR 2016), often used in model identifiers prior to 2020."
+res_outcome,v12_is_v1_import,,The factor is imported from v1.
+res_outcome,v12_ID_factor_v1,,The factor ID used within CEDAR v1.
+res_outcome,v12_ID_reference_v1,,The reference ID to which the factor belonged in v1.
+res_outcome,v12_ID_reference_v2_initial,,"The reference ID assigned during import of v1 to v2, prior to reassignment of duplicates."
+res_outcome,v12_solo_extraction_2016,,"These are v1 factors that were migrated to v2 references, that will not be dual extracted, as they were thoroughly reviewed by Ashley or Daniella in v1"
+host_01,host_name,Host,"TheÂ hostÂ fromÂ whichÂ theÂ assayedÂ microbeÂ originated,Â i.e.Â ""Chicken"""
+host_01,cedar_esr_host_01_id,,
+host_02,host_subtype_name,Host Subtype,"TheÂ hostÂ subtypeÂ fromÂ whichÂ the assayedÂ microbeÂ originated,Â i.e.Â ""Eggs""Â forÂ aÂ parentÂ hostÂ ""Chicken"""
+host_02,fk_host_02_host_01_id,Host ID,TheÂ IDÂ ofÂ theÂ parentÂ host
+host_02,DEP_sel_beef,Model Selection - Beef Models,
+host_02,DEP_sel_broil,Model Selection - Broiler Models,
+location_01,country_area,Country,The country or area
+location_01,iso_country_code_3,ISO3 Country Code,ISO country code (3 characters): the country specified by the iso_3166-1_alpha_3 code
+location_01,iso_country_code_2,ISO2 Country Code,ISO country code (2 characters): the country specified by the iso_3166-1_alpha_2 code
+location_01,iso_country_code_1,ISO1 Country Code,ISO country code (numerical): the country specified by the iso_3166-1_num code.
+location_01,m49_code,M49 Code,M49 code
+location_01,code_global,Global Code,Global code
+location_01,name_global,Global Name,Global name
+location_01,code_region,Region Code,Region code
+location_01,name_region,Region Name,Region name
+location_01,code_subregion,Subregion Code,Subregion code
+location_01,name_subregion,Subregion Name,Subregion name
+location_01,code_intermediate_subregion,Intermediate Subregion Code,Intermediate subregion code
+location_01,name_intermediate_subregion,Intermediate Subregion Name,Intermediate subregion name
+location_01,bin_least_developed_countries,Least Developed Country,
+location_01,bin_land_lock_least_developed_countries,Landlocked Least Developed Country,
+location_01,bin_small_island_developing_states,Small Island Developing State,
+location_01,bin_developing,Developing Country,
+location_02,iso_3166_1_alpha2,Country Code,"TheÂ ISOÂ 3166Â alpha-2Â countryÂ code,Â i.e.Â ""CA""Â forÂ Canada"
+location_02,iso_3166_2,Subdivision Code,"TheÂ subdivisionÂ codeÂ specifiedÂ byÂ theÂ iso_3166_2Â code.Â NormallyÂ twoÂ orÂ threeÂ lettersÂ (i.e.Â ""ON""Â forÂ Ontario),Â butÂ theÂ numeralsÂ 2-9Â mayÂ alsoÂ beÂ used"
+location_02,subdivision,Subdivision  ,"TheÂ nameÂ ofÂ theÂ subdivision,Â i.e.Â ""Ontario"""
+location_02,subdivision_type,Subdivision Type,"TheÂ typeÂ ofÂ subdivisionÂ withinÂ theÂ country,Â i.e.Â ""Province"""
+location_02,cipars_region_national,CIPARS National Region,TheÂ locationÂ isÂ withinÂ theÂ CIPARSÂ nationalÂ region
+location_02,cipars_region_atlantic,CIPARS Atlantic Region,TheÂ locationÂ isÂ withinÂ theÂ CIPARSÂ atlanticÂ region
+location_02,cipars_region_maritimes,CIPARS Maritimes Region,TheÂ locationÂ isÂ withinÂ theÂ CIPARSÂ maritimesÂ region
+location_02,cipars_region_prairies,CIPARS Prairies Region,TheÂ locationÂ isÂ withinÂ theÂ CIPARSÂ prairiesÂ region
+microbe_01,microbe_name,Microbe,"TheÂ microbeÂ subjectedÂ toÂ AST,Â i.e.Â ""Escherichia"""
+microbe_02,fk_microbe_02_microbe_01_id,Microbe ID,TheÂ IDÂ ofÂ theÂ parentÂ microbe
+microbe_02,microbe_subtype_name,Microbe Subtype,"TheÂ speciesÂ orÂ subtypeÂ ofÂ theÂ microbeÂ subjectedÂ toÂ AST,Â i.e.Â ""coli""Â forÂ parentÂ microbeÂ ""Escherichia"""
+microbe_02,DEP_old_id,,
+microbe_02,cedar_esr_microbe_02_id,,
+moa_type,res_format,Result Format,The format of the extracted measure of association data
+moa_unit,res_unit,Result Unit,The unit of analysis of the extracted measure of association data
+production_stage,stage,Production Stage,"TheÂ productionÂ stageÂ toÂ whichÂ theÂ factorÂ applies,Â orÂ whereÂ theÂ effectÂ ofÂ aÂ factorÂ isÂ observed,Â i.e.Â ""Farm"""
+production_stage,cedar_esr_production_stage_id,,
+publisher,pub_type,Type,"TheÂ typeÂ ofÂ publication,Â i.e.Â ""Journal"""
+publisher,pub_title,Title,"TheÂ titleÂ ofÂ theÂ publication,Â i.e.Â ""NatureÂ ReviewsÂ Immunology"""
+publisher,pub_rank,Rank,TheÂ ScimagoÂ rankÂ atÂ theÂ timeÂ ofÂ importÂ (2018)
+publisher,pub_issn,ISSN,"TheÂ ISSNÂ ofÂ theÂ publication,Â i.e.Â ""15424863,Â 00079235"""
+study_design,design,Design,The overall study design of the study
+atc_vet,levelname_1,First Level Group,The anatomical group to which the preparation belongs.
+atc_vet,levelname_2,Second Level Group,The therapeutic main group to which the preparation belongs.
+atc_vet,levelname_3,Third Level Group,The chemical/therapeutic/pharmacological subgroup (top-level) to which the preparation belongs.
+atc_vet,levelname_4,Fourth Level Group,The chemical/therapeutic/pharmacological subgroup (bottom-level) to which the preparation belongs.
+atc_vet,levelname_4_coarse,Simple Fourth Level Group,A coarser classification at the fourth level (chemical/therapeutic/pharmacological subgroup) to simplify record retrieval.
+atc_vet,levelname_5,Fifth Level Group,The chemical substance in the preparation.
+atc_vet,levelname_5_alt,Alternative Fifth Level Group,"An alternative name(s) for the preparation (e.g. USAN, BAN, ubiquitous priprietary name)."
+atc_vet,levelname_5_comb_example,Specific Fifth Level Group Combination Example,An example of a specific combination-preparation representative of the generic combination represented in the ATCvet.
+atc_vet,levelcode_1,First Level Code,The portion of the ATCvet code that describes the preparation's anatomical group.
+atc_vet,levelcode_2,Second Level Code,The portion of the ATCvet code that describes the preparation's therapeutic main group.
+atc_vet,levelcode_3,Third Level Code,The portion of the ATCvet code that describes the preparation's top-level therapeutic subgroup.
+atc_vet,levelcode_4,Fourth Level Code,The portion of the ATCvet code that describes the preparation's bottom-level therapeutic subgroup.
+atc_vet,levelcode_5,Fifth Level Code,The ATCvet code that describes the preparation.
+atc_vet,is_added,Agent is Part of ATCvet Index,"The preparation/gene was added by the CEDAR team, and is not reflected in the published ATCvet index."
+atc_vet,is_gene,Agent is a Gene,The preparation/gene is a gene.
+atc_vet,aro_number,ARO Number,The preparation/gene's ARO number (from CARD).
+atc_vet,is_duplicate,Agent is a Duplicate,There is another ATCvet code which include the same preparation(s). Use the alternate ATCvet code.
+legacy_user,name_user,Name of User,"The user's full name, i.e. ""John Smith"""
+,cedar_esr_user_id,,The user in CEDAR ESR
+model,model_name,Model Name,"TheÂ nameÂ ofÂ theÂ iAM.AMRÂ model,Â i.e.Â ""iAM.AMR.CHI"""
+model,model_description,Model Description,AÂ simpleÂ andÂ briefÂ descriptionÂ orÂ 'caption'Â ofÂ theÂ model
+model,fk_model_create_user_id,Model Creator,TheÂ userÂ whoÂ createdÂ theÂ model/query
+model,model_create_date,Creation Date,"TheÂ dateÂ theÂ model/queryÂ wasÂ created,Â inÂ <em>YYYY-MM-DD</em>Â format"
+model,fk_model_maintain_user_id,Model Maintainer,TheÂ userÂ whoÂ maintainsÂ theÂ model/query
+model,model_maintain_date,Last Maintaince Date,"TheÂ dateÂ theÂ model/queryÂ wasÂ lastÂ updated,Â inÂ <em>YYYY-MM-DD</em>Â format"
+ast_method,method,AST Method,LaboratoryÂ test methodÂ usedÂ toÂ determineÂ antimicrobialÂ susceptibility
+reference_join_location,fk_reference_join_location_reference_id,Related Ref ID,The reference pertaining to this location
+reference_join_location,fk_location_01_id,Country,
+reference_join_location,fk_reference_join_location_location_02_id,Region,
+reference_join_location,ref_loc_note,Additional Details,"AÂ free-textÂ descriptionÂ ofÂ theÂ subdivision,Â allowingÂ usersÂ toÂ specifyÂ customÂ subdivisionsÂ likeÂ ""east"",Â ""Mid-atlanticÂ region""Â orÂ ""Nationwide"""
+reference_join_reference_note,fk_reference_join_note_reference_id,Related Ref ID,The reference that this note refers to
+reference_join_reference_note,note,Note,"AÂ free-textÂ noteÂ describingÂ anyÂ challengesÂ withÂ interpretingÂ theÂ study,Â orÂ extractingÂ theÂ data"
+reference_join_reference_note,fk_reference_join_note_user_id,User,The userÂ whoÂ madeÂ theÂ note
+reference_join_reference_note,resolved,Resolved?,SpecifiesÂ whetherÂ orÂ notÂ theÂ noteÂ wasÂ resolvedÂ orÂ addressed
+reference_join_reference_note,is_apply_factor,,"The note relates to factor-level information, and should be included as a note with all factors"
+reference_history_action,action,,What happened to the reference?
+reference_history_action,action_level_coarse,,
+reference_history_action,action_level_coarse_num,,
+reference_history_action,action_description,,A detailed description of what happened to the reference
+reference_history_action,action_level_fine,,The resultant status level. This refers to how the factor can be used
+genetic_element,element_uid,,
+genetic_element,element_name,,
+genetic_element,element_alias,,
+genetic_element,element_type,,
+genetic_element,element_accno,,
+genetic_element,element_family_accno,,
+genetic_element,to_review,,
+factor_join_res_outcome,fk_factor_join_res_outcome_factor_id,,
+factor_join_res_outcome,fk_res_outcome_id,,
+cedar_exclude,exclusion,,
+cedar_exclude,exclusion_type,,
+figure_extract_method,method_name,,
+figure_extract_method,method_description,,
+figure_extract_method,method_wpd,,
+figure_extract_method,method_convert_to_count,,
+factor_family,factor_family_name,,The factor family name
+factor_parent,factor_parent_name,,The parent factor name
+factor_family_join_parent_factor,fk_family_join_parent_factor_parent_id,,"The parent factor identifier, or PFID"
+factor_family_join_parent_factor,fk_family_join_parent_factor_family_id,,"The factor family identifier, or FFID"
+factor_parent_join_factor,fk_parent_join_factor_factor_parent_id,,"The parent factor identifier, or PFID"
+factor_parent_join_factor,fk_parent_join_factor_factor_id,,"The factor identifier, or FID"
+factor_parent_metadata,fk_metadata_factor_parent_id,,"The parent factor identifier, or PFID"
+factor_parent_metadata,fk_metadata_location_02_id,,The ID of the location from the location_02 table
+factor_parent_metadata,fk_entry_user_id,,The user who added the frequency information
+factor_parent_metadata,fk_review_user_id,,The user who reviewed the frequency information
+factor_parent_metadata,frequency,,The frequency of factor implementation
+factor_parent_metadata,frequency_distribution,,"(optional) if a point value is not provided for frequency, a distribution name can be specified with parameters in other fields"
+factor_parent_metadata,frequency_param_a,,"First distribution parameter. Beta = a. Lower limit for uniform (i.e. range), pareto, triangular, etc."
+factor_parent_metadata,frequency_param_b,,"Second distribtuion parameter. Normal/log-normal = mean. Beta = b. Poisson = lambda. Mid or most-likely value for pareto, triangular, etc."
+factor_parent_metadata,frequency_param_c,,"Third distribution parameter. Normal/log-normal = SD/s, Upper limit for uniform (i.e. range), pareto, triangular, etc."
+factor_parent_metadata,frequency_data_apply_start_year,,"The first year this frequency applies to; if NULL, all years"
+factor_parent_metadata,frequency_data_apply_end_year,,"The last year this frequency applies to; if NULL, all years from start"
+factor_parent_metadata,frequency_data_source,,"The reference, or the person who provided the estimate"
+factor_parent_metadata,frequency_data_source_added_year,,"The year the reference was queried (if personal communication), or year published (if document)"
+factor_parent_metadata,fk_frequency_evidence_type_quality_id,,"The reference or source type ID, as an estimation of source quality (e.g. personal communication, surveillence, small study)"
+factor_parent_metadata,note,,Notes
+factor_parent_metadata,is_applicable_past,,Applicability in past
+factor_parent_metadata,is_applicable_present,,Applicability in present
+factor_parent_metadata,is_applicable_future,,Applicability in future
+factor_parent_metadata,applicable_data_source,,"The reference, or the person who assessed applicability"
+factor_parent_metadata,applicable_data_source_added_year,,"The year the reference was queried (if personal communication), or year published (if document)"
+factor_parent_metadata,fk_applicable_evidence_type_quality_id,,"The reference or source type ID, as an estimation of source quality (e.g. personal communication, surveillence, small study)"
+ast_breakpoint_source,ast_breakpoint_std,,The AST
+ast_breakpoint_source,ast_breakpoint_std_acronym,,
+ast_breakpoint_source,ast_breakpoint_std_accno,,
+ast_breakpoint_source,ast_breakpoint_std_desc,,
+ast_breakpoint_version,date_publish,,
+ast_breakpoint_version,date_last_valid,,
+ast_breakpoint_version,ast_breakpoint_std,,
+ast_breakpoint_version,ast_breakpoint_version,,
+ast_breakpoint_version,clsi_std_type,,
+evidence_type_quality,evidence_type,,
+evidence_type_quality,evidence_type_accno,,
+evidence_type_quality,evidence_type_description,,
+factor_parent_join_atc_vet,fk_amu_factor_parent_id,,
+factor_parent_join_atc_vet,fk_amu_atc_vet_id,,
+reference_join_reference_history,reference_join_history_reference_id,,"The reference ID corresponding to this history entry. This was formerly a foreign key to the reference table. Since the reference table now has a foreign key for this table's primary id instead, the former foreign key to the reference table can no longer exist. Now that this reference_join_reference_history table is depreciated (purely a legacy table), the foreign key to the reference table is not necessary anyway."
+,extract_user_legacy,,
