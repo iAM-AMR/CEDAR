@@ -58,7 +58,7 @@ factor,id,Factor ID,The factor ID.
 factor,pid_factor,Factor PID,The physical ID of the factor.
 factor,factor_record_version,,The record version number (default: 1).
 factor,reference,REF ID,The reference that reports the factor.
-factor,is_archived,Archived?,"Where TRUE, the factor is archived. "
+factor,is_archived,,"Where TRUE, the factor is archived. "
 factor,archived_reason,,A reason why the factor was archived.
 factor,is_excluded_extract,,"Where TRUE, the factor was excluded from further data extraction."
 factor,excluded_extract_reason,,The reason(s) why the factor was excluded from further data extraction.
@@ -79,7 +79,7 @@ res_outcome,id,,
 res_outcome,pid_ro,,The canonical resistance outcome ID. The URID is shared between resistance outcomes (ROs) that have been extracted in duplicate
 res_outcome,ro_record_version,,
 res_outcome,factor,,
-res_outcome,is_archived,Archived?,"Where TRUE, the resistance-outcome is archived. "
+res_outcome,is_archived,,"Where TRUE, the resistance-outcome is archived. "
 res_outcome,archived_reason,,A reason why the resistance-outcome was archived.
 res_outcome,resistance,AMR,The resistance that was assayed
 res_outcome,resistance_gene,,The genomic resistance assayed as a measure of resistance
@@ -111,16 +111,17 @@ res_outcome,ast_breakpoint_is_explicit,,"The breakpoint (if explicit, but not fr
 res_outcome,is_figure_extract,,True where the figure was extracted from a figure. This excludes cases where the figure is captioned with values
 res_outcome,figure_extract_method,,The method used to extract the resistance outcome (RO) from the reference
 res_outcome,figure_extract_reproducible,,True where a copy of the data extraction tool output is available
-res_outcome,extract_user,,The user that extracted the resistance outcome
+res_outcome,extract_user,User,The user who extracted the record.
+res_outcome,extract_user_legacy,User,The user who extracted the record.
 res_outcome,extract_project,Source Project,The project in which the object was extracted. 
-res_outcome,extract_date,,The date at which the resistance outcome was extracted
+res_outcome,extract_date,Date,The date at which the resistance outcome was extracted
 res_outcome,factor_v0_id,,"The factor ID from v0 of CEDAR (CEDAR 2016), often used in model identifiers prior to 2020."
 res_outcome,v12_is_v1_import,,The factor is imported from v1.
 res_outcome,v12_ID_factor_v1,,The factor ID used within CEDAR v1.
 res_outcome,v12_ID_reference_v1,,The reference ID to which the factor belonged in v1.
 res_outcome,v12_ID_reference_v2_initial,,"The reference ID assigned during import of v1 to v2, prior to reassignment of duplicates."
 res_outcome,v12_solo_extraction_2016,,"These are v1 factors that were migrated to v2 references, that will not be dual extracted, as they were thoroughly reviewed by Ashley or Daniella in v1"
-host_01,host_name,Host,"The host from which the assayed microbe originated, i.e. ""Chicken"""
+host_01,host_01_name,Host,"The host from which the assayed microbe originated, i.e. ""Chicken"""
 host_01,cedar_esr_host_01_id,,
 host_02,host_subtype_name,Host Subtype,"The host subtype from which the assayed microbe originated, i.e. ""Eggs"" for a parent host ""Chicken"""
 host_02,fk_host_02_host_01_id,Host ID,The ID of the parent host
@@ -151,20 +152,19 @@ location_02,cipars_region_national,CIPARS National Region,The location is wit
 location_02,cipars_region_atlantic,CIPARS Atlantic Region,The location is within the CIPARS atlantic region
 location_02,cipars_region_maritimes,CIPARS Maritimes Region,The location is within the CIPARS maritimes region
 location_02,cipars_region_prairies,CIPARS Prairies Region,The location is within the CIPARS prairies region
-microbe_01,microbe_name,Microbe,"The microbe subjected to AST, i.e. ""Escherichia"""
-microbe_02,fk_microbe_02_microbe_01_id,Microbe ID,The ID of the parent microbe
-microbe_02,microbe_subtype_name,Microbe Subtype,"The species or subtype of the microbe subjected to AST, i.e. ""coli"" for parent microbe ""Escherichia"""
-microbe_02,DEP_old_id,,
-microbe_02,cedar_esr_microbe_02_id,,
-moa_type,res_format,Result Format,The format of the extracted measure of association data
-moa_unit,res_unit,Result Unit,The unit of analysis of the extracted measure of association data
-production_stage,stage,Production Stage,"The production stage to which the factor applies, or where the effect of a factor is observed, i.e. ""Farm"""
-production_stage,cedar_esr_production_stage_id,,
+microbe_01,microbe_01_name,Microbe,"The microbe subjected to AST, i.e. ""Escherichia"""
+microbe_02,microbe_02_name,Microbe Subtype,"The species or subtype of the microbe subjected to AST, i.e. ""coli"" for parent microbe ""Escherichia"""
+microbe_02,microbe_level_01,Microbe ID,The ID of the parent microbe
+microbe_02,HIST_cedar_esr_microbe_02,,
+moa_type,moa_type_name,Result Format,The format of the extracted measure of association data
+moa_unit,outcome_unit_name,Result Unit,The unit of analysis of the extracted measure of association data
+production_stage,production_stage_name,Production Stage,"The production stage to which the factor applies, or where the effect of a factor is observed, i.e. ""Farm"""
+production_stage,HIST_cedar_esr_production_stage,,
 publisher,pub_type,Type,"The type of publication, i.e. ""Journal"""
 publisher,pub_title,Title,"The title of the publication, i.e. ""Nature Reviews Immunology"""
 publisher,pub_rank,Rank,The Scimago rank at the time of import (2018)
 publisher,pub_issn,ISSN,"The ISSN of the publication, i.e. ""15424863, 00079235"""
-study_design,design,Design,The overall study design of the study
+study_design,study_design_name,Design,The overall study design of the study
 atc_vet,levelname_1,First Level Group,The anatomical group to which the preparation belongs.
 atc_vet,levelname_2,Second Level Group,The therapeutic main group to which the preparation belongs.
 atc_vet,levelname_3,Third Level Group,The chemical/therapeutic/pharmacological subgroup (top-level) to which the preparation belongs.
@@ -247,7 +247,7 @@ factor_parent_metadata,is_applicable_future,,Applicability in future
 factor_parent_metadata,applicable_data_source,,"The reference, or the person who assessed applicability"
 factor_parent_metadata,applicable_data_source_added_year,,"The year the reference was queried (if personal communication), or year published (if document)"
 factor_parent_metadata,fk_applicable_evidence_type_quality_id,,"The reference or source type ID, as an estimation of source quality (e.g. personal communication, surveillence, small study)"
-ast_breakpoint_source,ast_breakpoint_std,,The AST
+ast_breakpoint_source,ast_breakpoint_std,,
 ast_breakpoint_source,ast_breakpoint_std_acronym,,
 ast_breakpoint_source,ast_breakpoint_std_accno,,
 ast_breakpoint_source,ast_breakpoint_std_desc,,
@@ -262,4 +262,3 @@ evidence_type_quality,evidence_type_description,,
 factor_parent_join_atc_vet,fk_amu_factor_parent_id,,
 factor_parent_join_atc_vet,fk_amu_atc_vet_id,,
 reference_join_reference_history,reference_join_history_reference_id,,"The reference ID corresponding to this history entry. This was formerly a foreign key to the reference table. Since the reference table now has a foreign key for this table's primary id instead, the former foreign key to the reference table can no longer exist. Now that this reference_join_reference_history table is depreciated (purely a legacy table), the foreign key to the reference table is not necessary anyway."
-,extract_user_legacy,,

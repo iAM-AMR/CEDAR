@@ -111,32 +111,34 @@ class host_01(models.Model): # =================================================
 # ===================================================================================================================================================
 
     """
-    The host from which the assayed samples were isolated. 
+    Hosts, differentiated at level (01) of typing (species).
     """
 
-    host_name                       = models.CharField(max_length = 20, 
-                                                       unique     = True, 
-                                                       help_text  = dict_help['host_name'])
-    cedar_esr_host_01_id = models.PositiveIntegerField(unique=True, blank=True, null=True, help_text=dict_help['cedar_esr_host_01_id'])
+    host_01_name                    = models.CharField(unique     = True, 
+                                                       max_length = 20, 
+                                                       help_text  = dict_help['host_01_name']) # Change to host_level_01_name
     
     def __str__(self):
-        return self.host_name
+        return self.host_01_name
 
 
 
-class host_02(models.Model): # --------------------------------------------------------------------
+class host_02(models.Model): # ======================================================================================================================
+#                              -------------------------------------------------------------------------------------------------------------- host_02
+# ===================================================================================================================================================
+
     """
-    ===============================================================================================
-    A host subtype.                                                                         host_02
-    ===============================================================================================
+    Hosts, differentiated at level (02) of typing. 
+    The concept of a level 02 of host typing is being depreciated; see NEWHOST02
     """
     
-    #TO DO CP: self-identification for dropdown!!
+    host_subtype_name               = models.CharField(max_length = 100,
+                                                       help_text  = dict_help['host_subtype_name']) #TODO: Change to host_level_02_name
 
-    host_01 = models.ForeignKey(host_01, on_delete=models.SET_NULL, null=True, help_text=dict_help['fk_host_02_host_01_id'])
-    host_subtype_name     = models.CharField(max_length=100, help_text=dict_help['host_subtype_name'])
-    DEP_sel_beef = models.BooleanField(blank=True, null=True, help_text=dict_help['DEP_sel_beef'])
-    DEP_sel_broil = models.BooleanField(blank=True, null=True, help_text=dict_help['DEP_sel_broil'])
+    host_level_01                        = models.ForeignKey(to         = host_01, 
+                                                       null       = True, 
+                                                       on_delete  = models.SET_NULL,
+                                                       help_text  = dict_help['host_level_01']) # TODO: Change to host_level_01
 
     # These fields will be removed when the host_production_stream and host_life_stage are linked 
     # directly to the factor table.
@@ -149,13 +151,16 @@ class host_02(models.Model): # -------------------------------------------------
                                                    null      = True,
                                                    on_delete = models.SET_NULL)
     
-    
+    DEP_sel_beef = models.BooleanField(blank=True, null=True, help_text=dict_help['DEP_sel_beef'])
+    DEP_sel_broil = models.BooleanField(blank=True, null=True, help_text=dict_help['DEP_sel_broil'])
+
     # The host_01_id before Beef Cattle (6) and Dairy Cattle (5) are collapsed into Cattle. 
     HIST_host_01_id = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.host_subtype_name
     
+
 
 class host_life_stage(models.Model): # ------------------------------------------------------------
     #                                  -------------------------------------------- host_life_stage
@@ -193,6 +198,7 @@ class production_stream(models.Model): # ---------------------------------------
 class location_01(models.Model): # ----------------------------------------------------------------
     #                              ---------------------------------------------------- location_01
     #                              ----------------------------------------------------------------
+
     """
     A location (country-level).
     """
@@ -263,131 +269,188 @@ class location_sub(models.Model): # --------------------------------------------
     iso_3166_2              = models.CharField(max_length=3, 
                                                help_text=dict_help['iso_3166_2'])
 
-    cipars_region_national  = models.BooleanField(help_text=dict_help['cipars_region_national'])
-    cipars_region_atlantic  = models.BooleanField(help_text=dict_help['cipars_region_atlantic'])
-    cipars_region_maritimes = models.BooleanField(help_text=dict_help['cipars_region_maritimes'])
-    cipars_region_prairies  = models.BooleanField(help_text=dict_help['cipars_region_prairies'])
+    is_cipars_region_national  = models.BooleanField(help_text=dict_help['cipars_region_national'])
+    is_cipars_region_atlantic  = models.BooleanField(help_text=dict_help['cipars_region_atlantic'])
+    is_cipars_region_maritimes = models.BooleanField(help_text=dict_help['cipars_region_maritimes'])
+    is_cipars_region_prairies  = models.BooleanField(help_text=dict_help['cipars_region_prairies'])
     
     def __str__(self):
         return '%s (%s)' % (self.subdivision, self.subdivision_type)
 
 
 
-class microbe_01(models.Model): # -----------------------------------------------------------------
+class microbe_01(models.Model): # =====================================================================================
+    #                             -------------------------------------------------------------------------- MICROBE_01
+    # =================================================================================================================
+    
     """
-    ===============================================================================================
-    A microbe type.                                                                    microbe_main
-    ===============================================================================================
+    Microbes, differentiated at the first level (01) of typing (generally, genus).
     """
 
-    microbe_name = models.CharField(max_length=50, unique=True, help_text=dict_help['microbe_name'])
+    microbe_01_name  =  models.CharField(unique     = True, 
+                                         max_length = 50, 
+                                         help_text  = dict_help['microbe_01_name'])
     
     def __str__(self):
-        return self.microbe_name
+        return self.microbe_01_name
 
 
 
-class microbe_02(models.Model): # -----------------------------------------------------------------
+class microbe_02(models.Model): # =====================================================================================
+    #                             -------------------------------------------------------------------------- MICROBE_02
+    # =================================================================================================================
     
     """
-    A microbe subtype.
+    Microbes, differentiated at the second level (02) of typing (generally: species, subtype, serovar).
     """
-
-        #TO DO: self-identification for dropdown!!
-
-    #microbe_01_id = models.ManyToManyField(microbe_01, db_table='microbe_join', help_text=dict_help['microbe_01_id'])
-    fk_microbe_02_microbe_01_id = models.ForeignKey(microbe_01, on_delete=models.SET_NULL, blank=True, null=True, help_text=dict_help['fk_microbe_02_microbe_01_id'])
-    microbe_subtype_name = models.CharField(max_length=100, help_text=dict_help['microbe_subtype_name'])
-    DEP_old_id = models.IntegerField(blank=True, null=True, help_text=dict_help['DEP_old_id'])
-    cedar_esr_microbe_02_id = models.PositiveIntegerField(unique=True, blank=True, null=True, help_text=dict_help['cedar_esr_microbe_02_id'])
     
-    def __str__(self):
-        return self.microbe_subtype_name
+    microbe_02_name  =  models.CharField(max_length = 100, 
+                                         help_text  = dict_help['microbe_02_name'])
     
-
-
-class moa_type(models.Model): # -------------------------------------------------------------------
-    """
-    A format of extracted measure of association data.
-    """
-    # TODO: Change this name. This sounds like "resistance format", and it's actually "result format".
-
-    res_format = models.CharField(max_length=50, unique=True, help_text=dict_help['res_format'])
+    microbe_level_01 = models.ForeignKey(to         = microbe_01, 
+                                         null       = True, 
+                                         blank      = True, 
+                                         on_delete  = models.SET_NULL, 
+                                         help_text  = dict_help['microbe_level_01'])
+    
+    # Historical --------------------------------
+    HIST_cedar_esr_microbe_02 = models.PositiveIntegerField(null      = True, 
+                                                            blank     = True, 
+                                                            unique    = True, 
+                                                            help_text = dict_help['HIST_cedar_esr_microbe_02'])
     
     def __str__(self):
-        return self.res_format
+        return self.microbe_02_name
+    
 
-class moa_unit(models.Model):
-    """
-    A unit of analysis for extracted measure of association data.
-    """
-    res_unit = models.CharField(max_length=50, unique=True, help_text=dict_help['res_unit'])
 
-    def __str__(self):
-        return self.res_unit
+class moa_type(models.Model): # =======================================================================================
+    #                           ------------------------------------------------------------------------------ MOA_TYPE
+    # =================================================================================================================
 
-class production_stage(models.Model):
     """
-    A production stage along the farm-to-fork continuum.
+    Measures of association. Refered to as "grain" elsewhere in CEDAR.
     """
-    stage = models.CharField(max_length=20, unique=True, help_text=dict_help['stage'])
-    cedar_esr_production_stage_id = models.PositiveIntegerField(unique=True, blank=True, null=True, help_text=dict_help['cedar_esr_production_stage_id'])
+
+    moa_type_name        = models.CharField(unique     = True, 
+                                            max_length = 50, 
+                                            help_text  = dict_help['moa_type_name'])
     
     def __str__(self):
-        return self.stage
+        return self.moa_type_name
 
-#class status_reference(models.Model):
-    #"""
-    #A reference's status with respect to data extraction.
-    #"""
-    #status = models.CharField(max_length=50, unique=True, help_text='The stage of data extraction, i.e. "Validation (Phase 1)"')
-    #status_description = models.TextField(help_text='A description of the status')
-    
-    #def __str__(self):
-        #return self.status
 
-class publisher(models.Model):
+
+class moa_unit(models.Model): # =======================================================================================
+    #                           ------------------------------------------------------------------------------ MOA_UNIT
+    # =================================================================================================================
+
     """
-    A publishing organization pertaining to one or more references/studies.
+    Units of analyses (e.g., isolate, sample, animal, person, flock, herd, farm).
     """
-    pub_type = models.CharField(max_length=50, blank=True, null=True, help_text=dict_help['pub_type'])
-    pub_title = models.TextField(help_text=dict_help['pub_title'])
-    pub_rank = models.IntegerField(blank=True, null=True, help_text=dict_help['pub_rank'])
-    pub_issn = models.TextField(blank=True, null=True, help_text=dict_help['pub_issn'])
+
+    outcome_unit_name     = models.CharField(unique     = True, 
+                                            max_length = 50, 
+                                            help_text  = dict_help['outcome_unit_name'])
+
+    def __str__(self):
+        return self.outcome_unit_name
+
+
+
+class production_stage(models.Model): # ===============================================================================
+    #                                   -------------------------------------------------------------- PRODUCTION_STAGE
+    # =================================================================================================================
+
+    """
+    Production stages along the farm-to-fork continuum.
+    """
+
+    production_stage_name = models.CharField(unique     = True, 
+                                             max_length = 20, 
+                                             help_text  = dict_help['production_stage_name'])
+
+    # Historical --------------------------------
+    HIST_cedar_esr_production_stage = models.PositiveIntegerField(null      = True, 
+                                                                  blank     = True, 
+                                                                  unique    = True, 
+                                                                  help_text = dict_help['HIST_cedar_esr_production_stage'])
     
     def __str__(self):
-        return '%s (%s)' % (self.pub_title, self.pub_rank)
+        return self.production_stage_name
 
-class study_design(models.Model):
+
+
+class publisher(models.Model): # ======================================================================================
+    #                            ---------------------------------------------------------------------------- PUBLISHER
+    # =================================================================================================================
+
     """
-    An overall study design type.
+    Scientific publications.
     """
-    design = models.CharField(max_length=50, unique=True, help_text=dict_help['design'])
+
+    pub_type  =    models.CharField(null       = True, 
+                                    blank      = True, 
+                                    max_length = 50, 
+                                    help_text  = dict_help['pub_type'])
+                                    
+    pub_title =    models.TextField(help_text  = dict_help['pub_title'])
+
+    pub_rank  = models.IntegerField(null       = True, 
+                                    blank      = True, 
+                                    help_text  = dict_help['pub_rank'])
+
+    pub_issn  =    models.TextField(null       = True, 
+                                    blank      = True, 
+                                    help_text  = dict_help['pub_issn'])
     
     def __str__(self):
-        return self.design
+        return self.pub_title
 
-class atc_vet(models.Model): #TO DO: finish help text
+
+
+class study_design(models.Model): # ===================================================================================
+    #                               ---------------------------------------------------------------------- STUDY_DESIGN
+    # =================================================================================================================
+
     """
-    A list of antimicrobials, taken from the ATCvet index.
+    Types of study design.
     """
-    levelname_1 = models.CharField(max_length=100, help_text=dict_help['levelname_1'])
+
+    study_design_name = models.CharField(unique     = True, 
+                                         max_length = 50, 
+                                         help_text  = dict_help['study_design_name'])
+    
+    def __str__(self):
+        return self.study_design_name
+
+
+
+class atc_vet(models.Model): # ========================================================================================
+    #                          -------------------------------------------------------------------------------- ATC_VET
+    # =================================================================================================================
+
+    """
+    Antimicrobials, from the ATC and ATCvet indices.
+    """
+
+    levelname_1 = models.CharField(max_length=100,                        help_text=dict_help['levelname_1'])
     levelname_2 = models.CharField(max_length=100, blank=True, null=True, help_text=dict_help['levelname_2'])
     levelname_3 = models.CharField(max_length=100, blank=True, null=True, help_text=dict_help['levelname_3'])
     levelname_4 = models.CharField(max_length=200, blank=True, null=True, help_text=dict_help['levelname_4'])
-    levelname_4_coarse = models.CharField(max_length=100, blank=True, null=True, help_text=dict_help['levelname_4_coarse'])
+    levelname_4_coarse       = models.CharField(max_length=100, blank=True, null=True, help_text=dict_help['levelname_4_coarse'])
     levelname_5 = models.CharField(max_length=100, blank=True, null=True, help_text=dict_help['levelname_5'])
-    levelname_5_alt = models.CharField(max_length=100, blank=True, null=True, help_text=dict_help['levelname_5_alt'])
+    levelname_5_alt          = models.CharField(max_length=100, blank=True, null=True, help_text=dict_help['levelname_5_alt'])
     levelname_5_comb_example = models.CharField(max_length=100, blank=True, null=True, help_text=dict_help['levelname_5_comb_example'])
-    levelcode_1 = models.CharField(max_length=4, blank=True, null=True, help_text=dict_help['levelcode_1'])
-    levelcode_2 = models.CharField(max_length=8, blank=True, null=True, help_text=dict_help['levelcode_2'])
-    levelcode_3 = models.CharField(max_length=10, blank=True, null=True, help_text=dict_help['levelcode_3'])
-    levelcode_4 = models.CharField(max_length=12, blank=True, null=True, help_text=dict_help['levelcode_4'])
-    levelcode_5 = models.CharField(max_length=16, blank=True, null=True, help_text=dict_help['levelcode_5'])
-    is_added = models.BooleanField(help_text=dict_help['is_added'])
-    is_gene = models.BooleanField(help_text=dict_help['is_gene'])
-    aro_number = models.IntegerField(blank=True, null=True, help_text=dict_help['aro_number'])
-    is_duplicate = models.BooleanField(help_text=dict_help['is_duplicate'])
+    levelcode_1 = models.CharField(max_length=4,   blank=True, null=True, help_text=dict_help['levelcode_1'])
+    levelcode_2 = models.CharField(max_length=8,   blank=True, null=True, help_text=dict_help['levelcode_2'])
+    levelcode_3 = models.CharField(max_length=10,  blank=True, null=True, help_text=dict_help['levelcode_3'])
+    levelcode_4 = models.CharField(max_length=12,  blank=True, null=True, help_text=dict_help['levelcode_4'])
+    levelcode_5 = models.CharField(max_length=16,  blank=True, null=True, help_text=dict_help['levelcode_5'])
+    is_added    = models.BooleanField(                                    help_text=dict_help['is_added'])
+    is_gene     = models.BooleanField(                                    help_text=dict_help['is_gene'])
+    aro_number  = models.IntegerField(             blank=True, null=True, help_text=dict_help['aro_number'])
+    is_duplicate = models.BooleanField(                                   help_text=dict_help['is_duplicate'])
     
     def __str__(self):
         if self.levelname_5 is not None:
@@ -396,7 +459,7 @@ class atc_vet(models.Model): #TO DO: finish help text
             ident = self.levelname_1
         return ident
 
-#Dynamic tables from CEDAR
+
 
 class legacy_user(models.Model): #renamed as legacy_user
     """
@@ -884,9 +947,9 @@ class figure_extract_method(models.Model):
 
 
 
-class res_outcome(models.Model): # ====================================================================================
-    # ----------------------------------------------------------------------------------------------------- RES_OUTCOME
-    # =================================================================================================================
+class res_outcome(models.Model): # ==================================================================================================================
+    # ----------------------------------------------------------------------------------------------------------------------------------- RES_OUTCOME
+    # ===============================================================================================================================================
     """
     An measured association with a resistance outcome.
     """
@@ -1100,3 +1163,16 @@ class reference_join_reference_note(models.Model): #former matrix table m_refere
     
     def __str__(self):
         return 'Reference %s: %s' % (self.fk_note_ref_id, self.note)
+
+
+
+
+#class status_reference(models.Model):
+    #"""
+    #A reference's status with respect to data extraction.
+    #"""
+    #status = models.CharField(max_length=50, unique=True, help_text='The stage of data extraction, i.e. "Validation (Phase 1)"')
+    #status_description = models.TextField(help_text='A description of the status')
+    
+    #def __str__(self):
+        #return self.status
