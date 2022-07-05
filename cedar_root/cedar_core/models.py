@@ -61,6 +61,9 @@ for key in dict_capt:
         dict_capt[key] = dict_capt[key].replace('\xa0',' ')
 
 
+def clean_help_text(field_name, dict = dict_help):
+    dict.get(field_name, "Missing Help Text")
+
 
 #Static tables from CEDAR
 
@@ -440,8 +443,8 @@ class res_outcome(models.Model): # =============================================
     prevtable_d = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))], blank=True, null=True, help_text=dict_help['prevtable_d'])
     
     # Contingency / Prevalence Table Margin Totals
-    table_n_ab = models.PositiveIntegerField(blank=True, null=True, help_text=dict_help['table_n_exp']) #
-    table_n_cd = models.PositiveIntegerField(blank=True, null=True, help_text=dict_help['table_n_ref']) #
+    table_n_ab = models.PositiveIntegerField(blank=True, null=True, help_text= dict_help.get('table_n_ab'))
+    table_n_cd = models.PositiveIntegerField(blank=True, null=True, help_text=clean_help_text('table_n_cd'))
     
     # Odds Ratios
     odds_ratio            = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))], blank=True, null=True, help_text=dict_help['odds_ratio']) #
@@ -590,7 +593,7 @@ class ast_method(models.Model): # ==============================================
     ast_method_name            = models.CharField(max_length=50, help_text=dict_help['method'])
     
     def __str__(self):
-        return self.method
+        return self.ast_method_name
 
 
 
