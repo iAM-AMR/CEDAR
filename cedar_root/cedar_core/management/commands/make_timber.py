@@ -5,7 +5,7 @@
 import csv, datetime
 
 from django.db.models import F
-from cedar_core.make_query_fun import write_timber_csv
+#from cedar_core.make_query_fun import write_timber_csv
 
 from cedar_core.models import reference, reference_join_location, reference_join_reference_note, factor, publisher, res_outcome
 
@@ -17,7 +17,7 @@ from django.core.management.base import BaseCommand, CommandError
 tmbr_default_field_names = [
     # See write_timber_csv() for description. 
     'id',
-    'pid',
+    'pid_ro',
     'factor__reference__id',
     'factor__reference__pid_reference',
     'factor__reference__refwk',
@@ -26,26 +26,26 @@ tmbr_default_field_names = [
     'factor__reference__key_bibtex',
     'factor__reference__ref_title',
     'factor__reference__ref_country__country',
-    'factor__reference__study_design__design',
+    'factor__reference__study_design__study_design_name',
     'factor__id',
     'factor__pid_factor',
     'factor__factor_title',
     'factor__factor_description',
     'factor__group_factor',
     'factor__group_comparator',
-    'factor__host_level_01__host_name',
+    'factor__host_level_01__host_01_name',
     'factor__host_level_02__host_subtype_name',
     'factor__host_production_stream',
     'factor__host_life_stage',
-    'factor__group_allocate_production_stage__stage',
-    'group_observe_production_stage__stage',
-    'moa_type__res_format',
-    'moa_unit__res_unit',
+    'factor__group_allocate_production_stage__production_stage_name',
+    'group_observe_production_stage__production_stage_name',
+    'moa_type__moa_type_name',
+    'moa_unit__outcome_unit_name',
     'resistance__levelname_4_coarse',
     'resistance__levelname_5',
     'resistance_gene__element_name',
-    'microbe_level_01__microbe_name',
-    'microbe_level_02__microbe_subtype_name',
+    'microbe_level_01__microbe_01_name',
+    'microbe_level_02__microbe_02_name',
     'is_figure_extract',
     'figure_extract_method__method_name',
     'figure_extract_reproducible',
@@ -57,8 +57,8 @@ tmbr_default_field_names = [
     'prevtable_b',
     'prevtable_c',
     'prevtable_d',
-    'table_n_exp',
-    'table_n_ref',
+    'table_n_ab',
+    'table_n_cd',
     'odds_ratio',
     'odds_ratio_lo',
     'odds_ratio_up',
@@ -214,26 +214,26 @@ timber_qs_all = res_outcome.objects.all().values(
     'factor__reference__key_bibtex',
     'factor__reference__ref_title',
     'factor__reference__ref_country__country',
-    'factor__reference__study_design__design',
+    'factor__reference__study_design__study_design_name',
     'factor__id',
     'factor__pid_factor',
     'factor__factor_title',
     'factor__factor_description',
     'factor__group_factor',
     'factor__group_comparator',
-    'factor__host_level_01__host_name',
+    'factor__host_level_01__host_01_name',
     'factor__host_level_02__host_subtype_name',
     'factor__host_production_stream',
     'factor__host_life_stage',
-    'factor__group_allocate_production_stage__stage',
-    'group_observe_production_stage__stage',
-    'moa_type__res_format',
-    'moa_unit__res_unit',
+    'factor__group_allocate_production_stage__production_stage_name',
+    'group_observe_production_stage__production_stage_name',
+    'moa_type__moa_type_name',
+    'moa_unit__outcome_unit_name',
     'resistance__levelname_4_coarse',
     'resistance__levelname_5',
     'resistance_gene__element_name',
-    'microbe_level_01__microbe_name',
-    'microbe_level_02__microbe_subtype_name',
+    'microbe_level_01__microbe_01_name',
+    'microbe_level_02__microbe_02_name',
     'is_figure_extract',
     'figure_extract_method__method_name',
     'figure_extract_reproducible',
@@ -245,8 +245,8 @@ timber_qs_all = res_outcome.objects.all().values(
     'prevtable_b',
     'prevtable_c',
     'prevtable_d',
-    'table_n_exp',
-    'table_n_ref',
+    'table_n_ab',
+    'table_n_cd',
     'odds_ratio',
     'odds_ratio_lo',
     'odds_ratio_up',
@@ -305,7 +305,7 @@ write_timber_csv(timber_qs, "timber_all_%s.csv" % (appendnow))
 # Resistance: Any
 # Project: //unknown//
 
-timber_lridge = timber_qs.filter(factor__host_level_01__host_name = "Chicken")
+timber_lridge = timber_qs.filter(factor__host_level_01__host_01_name = "Chicken")
 
 write_timber_csv(timber_lridge, "timber_lridge_%s_raw.csv" % (appendnow))
 
@@ -320,8 +320,8 @@ write_timber_csv(timber_lridge, "timber_lridge_%s_raw.csv" % (appendnow))
 # Resistance: Third-Generation Cephalosporins
 # Project: CH-SAL-3GC
 
-timber_CH_SAL_3GC = timber_qs.filter(factor__host_level_01__host_name = "Chicken",
-                                     microbe_level_01__microbe_name = "Salmonella",
+timber_CH_SAL_3GC = timber_qs.filter(factor__host_level_01__host_01_name = "Chicken",
+                                     microbe_level_01__microbe_01_name = "Salmonella",
                                      resistance__levelname_4 = "Third-generation cephalosporins")
 
 timber_CH_SAL_3GC.count()
