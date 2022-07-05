@@ -441,7 +441,7 @@ class ResistanceOutcomeForm(ModelForm):
         fields = ['resistance', 'resistance_gene', 'place_in_text', 
                   'microbe_level_01', 'microbe_level_02', 'group_observe_production_stage',
                   'moa_type', 'moa_unit', 'contable_a', 'contable_b', 'contable_c', 'contable_d',
-                  'prevtable_a', 'prevtable_b', 'prevtable_c', 'prevtable_d', 'table_n_exp', 'table_n_ref',
+                  'prevtable_a', 'prevtable_b', 'prevtable_c', 'prevtable_d', 'table_n_ab', 'table_n_cd',
                   'odds_ratio', 'odds_ratio_lo', 'odds_ratio_up', 'odds_ratio_sig', 'is_figure_extract',
                   'figure_extract_method', 'extract_user_legacy']
         
@@ -451,7 +451,7 @@ class ResistanceOutcomeForm(ModelForm):
 
         for fieldname in ['contable_a', 'contable_b', 'contable_c', 'contable_d', 'fk_resistance_id',
                           'prevtable_a', 'prevtable_b', 'prevtable_c', 'prevtable_d',
-                          'table_n_exp', 'table_n_ref', 'fk_microbe_02_id',
+                          'table_n_ab', 'table_n_cd', 'fk_microbe_02_id',
                           'odds_ratio', 'odds_ratio_lo', 'odds_ratio_up', 'microbe_level_01', 'odds_ratio_sig']:
             if fieldname == 'odds_ratio_sig':
                 help_texts[fieldname] = 'The p-value associated with the odds ratio. If an odds ratio is provided, without a significance level, please report "NR" for "not reported".'
@@ -468,8 +468,8 @@ class ResistanceOutcomeForm(ModelForm):
             'resistance_gene': None,
             'contable_a': None,
             'contable_b': None,
-            'table_n_exp': None,
-            'table_n_ref': None,
+            'table_n_ab': None,
+            'table_n_cd': None,
             'prevtable_a': None,
             'prevtable_b': None,
             'contable_c': None,
@@ -494,8 +494,8 @@ class ResistanceOutcomeForm(ModelForm):
 
         to_exclude = ['resistance', 'place_in_text',
                   'microbe_level_01', 'microbe_level_02', 'contable_a', 'contable_b',
-                  'moa_type', 'moa_unit', 'contable_c', 'contable_d', 'table_n_exp',
-                  'prevtable_a', 'prevtable_b', 'prevtable_c', 'prevtable_d', 'table_n_ref']
+                  'moa_type', 'moa_unit', 'contable_c', 'contable_d', 'table_n_ab',
+                  'prevtable_a', 'prevtable_b', 'prevtable_c', 'prevtable_d', 'table_n_cd']
         for i in range(0,len(to_exclude)-1):
             self.fields[to_exclude[i]].label = False
         #self.helper.form_show_labels = False
@@ -588,7 +588,7 @@ class ResistanceOutcomeForm(ModelForm):
                 Field('contable_b', css_id='ct_b'),
                 HTML('''        </td>
                                 <td rowspan="2">'''),
-                Field('table_n_exp', css_id='total_exp', style="height: 125px"),
+                Field('table_n_ab', css_id='total_exp', style="height: 125px"),
                 HTML('''        </td>
                             </tr>
                             <tr>
@@ -612,7 +612,7 @@ class ResistanceOutcomeForm(ModelForm):
                 Field('contable_d', css_id='ct_d'),
                 HTML('''        </td>
                                 <td rowspan="2">'''),
-                Field('table_n_ref', css_id='total_ref', style="height: 125px"),
+                Field('table_n_cd', css_id='total_ref', style="height: 125px"),
                 HTML('''        </td>
                             </tr>
                             <tr>
@@ -664,7 +664,7 @@ class ResistanceOutcomeForm(ModelForm):
         model = res_outcome
         # TO DO: fix the deletion of group exp, group ref
         fields = ['fk_resistance_id', 'moa_type', 'contable_a', 'contable_b',
-                  'contable_c', 'contable_d', 'table_n_exp', 'table_n_ref']
+                  'contable_c', 'contable_d', 'table_n_ab', 'table_n_cd']
         help_texts = {}
         for fieldname in fields:
             help_texts[fieldname] = None
@@ -724,7 +724,7 @@ class ResistanceOutcomeForm(ModelForm):
             Field('contable_b', style="width: 80px;"), 
             HTML('''                        </td>
                                             <td>'''),
-            Field('table_n_exp', style="width: 80px;"),
+            Field('table_n_ab', style="width: 80px;"),
             HTML('''                        </td>
                                         </tr>
                                         <tr>
@@ -736,7 +736,7 @@ class ResistanceOutcomeForm(ModelForm):
             Field('contable_d', style="width: 80px;"),
             HTML('''                        </td>
                                             <td>'''),
-            Field('table_n_ref', style="width: 80px;"),
+            Field('table_n_cd', style="width: 80px;"),
             HTML('''                        </td>
                                         </tr>
                                     </tbody>
@@ -763,7 +763,7 @@ class ResistanceOutcomeForm(ModelForm):
     class Meta:
         model = res_outcome
         fields = ['fk_resistance_id', 'moa_type', 'prevtable_a', 'prevtable_b',
-                  'prevtable_c', 'prevtable_d', 'table_n_exp', 'table_n_ref']
+                  'prevtable_c', 'prevtable_d', 'table_n_ab', 'table_n_cd']
         help_texts = {}
         for fieldname in fields:
             help_texts[fieldname] = None
@@ -817,7 +817,7 @@ class ResistanceOutcomeForm(ModelForm):
             Field('prevtable_b', style="width: 80px;"), 
             HTML('''                        </td>
                                             <td>'''),
-            Field('table_n_exp', style="width: 80px;"),
+            Field('table_n_ab', style="width: 80px;"),
             HTML('''                        </td>
                                         </tr>
                                         <tr>
@@ -829,7 +829,7 @@ class ResistanceOutcomeForm(ModelForm):
             Field('prevtable_d', style="width: 80px;"),
             HTML('''                        </td>
                                             <td>'''),
-            Field('table_n_ref', style="width: 80px;"),
+            Field('table_n_cd', style="width: 80px;"),
             HTML('''                        </td>
                                         </tr>
                                     </tbody>

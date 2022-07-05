@@ -369,7 +369,7 @@ def query_timber(request):
                             'ID_factor', 'association_with_resistance_id', 'AMR', 'gene', 'microbe_01', 'microbe_02',
                             'stage_observe', 'res_format', 'res_unit', 'place_in_text',
                             'contable_a', 'contable_b', 'contable_c', 'contable_d', 'prevtable_a', 'prevtable_b', 'prevtable_c',
-                            'prevtable_d', 'table_n_exp', 'table_n_ref', 'odds_ratio', 'odds_ratio_lo', 'odds_ratio_up',
+                            'prevtable_d', 'table_n_ab', 'table_n_cd', 'odds_ratio', 'odds_ratio_lo', 'odds_ratio_up',
                             'odds_ratio_sig', 'odds_ratio_confidence','figure_extract', 'figure_extract_method', 
                             'extract_date_ro', 'ID_meta', 'meta_amr', 'meta_type']
             
