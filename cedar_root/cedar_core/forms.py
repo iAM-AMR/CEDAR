@@ -1,3 +1,4 @@
+from turtle import width
 from django.forms import ModelForm
 from django import forms
 from cedar_core.models import factor, reference, reference_join_location, reference_join_reference_note, res_outcome, location_01, location_02, host_01, microbe_01, atc_vet, dict_help, dict_capt
@@ -24,8 +25,12 @@ class ReferenceForm(ModelForm):
                   'is_excluded_extract','excluded_extract_reason', 'study_design', 'study_design_detail',
                   'study_sample_method', 'ref_ast_method', 'ref_has_ast_explicit_break', 'ref_has_ast_mic_table']
         widgets = {
-            'publisher': autocomplete.ModelSelect2(url='publish-id-autocomplete')
+            'publisher': autocomplete.ModelSelect2(url='publish-id-autocomplete'),
+            'ref_title': forms.TextInput(),
+            'ref_author': forms.TextInput(),
         }
+
+
         
         # Replaced by prepended text below
         #labels = {
@@ -55,7 +60,7 @@ class ReferenceForm(ModelForm):
         #Create FormHelper from crispy forms for layout
         self.helper = FormHelper()
         self.helper.form_tag = False
-        self.helper.form_show_labels = True
+        self.helper.form_show_labels = False
 
         #can have class='sr-only' to hide labels
         #but how to add w/in Layout?
@@ -64,23 +69,44 @@ class ReferenceForm(ModelForm):
             #Main tab
             Div(
                 Column(
-                    Div(
-                        HTML(
-                            """<h6>Bibliographic Information:</h6> <hr>"""
-                        ),
-                        PrependedText('ref_title', dict_capt['ref_title'], placeholder="Study Title Here"), 
-                        PrependedText('ref_author', dict_capt['ref_author'], placeholder="Author Name(s) Here"),
-                    ),            
+                  
                     Div(
                         Row(
                             Column(
-                                PrependedText('publish_year', 'Publication Year', placeholder="Publication Year Here"),
-                                css_class='col-md-6'
+                                PrependedText('ref_title', dict_capt['ref_title'], placeholder="Study Title"),
+                                ccs_class='col-md-6',
+                            ),
+                            Column(
+                                PrependedText('ref_author', dict_capt['ref_author'], placeholder="Author Name(s) Here"),
+                                ccs_class='col-md-6',
+                            )
+                        ),
+
+                        Row(
+                            Column(
+                                PrependedText('publish_year', 'Pub. Year', placeholder="Publication Year Here"),
+                                css_class='col-md-2'
                             ),
                             Column(
                                 PrependedText('publisher', 'Publisher', placeholder="Publisher Here"), #form-text styles oddly
-                                css_class='col-md-6'
+                                css_class='col-md-6 align-content-lg-stretch' 
                             ),
+                            Column(
+                                PrependedText('publish_doi', 'DOI:', placeholder="DOI Here"),
+                                css_class='col-md-4'
+                            ),
+                        ),
+
+                        Row(
+                            Column(
+                                PrependedText('is_excluded_extract', 'Exclude?'),
+                                css_class='col-md-2  justify-content-start'
+                            ), 
+                            Column(
+                                PrependedText('excluded_extract_reason', 'Is Excluded Because:', placeholder="Reason Here"),
+                                css_class='col-md-10'
+                            ),
+                        ),
                             #HTML(
                                 #""" <style>
                                         #.row{
@@ -94,28 +120,9 @@ class ReferenceForm(ModelForm):
                                     #</style> """
                             #),
                             #css_class = 'd-flex flex-row',
-                        ),
-                        HTML(
-                            """<br> <h6>Study Identifiers:</h6> <hr>"""
-                        ),
-                        Row(
-                            Column(
-                                PrependedText('publish_doi', 'DOI:', placeholder="DOI Here"),
-                                css_class='col-md-6'
-                            ),
-                            Column(
-                                PrependedText('publish_pmid', 'PMID:', placeholder="PUBMED ID Here"),
-                                css_class='col-md-6'
-                            ),
-                        ),
+
                     ),
-                    Div(
-                        HTML(
-                            """<br> <h6>Exclusion Status:</h6> <hr>"""
-                        ),
-                        PrependedText('is_excluded_extract', 'Exclude?', css_class='ml-2 mt-2'),
-                        PrependedText('excluded_extract_reason', 'Is Excluded Because:', placeholder="Reason Here", css_class='form-group'),
-                    ),
+                    
                     FormActions(
                         Submit('save', 'Save changes')
                     ),

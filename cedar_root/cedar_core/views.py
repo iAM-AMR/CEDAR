@@ -1,24 +1,31 @@
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
 
-from crispy_forms.utils import render_crispy_form
+
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, permission_required
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.urls import reverse_lazy
+from django.shortcuts import render, redirect, get_object_or_404
+
 
 from .models import reference, reference_join_location, reference_join_reference_note, factor, publisher, res_outcome
+from .forms  import ReferenceForm, RefLocForm, RefLocFormSet, RefLocFormSetHelper, RefNoteForm, RefNoteFormSet, RefNoteFormSetHelper, QuerySelectForm, TopicTabForm, FactorForm, ResistanceOutcomeForm
 
-from .forms import ReferenceForm, RefLocForm, RefLocFormSet, RefLocFormSetHelper, RefNoteForm, RefNoteFormSet, RefNoteFormSetHelper, QuerySelectForm, TopicTabForm, FactorForm, ResistanceOutcomeForm
-
-from django.forms.models import model_to_dict, formset_factory, modelformset_factory
-from django.urls import reverse
+from django.forms.models import model_to_dict
 from django.db.models import F, Q
+
 
 from django.utils import timezone
 
 import csv
 import numpy as np
 
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required, permission_required
+
+
+
+
+from crispy_forms.utils import render_crispy_form
+
 
 from dal import autocomplete
 
@@ -90,8 +97,8 @@ def view_factors(request, ref_id):
     
     try:
         ref = reference.objects.get(pk=ref_id)
-    except ref.DoesNotExist:
-        raise Http404("Reference does not exist")
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound('<h1>Page not found</h1>')
     
     ref_factors = ref.factor_set.all()
     
@@ -531,14 +538,23 @@ def delete_factor(request, ref_id, fac_id):
     
     return redirect('/cedar_core/references/' + str(ref_id) + '/factors/')
 
+
+
+# =============================================================================
+# -------------------------------------------------------------- VIEW REFERENCE
+# =============================================================================
+
 @login_required
 @permission_required('cedar_core.add_factor')
 def ref_detail(request, ref_id):
 
-    try:
-        ref = reference.objects.get(pk=ref_id)
-    except ref.DoesNotExist:
-        raise Http404("Reference does not exist")
+    # try:
+    #     ref = reference.objects.get(pk=ref_id)
+    # except ObjectDoesNotExist:
+    #     return HttpResponseNotFound('<h1>Page not found</h1>')
+    
+    # Shortcut
+    ref = get_object_or_404(reference, pk=ref_id )
 
     # If this is a POST request, process the form data
     if request.method == 'POST':
@@ -566,10 +582,14 @@ def ref_detail(request, ref_id):
             print(ref_form.cleaned_data) # need this line as ref_form.cleaned_data must be called before ref_form.save()
             print('CLEANED DATA')
             
-            output = ref_form.save(commit=False) #save changes to the database
+
+            # Changes wouldn't save without swap to commit=TRUE.
+            # CP's approach was defending agaisnt something...
+            # https://www.django-antipatterns.com/antipattern/using-commit-false-when-altering-the-instance-in-a-modelform.html
+            ref_form.save() #save changes to the database
 
             print('SAVED FORM')
-            print(output)
+            #print(output)
             
         else:
             print('REF FORM NOT VALID')
@@ -594,6 +614,8 @@ def ref_detail(request, ref_id):
                 print(f.cleaned_data)
             print(loc_formset.errors)
 
+        
+
     # If request is a GET (or any other method) we'll create a blank form for each tab (pre-populated with fields that are not empty)
     else:
         ref_form = ReferenceForm(initial=model_to_dict(ref), instance=ref)
@@ -617,6 +639,7 @@ def ref_detail(request, ref_id):
                'note_helper': note_helper,
                'page_title': 'Update a Reference',
                }
+               
     return render(request, 'cedar_core/ref_detail.html', context)
 
 # Add either a new reference note, reference location, factor, or res_outcome
@@ -629,7 +652,7 @@ def add_new_obj(request, obj_id, form_type):
     obj = reference.objects.get(pk=obj_id)
 
     if form_type == 'loc':
-        new_obj = reference_join_location(fk_reference_join_location_reference_id = obj)
+        new_obj = reference_join_location(reference_id = obj)
         redir_path = '/cedar_core/references/' + str(obj_id) + '/#loc-md'
     elif form_type == 'note':
         new_obj = reference_join_reference_note(fk_reference_join_note_reference_id = obj)
@@ -639,7 +662,7 @@ def add_new_obj(request, obj_id, form_type):
         redir_path = '/cedar_core/references/' + str(obj_id) + '/factors'
     
     # Save new object and redirect
-    new_obj.save(commit=False)
+    new_obj.save()
     
     return redirect(redir_path)
 
