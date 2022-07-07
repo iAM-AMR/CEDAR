@@ -593,6 +593,21 @@ class ast_method(models.Model): # ==============================================
         return self.ast_method_name
 
 
+# class ast_method_new(models.Model): # =================================================================================
+#     #                                 ---------------------------------------------------------------------- AST_METHOD
+#     # =================================================================================================================
+    
+#     """
+#     Microbial susceptibility testing methods. 
+#     """
+
+#     ast_method_name = models.CharField()
+#     ast_method_accno = models.CharField()
+#     ast_method_type_name = models.CharField()
+#     ast_method_type_accno = models.CharField()
+#     ast_method_is_ast_type = models.BooleanField()
+#     hist_ast_method_id = models.IntegerField()
+
 
 class atc_vet(models.Model): # ========================================================================================
     #                          -------------------------------------------------------------------------------- ATC_VET

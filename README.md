@@ -11,3 +11,22 @@ Azure requires a requirements.txt file in the root directory. We generate this b
 
 
 A new workflow was generated automatically from AZURE.
+
+
+## Packages
+
+
+#### Libraries for Auto-generated Documentation
+
+You will need to download Sphinx, and Read the Docs Sphinx theme: `pipenv install -U sphinx sphinx-autobuild sphinx_rtd_theme`
+
+In addition:
+- `sphinxcontrib-django`
+
+#### Miscellaneous Other Libraries
+
+- `django-widget-tweaks`
+- `django-extensions`
+- `django-crispy-forms`
+
+**Note**: Check that these are listed in the INSTALLED_APPS area of your Django site's `settings.py` file.
