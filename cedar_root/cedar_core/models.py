@@ -459,13 +459,13 @@ class res_outcome(models.Model): # =============================================
                                                            null      = True, 
                                                            help_text = get_help_text('ast_method'))
 
-    ast_breakpoint_source              = models.ForeignKey(to        = 'ast_breakpoint_source', 
+    ast_reference_standard             = models.ForeignKey(to        = 'ast_reference_standard', 
                                                            on_delete = models.SET_NULL, 
                                                            blank     = True, 
                                                            null      = True, 
-                                                           help_text = get_help_text('ast_breakpoint_source'))
+                                                           help_text = get_help_text('ast_reference_standard'))
 
-    ast_breakpoint_version             = models.ForeignKey(to        = 'ast_breakpoint_version',
+    ast_breakpoint_version             = models.ForeignKey(to        = 'ast_reference_standard_version',
                                                            on_delete = models.SET_NULL, 
                                                            blank     = True, 
                                                            null      = True, 
@@ -546,25 +546,25 @@ class res_outcome(models.Model): # =============================================
 # =====================================================================================================================
 
 
-class ast_breakpoint_source(models.Model): # ==========================================================================
-    #                                        ---------------------------------------------------- AST_BREAKPOINT_SOURCE
+class ast_reference_standard(models.Model): # =========================================================================
+    #                                        --------------------------------------------------- AST_REFERENCE_STANDARD
     # =================================================================================================================
 
     """
-    Source of breakpoint information
+    The reference standard for interpreting the Minimum Inhibitory Concentration (MIC).
     """
     
-    ast_breakpoint_std         = models.CharField(max_length=200, blank=True, null=True, help_text=get_help_text('ast_breakpoint_std'))
-    ast_breakpoint_std_acronym = models.CharField(max_length=200, blank=True, null=True, help_text=get_help_text('ast_breakpoint_std_acronym'))
-    ast_breakpoint_std_accno   = models.CharField(max_length=200, blank=True, null=True, help_text=get_help_text('ast_breakpoint_std_accno'))
-    ast_breakpoint_std_desc    = models.CharField(max_length=200, blank=True, null=True, help_text=get_help_text('ast_breakpoint_std_desc'))
+    ast_reference_std_name    = models.CharField(max_length=200, help_text=get_help_text('ast_reference_std_name'))
+    ast_reference_std_acronym = models.CharField(max_length=200, blank=True, help_text=get_help_text('ast_reference_std_acronym'))
+    ast_reference_std_accno   = models.CharField(max_length=200, blank=True, help_text=get_help_text('ast_reference_std_accno'))
+    ast_reference_std_desc    = models.CharField(max_length=200, blank=True, help_text=get_help_text('ast_reference_std_desc'))
     
     def __str__(self):
-        return self.ast_breakpoint_std
+        return self.ast_reference_std_name
 
 
 
-class ast_breakpoint_version(models.Model): # =========================================================================
+class ast_reference_standard_version(models.Model): # =========================================================================
     #                                        --------------------------------------------------- AST_BREAKPOINT_VERSION
     # =================================================================================================================
 
@@ -572,20 +572,29 @@ class ast_breakpoint_version(models.Model): # ==================================
     Version of the source of breakpoint information
     """
     
-    date_publish               = models.CharField(max_length=200, blank=True, null=True, help_text=get_help_text('date_publish'))
-    date_last_valid            = models.CharField(max_length=200, blank=True, null=True, help_text=get_help_text('date_last_valid'))
-    ast_breakpoint_std         = models.CharField(max_length=200, blank=True, null=True, help_text=get_help_text('ast_breakpoint_std')) # TODO: TO FK
-    ast_breakpoint_version     = models.CharField(max_length=200, blank=True, null=True, help_text=get_help_text('ast_breakpoint_version'))
-    clsi_std_type              = models.CharField(max_length=200, blank=True, null=True, help_text=get_help_text('clsi_std_type'))
+    ast_reference_std_version     = models.CharField(max_length=200, blank=True, help_text=get_help_text('ast_breakpoint_version'))
+    
+    ast_reference_std             = models.ForeignKey(to        = ast_reference_standard, 
+                                                      on_delete = models.CASCADE, 
+                                                      help_text = get_help_text('ast_reference_std'))
+    
+    ast_reference_std_pub_year    = models.PositiveSmallIntegerField(blank      = True, 
+                                                                     help_text  = get_help_text('ast_reference_std_pub_year'))
+    
+    clsi_std_doc_name              = models.CharField(max_length=200, blank=True, help_text=get_help_text('clsi_std_doc_name'))
     
     def __str__(self):
-        return '%s: %s' % (self.ast_breakpoint_std, self.ast_breakpoint_version)
+        return '%s: %s' % (self.ast_reference_std, self.ast_reference_std_version)
 
 
 
-class ast_method_old(models.Model): # =====================================================================================
+class ast_method_old(models.Model): # =================================================================================
     #                             -------------------------------------------------------------------------- AST_METHOD
     # =================================================================================================================
+
+    """
+    Microbial susceptibility testing methods, and 
+    """
     
     ast_method_name            = models.CharField(max_length=50, help_text=get_help_text('method'))
     
@@ -593,20 +602,20 @@ class ast_method_old(models.Model): # ==========================================
         return self.ast_method_name
 
 
-# class ast_method_new(models.Model): # =================================================================================
-#     #                                 ---------------------------------------------------------------------- AST_METHOD
-#     # =================================================================================================================
+class ast_method(models.Model): # =====================================================================================
+    #                                 ---------------------------------------------------------------------- AST_METHOD
+    # =================================================================================================================
     
-#     """
-#     Microbial susceptibility testing methods. 
-#     """
+    """
+    Microbial susceptibility testing methods. 
+    """
 
-#     ast_method_name = models.CharField()
-#     ast_method_accno = models.CharField()
-#     ast_method_type_name = models.CharField()
-#     ast_method_type_accno = models.CharField()
-#     ast_method_is_ast_type = models.BooleanField()
-#     hist_ast_method_id = models.IntegerField()
+    ast_method_name           = models.CharField(max_length = 100, help_text = get_help_text('ast_method_name')       )
+    ast_method_accno          = models.CharField(max_length = 100, help_text = get_help_text('ast_method_accno')      )
+    ast_method_type_name      = models.CharField(max_length = 100, help_text = get_help_text('ast_method_type_name')  )
+    ast_method_type_accno     = models.CharField(max_length = 100, help_text = get_help_text('ast_method_type_accno') )
+    ast_method_is_ast_type = models.BooleanField(                  help_text = get_help_text('ast_method_is_ast_type'))
+    hist_ast_method_id     = models.IntegerField(                  help_text = get_help_text('hist_ast_method_id')    )
 
 
 class atc_vet(models.Model): # ========================================================================================
@@ -986,6 +995,25 @@ class model(models.Model): # ===================================================
     
     def __str__(self):
         return self.model_name
+
+
+
+class logic_dictionary(models.Model):
+
+    """
+    A logic type controlled vocabulary.   
+    """
+
+    logic_state          = models.CharField(unique     = True, 
+                                            max_length = 50, 
+                                            help_text  = get_help_text('logicalstate'))
+
+    logic_state_desc     = models.TextField(help_text  = get_help_text('logic_state_desc'))
+
+    logic_state_accurl    = models.URLField(help_text  = get_help_text('logic_state_accurl'))
+
+    hist_ref_logic_state = models.CharField(max_length = 100,
+                                            help_text  = get_help_text('hist_ref_logic_desc'))
 
 
 
