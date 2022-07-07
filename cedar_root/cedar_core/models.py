@@ -192,7 +192,7 @@ class reference(models.Model): # ===============================================
     
 
     # AST ---------------------------------------
-    ref_ast_method                = models.ForeignKey(to         = 'ast_method',
+    ref_ast_method                = models.ForeignKey(to         = 'ast_method_old',
                                                       null       = True, 
                                                       blank      = True, 
                                                       on_delete  = models.SET_NULL)
@@ -453,7 +453,7 @@ class res_outcome(models.Model): # =============================================
 
     # AST Method and Details ----------------------------------------------------------------------
 
-    ast_method                         = models.ForeignKey(to        = 'ast_method', 
+    ast_method                         = models.ForeignKey(to        = 'ast_method_old', 
                                                            on_delete = models.SET_NULL, 
                                                            blank     = True, 
                                                            null      = True, 
@@ -583,7 +583,7 @@ class ast_breakpoint_version(models.Model): # ==================================
 
 
 
-class ast_method(models.Model): # =====================================================================================
+class ast_method_old(models.Model): # =====================================================================================
     #                             -------------------------------------------------------------------------- AST_METHOD
     # =================================================================================================================
     
