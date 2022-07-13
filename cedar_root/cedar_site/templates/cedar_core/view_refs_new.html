@@ -20,7 +20,7 @@
       <table id="myTable" class="table table-bordered table-sm" cellspacing="0" width="100%">
         <thead>
           <tr>
-            <th>RWID</th>
+            <th>ID</th>
             <th>Bibtex Key</th>
             <th>Title</th>
           </tr>
@@ -28,7 +28,7 @@
         <tbody>
           {% for reference in refs_list %}
             <tr>
-              <td>{{ reference.refwk }}</td>
+              <td>{{ reference.id }}</td>
               <td>{{ reference.key_bibtex }}</td>
               <td>
                 <!-- <a href="/cedar_core/references/{{ reference.id }}/">{{ reference.study_title }}</a> -->
@@ -50,6 +50,7 @@
       $('#myTable').DataTable({
         "scrollY": "100%",
         "scrollCollapse": true,
+        order: [[1, 'asc']],
       });
       $('.dataTables_length').addClass('bs-select');
     });

@@ -49,47 +49,18 @@ class PublisherAutocomplete(autocomplete.Select2QuerySetView):
 @permission_required('cedar_core.add_factor') # this permission check serves to verify that the logged in user is part of the "Edit" permissions group
 def view_references(request):
     
-    refs_list = reference.objects.order_by('key_bibtex')
+    refs_list = reference.objects.filter(is_archived = False)
     
-    #************************ COMMENTED OUT: CHECKBOX CODE**********************************************
-    # If data is incoming from the server, filtering can happen based on the checkboxes that have been checked
-    """if request.method == 'POST':
-        
-        # Get checked checkboxes from webpage. If none are chcked, request_getdata is None
-        print('POST')
-        request_getdata = request.POST.get('getdata', None)
-        print(request_getdata)
-        
-        # Parse out a list of all the checked host names
-        filter_hosts = re.split("&",request_getdata)[1:]
-        
-        # Filtering is not necessary if none, or if all of the checkboxes are checked
-        if 0 < len(filter_hosts) < 4:
-            total_refs = {}
-            #curr_refs_list = []
-            
-            # Filter the list by each checked checkbox and store each filtered list in a total_refs dictionary
-            for host in filter_hosts:
-                host_field = "topic_tab_" + re.search("(?<=\=)(.*)",host).group()
-                print(host_field)
-                total_refs[host_field] = exec("reference.objects.filter(%s=1)" % (host_field))
-            
-            # In progress: Combine the filtered lists and remove duplicates, saving a new refs_list 
-            combine_exp = "refs_list = "
-            count = 0
-            for key in total_refs:
-                count += 1
-                if count == len(total_refs):
-                    combine_exp += "total_refs['%s']" % (key)
-                else:
-                    combine_exp += "total_refs['%s'] | " % (key)
-            exec(combine_exp)
-        context = {'refs_list': refs_list}
-        return render(request, 'cedar_core/view_refs_new.html', context)
-    """
     
-    context = {'refs_list': refs_list, 'page_title': 'References'}
+    
+    context = {'refs_list': refs_list, 
+               'page_title': 'CEDAR: Browse References'}
+
+               
     return render(request, 'cedar_core/view_refs_new.html', context)
+
+
+
 
 @login_required
 @permission_required('cedar_core.add_factor')
