@@ -197,35 +197,38 @@ class reference(models.Model): # ===============================================
                                                       blank      = True, 
                                                       on_delete  = models.SET_NULL)
     
-    ref_has_ast_explicit_break     = models.CharField(null       = True, 
+    hist_ref_has_ast_explicit_break     = models.CharField(null       = True, 
                                                       blank      = True, 
                                                       max_length = 2, 
                                                       choices    = ANSWER_CHOICES, 
                                                       help_text  = get_help_text('ref_has_ast_explicit_break'))
 
-    ref_has_ast_mic_table          = models.CharField(null       = True, 
+    ref_has_ast_explicit_break                                = models.ForeignKey(
+        to         = 'logic_dictionary',
+        null       = True,
+        blank      = True, 
+        on_delete  = models.SET_NULL, 
+        help_text  = get_help_text('ref_has_ast_explicit_break'),
+        related_name = 'ast_explicit_break')
+
+    
+
+    hist_ref_has_ast_mic_table          = models.CharField(null       = True, 
                                                       blank      = True, 
                                                       max_length = 2, 
                                                       choices    = ANSWER_CHOICES, 
                                                       help_text  = get_help_text('ref_has_ast_mic_table'))
 
-    ref_has_data_pheno_level       = models.CharField(null       = True, 
-                                                      blank      = True, 
-                                                      max_length = 2, 
-                                                      choices    = ANSWER_CHOICES, 
-                                                      help_text  = get_help_text('ref_has_data_pheno_level'))
+    ref_has_ast_mic_table                               = models.ForeignKey(
+        to         = 'logic_dictionary', 
+        null       = True,
+        blank      = True, 
+        on_delete  = models.SET_NULL, 
+        help_text  = get_help_text('ref_has_ast_mic_table'), 
+        related_name = 'ast_mic_table')
 
-    ref_has_data_geno_level        = models.CharField(null       = True, 
-                                                      blank      = True, 
-                                                      max_length = 2, 
-                                                      choices    = ANSWER_CHOICES, 
-                                                      help_text  = get_help_text('ref_has_data_geno_level'))
 
-    ref_has_esbl_factor            = models.CharField(null       = True, 
-                                                      blank      = True, 
-                                                      max_length = 2, 
-                                                      choices    = ANSWER_CHOICES,
-                                                      help_text  = get_help_text('ref_has_esbl_factor'))
+
 
     # Topic -------------------------------------
     topic_tab_cattle        = models.BooleanField(blank=True, null=True, help_text=get_help_text('topic_tab_cattle'))
@@ -610,12 +613,29 @@ class ast_method(models.Model): # ==============================================
     Microbial susceptibility testing methods. 
     """
 
-    ast_method_name           = models.CharField(max_length = 100, help_text = get_help_text('ast_method_name')       )
-    ast_method_accno          = models.CharField(max_length = 100, help_text = get_help_text('ast_method_accno')      )
-    ast_method_type_name      = models.CharField(max_length = 100, help_text = get_help_text('ast_method_type_name')  )
-    ast_method_type_accno     = models.CharField(max_length = 100, help_text = get_help_text('ast_method_type_accno') )
-    ast_method_is_ast_type = models.BooleanField(                  help_text = get_help_text('ast_method_is_ast_type'))
-    hist_ast_method_id     = models.IntegerField(                  help_text = get_help_text('hist_ast_method_id')    )
+    ast_method_name                                         = models.CharField(
+        max_length = 100, 
+        help_text  = get_help_text('ast_method_name'))
+
+    ast_method_accno                                        = models.CharField(
+        max_length = 100, 
+        help_text  = get_help_text('ast_method_accno'))
+
+    ast_method_type_name                                    = models.CharField(
+        max_length = 100, 
+        help_text  = get_help_text('ast_method_type_name'))
+
+    ast_method_type_accno                                   = models.CharField(
+        max_length = 100, 
+        help_text  = get_help_text('ast_method_type_accno'))
+
+    ast_method_is_ast_type                               = models.BooleanField(
+        help_text = get_help_text('ast_method_is_ast_type'))
+
+    hist_ast_method_id                                   = models.IntegerField(
+        null      = True, 
+        blank     = True, 
+        help_text = get_help_text('hist_ast_method_id'))
 
 
 class atc_vet(models.Model): # ========================================================================================
@@ -708,19 +728,34 @@ class genetic_element(models.Model): # =========================================
     # =================================================================================================================
     
     """
-    Genetic elements (generally, genes) expect to encode resistance determinants.
+    Genetic elements (genes, gene families) expected to encode resistance determinants.
     """
     
-    element_uid = models.PositiveIntegerField(blank=True, null=True, help_text=get_help_text('element_uid'))
-    element_name = models.CharField(max_length=500, blank=True, null=True, help_text=get_help_text('element_name'))
-    element_alias = models.CharField(max_length=500, blank=True, null=True, help_text=get_help_text('element_alias'))
-    element_type = models.CharField(max_length=500, blank=True, null=True, help_text=get_help_text('element_type'))
-    element_accno = models.CharField(max_length=500, blank=True, null=True, help_text=get_help_text('element_accno'))
-    element_family_accno = models.CharField(max_length=500, blank=True, null=True, help_text=get_help_text('element_family_accno'))
-    to_review = models.BooleanField(blank=True, null=True, help_text=get_help_text('to_review'))
+    genetic_element_name                                    = models.CharField(
+        max_length = 200, 
+        help_text  = get_help_text('element_name'))
+
+    genetic_element_alias                                   = models.CharField(
+        blank      = True, 
+        max_length = 200, 
+        help_text  = get_help_text('element_alias'))
+
+    genetic_element_type                                    = models.CharField(
+        max_length = 200, 
+        help_text  = get_help_text('element_type'))
+
+    genetic_element_accno                                   = models.CharField(
+        blank      = True, 
+        max_length = 200, 
+        help_text  = get_help_text('element_accno'))
+
+    genetic_element_family_accno                            = models.CharField(
+        blank      = True, 
+        max_length = 200, 
+        help_text  = get_help_text('element_family_accno'))
     
     def __str__(self):
-        return '%s: %s' % (self.element_accno, self.element_name)
+        return '%s (%s)' % (self.genetic_element_name, self.genetic_element_accno)
 
 
 
@@ -900,6 +935,34 @@ class location_sub(models.Model): # ============================================
 
 
 
+class logic_dictionary(models.Model): # ===============================================================================
+    #                                   -------------------------------------------------------------- LOGIC_DICTIONARY
+    # =================================================================================================================
+    
+    """
+    A controlled vocabulary of logic states. 
+    """
+
+    logic_state                                             = models.CharField(
+        unique     = True, 
+        max_length = 50, 
+        help_text  = get_help_text('logic_state'))
+
+    logic_state_desc                                        = models.TextField(
+        help_text  = get_help_text('logic_state_desc'))
+
+    logic_state_accurl                                      =  models.URLField(
+        help_text  = get_help_text('logic_state_accurl'))
+
+    hist_ref_logic_state                                    = models.CharField(
+        max_length = 100,
+        help_text  = get_help_text('hist_ref_logic_state'))
+
+    def __str__(self):
+        return self.logic_state
+
+
+
 class microbe_01(models.Model): # =====================================================================================
     #                             -------------------------------------------------------------------------- MICROBE_01
     # =================================================================================================================
@@ -995,25 +1058,6 @@ class model(models.Model): # ===================================================
     
     def __str__(self):
         return self.model_name
-
-
-
-class logic_dictionary(models.Model):
-
-    """
-    A logic type controlled vocabulary.   
-    """
-
-    logic_state          = models.CharField(unique     = True, 
-                                            max_length = 50, 
-                                            help_text  = get_help_text('logicalstate'))
-
-    logic_state_desc     = models.TextField(help_text  = get_help_text('logic_state_desc'))
-
-    logic_state_accurl    = models.URLField(help_text  = get_help_text('logic_state_accurl'))
-
-    hist_ref_logic_state = models.CharField(max_length = 100,
-                                            help_text  = get_help_text('hist_ref_logic_desc'))
 
 
 
@@ -1189,7 +1233,7 @@ class factor_parent_metadata(models.Model):
     An entry of metadata pertaining to the applicability or frequency of a parent factor
     """
     
-    fk_metadata_factor_parent_id = models.ForeignKey(factor_parent, on_delete=models.SET_NULL, blank=True, null=True, help_text=get_help_text('fk_metadata_factor_parent_id'))
+    fk_metadata_factor_parent_id     = models.ForeignKey(factor_parent, on_delete=models.SET_NULL, blank=True, null=True, help_text=get_help_text('fk_metadata_factor_parent_id'))
     fk_metadata_location_02_id = models.ForeignKey(location_02, on_delete=models.SET_NULL, blank=True, null=True, help_text=get_help_text('fk_metadata_location_02_id'))
     fk_entry_user_id = models.ForeignKey(legacy_user, on_delete=models.SET_NULL, related_name='user_entry', blank=True, null=True, help_text=get_help_text('fk_entry_user_id'))
     fk_review_user_id = models.ForeignKey(legacy_user, on_delete=models.SET_NULL, related_name='user_review', blank=True, null=True, help_text=get_help_text('fk_review_user_id'))
@@ -1201,8 +1245,21 @@ class factor_parent_metadata(models.Model):
     frequency_data_apply_start_year = models.IntegerField(blank=True, null=True, help_text=get_help_text('frequency_data_apply_start_year'))
     frequency_data_apply_end_year = models.IntegerField(blank=True, null=True, help_text=get_help_text('frequency_data_apply_end_year'))
     frequency_data_source = models.CharField(max_length=500, blank=True, null=True, help_text=get_help_text('frequency_data_source'))
-    frequency_data_source_added_year = models.IntegerField(blank=True, null=True, help_text=get_help_text('frequency_data_source_added_year'))
-    fk_frequency_evidence_type_quality_id = models.ForeignKey(evidence_type_quality, on_delete=models.SET_NULL, blank=True, null=True, related_name='evidence_quality_frequency', help_text=get_help_text('fk_frequency_evidence_type_quality_id'))
+
+    frequency_data_source_added_year                     = models.IntegerField(
+        null       = True, 
+        blank      = True, 
+        help_text  = get_help_text('frequency_data_source_added_year'))
+
+    fk_frequency_evidence_type_quality_id                  = models.ForeignKey(      
+        to           = evidence_type_quality, 
+        null         = True, 
+        blank        = True, 
+        on_delete    = models.SET_NULL, 
+        help_text    = get_help_text('fk_frequency_evidence_type_quality_id'), 
+        related_name = 'evidence_quality_frequency')
+
+
     note = models.TextField(blank=True, null=True, help_text=get_help_text('note'))
     is_applicable_past = models.BooleanField(blank=True, null=True, help_text=get_help_text('is_applicable_past'))
     is_applicable_present = models.BooleanField(blank=True, null=True, help_text=get_help_text('is_applicable_present'))
