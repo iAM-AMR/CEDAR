@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block content %}
+
+
+  <!-- table of references -->
+  <div class="row justify-content-center"> <!-- container-lg -->
+    <div class="col-10">
+
+      <h1 class="mt-2">Browse Factors</h1>
+      <hr style="border-width:5px;">
+      <br>
+
+      <table id="myTable" class="table table-bordered table-sm" cellspacing="0" width="100%">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Reference</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for factor in factor_list %}
+            <tr>
+              <td>{{ factor.id }}</td>
+              <td>{{ factor.factor_title }}</td>
+              <td><a href="{% url 'ref_detail' ref_id=factor.reference__id %}">{{ factor.reference__id }}</a></td>
+
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+
+{% block body_scripts %}
+
+  <!-- Table scrolling and default order -->
+
+  <!-- The order is set using a zero-indexed column number. -->
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $('#myTable').DataTable({
+        "scrollY": "100%",
+        "scrollCollapse": true,
+        order: [[1, 'asc']],
+      });
+      $('.dataTables_length').addClass('bs-select');
+    });
+  </script>
+
+
+
+{% endblock body_scripts %}

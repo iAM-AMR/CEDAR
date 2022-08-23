@@ -1,11 +1,14 @@
 
 
+from multiprocessing import context
+from webbrowser import get
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
+
 
 
 from .models import reference, reference_join_location, reference_join_reference_note, factor, publisher, res_outcome
@@ -54,11 +57,27 @@ def view_references(request):
     
     
     context = {'refs_list': refs_list, 
-               'page_title': 'CEDAR: Browse References'}
+               'page_title': 'CEDAR: Browse References', 
+               'view_references': 'active'}
 
                
     return render(request, 'cedar_core/view_refs_new.html', context)
 
+
+def browse_factors(request):
+
+    factor_list = factor.objects.all().values(
+        'id',
+        'factor_title',
+        'reference__id',
+    )
+
+    context = {'page_title': 'CEDAR: Browse Factors',
+               'navbar_status': 'active', 
+               'factor_list': factor_list,
+               }
+
+    return render(request, 'cedar_core/browse_factors.html', context)
 
 
 
@@ -71,6 +90,7 @@ def view_factors(request, ref_id):
     except ObjectDoesNotExist:
         return HttpResponseNotFound('<h1>Page not found</h1>')
     
+    # Reverse Related Object Lookup
     ref_factors = ref.factor_set.all()
     
     # **********Legacy code (depreciated): Retrieve 2x2 table info (contingency or prevalence) (back when resistance outcomes & factors were in the same table)*********************
@@ -508,6 +528,20 @@ def delete_factor(request, ref_id, fac_id):
     }
     
     return redirect('/cedar_core/references/' + str(ref_id) + '/factors/')
+
+
+
+
+def detail_factor(request, ref_id, factor_id):
+
+    thisfactor = get_object_or_404(factor, pk = factor_id)
+
+    context = {'page_title': 'CEDAR: Factor #',
+               'navstatus_factors': 'active', 
+               'factor': thisfactor,
+               }
+
+    return render(request, 'cedar_core/detail_factor.html', context)
 
 
 
