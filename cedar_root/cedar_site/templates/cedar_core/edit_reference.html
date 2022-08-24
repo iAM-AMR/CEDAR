@@ -1,3 +1,5 @@
+
+
 {% extends 'base.html' %}
 
 {% load static %}
@@ -6,58 +8,58 @@
 
 {% load widget_tweaks %}
 
-{% block page_header %}
-    {{ref.ref_title}}
-{% endblock page_header %}
-
 {% block head_css %}
-  <!-- Your custom styles (optional) -->
-  <link rel="stylesheet" href="{% static 'cedar_core/ref_detail_style.css' %}">
+  <!-- CSS (optional) -->
+  <link rel="stylesheet" type="text/css" href="{% static 'cedar_core/detail_style.css' %}">
 {% endblock head_css %}
 
 
 {% block content %}
-    <div class="container-fluid">
 
+    <div class="container-fluid maxWidth">
+
+        <!-- The header. -->
         <div class="row justify-content-center align-items-center">
-            <div class="col-8">
+            
+            <div class="col-10">
                 <h1 class="my-auto">Reference: {{ref.id}} | {{ref.key_bibtex}}</h1>
             </div>
-            <div class="col-3">
-                    <button type="button" id="openfactor">
-                        <a href="{% url 'view_factors' ref_id=ref.id %}">Open Factor List</a>
-                    </button>                
-            </div>
+            
+            <div class="col-2">
+                <a class="btn btn-secondary btn-block" href="{% url 'view_factors' ref_id=ref.id %}">Factor List</a>
+            </div>            
+        
         </div>
 
-        <div class="row justify-content-center">
-            <div class="col-11">
-                <h3>{{ref.ref_title}}</h3>
+        <!-- The title (below header). -->
+        <div class="row">
+            <div class="col-12 mt-3">
+                <h2>{{ref.ref_title}}.</h2>
                 <hr class="mt-0 mb-4" style="border-width:5px;">
             </div>
         </div>
 
-       
-
-        <div class="row justify-content-center">
-            <div class="col-11">
+       <!-- The reference details, in tabs. -->
+        <div class="row justify-content-center align-items-center">
+            <div class="col-12">
 
                 <form action="" method="post" id="leadform" enctype="multipart/form-data" role="form">
                     {% csrf_token %}
                     
                     <nav>
                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                          <button class="nav-link active" id="nav-main-tab" data-bs-toggle="tab" data-bs-target="#main-md" type="button" role="tab" aria-controls="nav-main" aria-selected="true">Main</button>
-                          <button class="nav-link" id="nav-study-design-tab" data-bs-toggle="tab" data-bs-target="#study-md" type="button" role="tab" aria-controls="nav-study-design" aria-selected="false">Study Design</button>
-                          <button class="nav-link" id="nav-locale-tab" data-bs-toggle="tab" data-bs-target="#loc-md" type="button" role="tab" aria-controls="nav-locale" aria-selected="false">Locale</button>
-                          <button class="nav-link" id="nav-notes-tab" data-bs-toggle="tab" data-bs-target="#notes-md" type="button" role="tab" aria-controls="nav-notes" aria-selected="false">Notes and Issues</button>
-                          <button class="nav-link" id="nav-disabled-tab" data-bs-toggle="tab" data-bs-target="#nav-disabled" type="button" role="tab" aria-controls="nav-disabled" aria-selected="false" disabled>Disabled</button>
+                          <button class="nav-link active" id="nav-main-tab" data-bs-toggle="tab" data-bs-target="#tab-1-main" type="button" role="tab" aria-controls="tab-1-main" aria-selected="true">Main</button>
+                          <button class="nav-link" id="nav-study-design-tab" data-bs-toggle="tab" data-bs-target="#tab-2-study" type="button" role="tab" aria-controls="tab-2-study" aria-selected="false">Study Design</button>
+                          <button class="nav-link" id="nav-locale-tab" data-bs-toggle="tab" data-bs-target="#tab-3-locale" type="button" role="tab" aria-controls="tab-3-locale" aria-selected="false">Locale</button>
+                          <button class="nav-link" id="nav-notes-tab" data-bs-toggle="tab" data-bs-target="#tab-4-notes" type="button" role="tab" aria-controls="tab-4-notes" aria-selected="false">Notes and Issues</button>
                         </div>
-                      </nav>
+                    </nav>
 
-                    <div class="tab-content card pt-2" id="myTabContentMD">
+                    <div class="tab-content card pt-2 px-2" id="myTabContent">
+                        
                         {% crispy ref_form ref_form_helper %}
-                        <div class="tab-pane fade" id="loc-md" role="tabpanel" aria-labelledby="loc-tab-md">
+                        
+                        <div class="tab-pane fade" id="tab-3-locale" role="tabpanel" aria-labelledby="nav-locale-tab">
                             <button type="button" class="btn btn-success btn-xs" id="addloc">
                                 <a href="{% url 'add_new_obj' obj_id=ref.id form_type='loc' %}">Add Location</a>
                                 <i class="fas fa-plus-square"></i>
@@ -69,7 +71,7 @@
                             {% endfor %} -->
                         </div>
 
-                        <div class="tab-pane fade" id="notes-md" role="tabpanel" aria-labelledby="notes-tab-md">
+                        <div class="tab-pane fade" id="tab-4-notes" role="tabpanel" aria-labelledby="nav-notes-tab">
                             <button type="button" class="btn btn-success btn-xs" id="addnote">
                                 <a href="{% url 'add_new_obj' obj_id=ref.id form_type='note' %}">Add Note</a>
                                 <i class="fas fa-plus-square"></i>
@@ -116,8 +118,6 @@
 {% endblock body_scripts %}
 
 {% block footer %}
-
-    <script type="text/javascript" src="http://dal-yourlabs.rhcloud.com/static/collected/admin/js/vendor/jquery/jquery.js"></script>
 
     {{ ref_form.media }}
 

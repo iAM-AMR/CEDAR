@@ -28,6 +28,7 @@ class ReferenceForm(ModelForm):
             'publisher': autocomplete.ModelSelect2(url='publish-id-autocomplete'),
             'ref_title': forms.TextInput(),
             'ref_author': forms.TextInput(),
+            'is_excluded_extract': forms.CheckboxInput(),
         }
 
 
@@ -106,12 +107,12 @@ class ReferenceForm(ModelForm):
                                 <p>Is the reference excluded?</p>
                                 """),
                                 'is_excluded_extract',
-                                css_class='col-3'
+                                css_class='col-md-2'
                             ), 
 
                             Column(
                                 PrependedText('excluded_extract_reason', 'Is Excluded Because:', placeholder="Reason Here"),
-                                css_class='col-9'
+                                css_class='col-md-10'
                             ),
                         ),
                             #HTML(
@@ -134,7 +135,7 @@ class ReferenceForm(ModelForm):
                         Submit('save', 'Save changes')
                     ),
                 ),
-                css_id='main-md',
+                css_id='tab-1-main',
                 css_class='tab-pane fade show active',
             ),
             #Study Design tab
@@ -157,7 +158,7 @@ class ReferenceForm(ModelForm):
                 FormActions(
                     Submit('save', 'Save changes')
                 ),
-                css_id='study-md',
+                css_id='tab-2-study',
                 css_class='tab-pane fade',
             ),
         )

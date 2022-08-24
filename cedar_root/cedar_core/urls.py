@@ -1,6 +1,6 @@
 from django.urls import include, path, reverse, re_path
 
-from . import views
+from cedar_core.views import *
 
 from cedar_core.views import PublisherAutocomplete
 
@@ -10,8 +10,9 @@ urlpatterns = [
     ##path('accounts/', include('django.contrib.auth.urls')), #create_field='publish-id-autocomplete'
     re_path(r'^publish-id-autocomplete/$', PublisherAutocomplete.as_view(), name='publish-id-autocomplete',),
     path('accounts/login/', auth_views.LoginView.as_view(template_name='cedar_core/login.html')),
-    path('references/', views.view_references, name='view_references'),
-    path('references/<int:ref_id>/', views.ref_detail, name='ref_detail'),
+    path('references/', views.browse_references, name='browse_references'),
+    path('references/<int:ref_id>/', details.detail_reference, name='detail_reference'),
+    path('references/<int:ref_id>/edit', details.edit_reference, name='edit_reference'),
     path('references/<int:obj_id>/add/<str:form_type>/', views.add_new_obj, name='add_new_obj'),
     path('references/<int:ref_id>/factors/', views.view_factors, name='view_factors'),
     path('references/<int:ref_id>/factors/<int:factor_id>/', views.detail_factor, name='detail_factor'),
