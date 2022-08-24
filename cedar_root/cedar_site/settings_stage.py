@@ -14,6 +14,8 @@ ALLOWED_HOSTS = []
 
 DEBUG = True
 
+CRISPY_FAIL_SILENTLY = not DEBUG
+
 SECRET_KEY = '#4-0mz6rs$&b)8h5zmam!8*87q6-#fck$$^r47xdwh0ri5b5&!'
 
 STATIC_URL = '/static/'

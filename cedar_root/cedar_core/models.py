@@ -111,6 +111,8 @@ class reference(models.Model): # ===============================================
                                                       help_text  = get_help_text('archived_reason'))
     
     # Exclude Extract ---------------------------
+
+    # To support users using CEDAR for Lit Searches.
     is_excluded_extract         = models.BooleanField(default    = False, 
                                                       help_text  = get_help_text('is_excluded_extract'))
 
