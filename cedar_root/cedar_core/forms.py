@@ -99,12 +99,19 @@ class ReferenceForm(ModelForm):
 
                         Row(
                             Column(
-                                PrependedText('is_excluded_extract', 'Exclude?'),
-                                css_class='col-md-2  justify-content-start'
+
+                                # The checkbox will not display if "Prepend Text" is used.
+
+                                HTML("""
+                                <p>Is the reference excluded?</p>
+                                """),
+                                'is_excluded_extract',
+                                css_class='col-3'
                             ), 
+
                             Column(
                                 PrependedText('excluded_extract_reason', 'Is Excluded Because:', placeholder="Reason Here"),
-                                css_class='col-md-10'
+                                css_class='col-9'
                             ),
                         ),
                             #HTML(

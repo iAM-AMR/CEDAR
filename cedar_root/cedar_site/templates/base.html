@@ -71,33 +71,47 @@
   <body>
 
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+
       <div class="container-fluid">
+        
         <a class="navbar-brand" href="#">CEDAR</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
     
-        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
           <ul class="navbar-nav me-auto mb-2 mb-md-0">
+
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="/">Home</a>
             </li>
+
             <li class="nav-item {{ view_references }}">
               <a class="nav-link" href="{% url 'view_references' %}">References</a>
             </li>
+
             <li class="nav-item {{ navstatus_factors }}">
               <a class="nav-link" href="/">Factors</a>
             </li>
+          
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-expanded="false">Query</a>
-              <ul class="dropdown-menu" aria-labelledby="dropdown01">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Query
+              </a>
+              <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="{% url 'query_timber' %}">Query Data</a></li>
                 <li><a class="dropdown-item" href="{% url 'topic_tab_query' %}">Query Papers</a></li>
               </ul>
             </li>
+
           </ul>
+
         </div>
+
       </div>
+
     </nav>
 
     {% block content %}
