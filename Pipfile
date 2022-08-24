@@ -14,12 +14,12 @@ sphinx = "*"
 sphinx-autobuild = "*"
 sphinx-rtd-theme = "*"
 django-crispy-forms = "*"
-django-bootstrap4 = "*"
 django-extensions = "*"
 django-widget-tweaks = "*"
 pandas = "*"
 crispy-bootstrap5 = "*"
 django-autocomplete-light = "*"
+django-bootstrap5 = "*"
 
 [requires]
 python_version = "3.10.5"
