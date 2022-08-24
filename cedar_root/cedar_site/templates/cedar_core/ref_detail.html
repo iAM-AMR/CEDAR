@@ -44,25 +44,18 @@
 
                 <form action="" method="post" id="leadform" enctype="multipart/form-data" role="form">
                     {% csrf_token %}
-                    <ul class="nav nav-tabs md-tabs" id="myTabMD" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="main-tab-md" data-toggle="tab" href="#main-md" role="tab" aria-controls="main-md"
-                                aria-selected="true">Main</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="study-tab-md" data-toggle="tab" href="#study-md" role="tab" aria-controls="study-md"
-                                aria-selected="false">Study Design</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="loc-tab-md" data-toggle="tab" href="#loc-md" role="tab" aria-controls="loc-md"
-                                aria-selected="false">Location</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="notes-tab-md" data-toggle="tab" href="#notes-md" role="tab" aria-controls="notes-md"
-                                aria-selected="false">Notes and Issues</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content card pt-5" id="myTabContentMD">
+                    
+                    <nav>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                          <button class="nav-link active" id="nav-main-tab" data-bs-toggle="tab" data-bs-target="#main-md" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Main</button>
+                          <button class="nav-link" id="nav-study-design-tab" data-bs-toggle="tab" data-bs-target="#study-md" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Study Design</button>
+                          <button class="nav-link" id="nav-locale-tab" data-bs-toggle="tab" data-bs-target="#loc-md" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Locale</button>
+                          <button class="nav-link" id="nav-notes-tab" data-bs-toggle="tab" data-bs-target="#notes-md" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Notes and Issues</button>
+                          <button class="nav-link" id="nav-disabled-tab" data-bs-toggle="tab" data-bs-target="#nav-disabled" type="button" role="tab" aria-controls="nav-disabled" aria-selected="false" disabled>Disabled</button>
+                        </div>
+                      </nav>
+
+                    <div class="tab-content card pt-2" id="myTabContentMD">
                         {% crispy ref_form ref_form_helper %}
                         <div class="tab-pane fade" id="loc-md" role="tabpanel" aria-labelledby="loc-tab-md">
                             <button type="button" class="btn btn-success btn-xs" id="addloc">
@@ -75,6 +68,7 @@
                                 {% crispy loc %}
                             {% endfor %} -->
                         </div>
+
                         <div class="tab-pane fade" id="notes-md" role="tabpanel" aria-labelledby="notes-tab-md">
                             <button type="button" class="btn btn-success btn-xs" id="addnote">
                                 <a href="{% url 'add_new_obj' obj_id=ref.id form_type='note' %}">Add Note</a>
@@ -86,6 +80,9 @@
                                 {% crispy f %}
                             {% endfor %} -->
                         </div>
+
+                          
+                          
                     </div>
                 </form>
             </div>

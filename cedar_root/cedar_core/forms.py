@@ -133,9 +133,7 @@ class ReferenceForm(ModelForm):
             #Study Design tab
             Div(
                 Column(
-                    HTML(
-                        """<br> <h6>Study Design:</h6> <hr>"""
-                    ),          
+                  
                     PrependedText('study_design', 'Study Design:'),
                     PrependedText('study_design_detail', 'Design Detail:'), 
                     PrependedText('study_sample_method', 'Sampling Method:'), 
