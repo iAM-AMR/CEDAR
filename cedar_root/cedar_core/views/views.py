@@ -532,21 +532,6 @@ def delete_factor(request, ref_id, fac_id):
 
 
 
-
-def detail_factor(request, ref_id, factor_id):
-
-    thisfactor = get_object_or_404(factor, pk = factor_id)
-
-    context = {'page_title': 'CEDAR: Factor #',
-               'navstatus_factors': 'active', 
-               'factor': thisfactor,
-               }
-
-    return render(request, 'cedar_core/detail_factor.html', context)
-
-
-
-
 # Add either a new reference note, reference location, factor, or res_outcome
 @login_required
 @permission_required('cedar_core.add_factor')

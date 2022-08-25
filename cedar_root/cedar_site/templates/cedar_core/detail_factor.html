@@ -20,10 +20,24 @@
         <!-- The header. -->
         <div class="row justify-content-center align-items-center border-bottom">
             
+
+
+
             <div class="col-10">
+
+
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item"><a href="{% url 'detail_reference' ref_id=factor.reference_id %}">Reference</a></li>
+                      <li class="breadcrumb-item"><a href="{% url 'view_factors' ref_id=factor.reference_id %}">Factors</a></li>
+                      <li class="breadcrumb-item active" aria-current="page">{{ factor.factor_title }}</li>
+                    </ol>
+                </nav>
+
+
                 <h1>{{ factor.factor_title }}</h1>
                 <p>{{ factor.host_level_01 }} {{ factor.host_level_02 }} </p>
-                <p>{{ factor.factor_description }} </p>
+                <p> </p>
             </div>
 
             <div class="col-2">
@@ -39,11 +53,15 @@
         <div class="row justify-content-center align-items-center">
 
             <div class="col">
-                <p>{{ factor.group_comparator }} </p>
+                <p> {{ factor.factor_description }} </p>
             </div>
 
             <div class="col">
-                <p>{{ factor.group_factor }} </p>
+                <p> {{ factor.group_comparator }} </p>
+            </div>
+
+            <div class="col">
+                <p> {{ factor.group_factor }} </p>
             </div>
 
         </div>

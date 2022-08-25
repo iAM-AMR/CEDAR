@@ -84,6 +84,7 @@
 
   <body>
 
+    <!-- NAVBAR =========================================================== -->
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
 
       <div class="container-fluid">
@@ -120,7 +121,8 @@
             <li class="nav-item {{ navstatus_references }}">
               <a 
                 class="nav-link" 
-                href="{% url 'browse_references' %}">References
+                href="{% url 'browse_references' %}">
+                References
               </a>
             </li>
 
@@ -128,7 +130,8 @@
             <li class="nav-item {{ navstatus_factors }}">
               <a 
                 class="nav-link" 
-                href="{% url 'browse_factors' %}">Factors
+                href="{% url 'browse_factors' %}">
+                Factors
               </a>
             </li>
           
@@ -172,8 +175,8 @@
     <!-- CONTENT ========================================================== -->
 
     <!-- Django template block for replacement during extend. -->
-    {% block content %}
-    {% endblock %}
+    {% block content    %}
+    {% endblock content %}
 
 
     <!-- SCRIPTS (BODY) =================================================== -->
@@ -193,15 +196,15 @@
     </script>
     
     <!-- Django template block for replacement during extend. -->
-    {% block body_scripts %}
+    {% block body_scripts    %}
     {% endblock body_scripts %}
 
 
     <!-- FOOTER =========================================================== -->
 
-    {% block footer %}
-    {% endblock %}
+    {% block footer    %}
+    {% endblock footer %}
 
   </body>
-  
+
 </html>

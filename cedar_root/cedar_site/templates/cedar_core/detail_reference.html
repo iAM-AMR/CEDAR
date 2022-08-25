@@ -14,43 +14,92 @@
 
 
 {% block content %}
-
-    <div class="container-fluid maxWidth">
+<div class="container-fluid maxWidth">
         
-        <!-- The header. -->
-        <div class="row justify-content-center align-items-center">
-            
-            <div class="col-10">
-                <h1 class="my-auto">Reference: {{reference.id}} | {{reference.key_bibtex}}</h1>
-            </div>
-            
-            <div class="col-2">
-                <a class="btn btn-secondary btn-block" href="{% url 'view_factors' ref_id=reference.id %}">Factor List</a>
-            </div>     
+  <!-- The header. -->
+  <div class="row justify-content-center align-items-center">
+      
+      <div class="col-10">
+          <h1 class="my-auto">Reference: {{reference.id}} | {{reference.key_bibtex}}</h1>
+      </div>
+      
+      <div class="col-2">
+          <a class="btn btn-secondary btn-block" href="{% url 'view_factors' ref_id=reference.id %}">Factor List</a>
+      </div>     
 
-        </div>
+  </div>
 
-         <!-- The title (below header). -->
-         <div class="row">
-            <div class="col-12 mt-3">
-                <h2>{{reference.ref_title}}.</h2>
-                <hr class="mt-0 mb-4" style="border-width:5px;">
-            </div>
-        </div>
+  <!-- The title (below header). -->
+  <div class="row">
 
-        <!-- The factor contents. -->
-        <div class="row justify-content-center align-items-center">
+      <div class="col-12 mt-3">
+          <h2>{{reference.ref_title}}.</h2>
+          <hr class="mt-0 mb-0" style="border-width:5px;">
+      </div>
 
-            <div class="col">
-                <p>{{ reference.ref_author }} </p>
-            </div>
+  </div>
 
-        </div>
+  <!-- The reference contents. -->
+  <div class="row justify-content-center align-items-center mb-0">
 
+      <div class="col mt-0 mb-0">
+          <p class="mb-0"><i>{{ reference.ref_author }}</i> ({{ reference.ref_country }}) </p>
+          <p>{{ reference.publisher }} ({{ reference.publish_year }})</p>
+      </div>
 
-
-
-    </div>
+  </div>
 
 
+
+  <!-- The factors -->
+  <div class="row justify-content-center align-items-center">
+
+      <div class="col">
+          <h3>Factors</h3>
+          <hr class="mt-0 mb-4" style="border-width:5px;">
+      </div>
+
+  </div>
+
+
+
+  <table id="myTable" class="table table-bordered stripe" cellspacing="0" width="100%">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th class="col-3">Title</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for factor in reference_factors %}
+          <tr>
+            <td>{{ factor.id }}</td>
+            <td><a href="{% url 'detail_factor' ref_id=reference.id factor_id=factor.id %}">{{ factor.factor_title }}</a></td>
+            <td>{{ factor.factor_description }}</td>
+
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+
+</div>
 {% endblock content %}
+
+
+{% block body_scripts %}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+      $('#myTable').DataTable({
+        "scrollY": "100%",
+        "scrollCollapse": true,
+        order: [[1, 'asc']],
+      });
+      $('.dataTables_length').addClass('bs-select');
+    });
+  </script>
+
+  
+{% endblock body_scripts %}

@@ -140,18 +140,35 @@ def edit_reference(request, ref_id):
 
 
 
+# --------------------------------------------------------------- detail_factor
+
+def detail_factor(request, ref_id, factor_id):
+
+    thisfactor = get_object_or_404(factor, pk = factor_id)
+
+    context = {'page_title': 'CEDAR: Factor ' + str(factor_id),
+               'navstatus_factors': 'active', 
+               'factor': thisfactor,
+               }
+
+    return render(request, 'cedar_core/detail_factor.html', context)
 
 
 
-
+# =============================================================================
+# ------------------------------------------------------------ detail_reference
+# =============================================================================
 
 def detail_reference(request, ref_id):
 
     thisreference = get_object_or_404(reference, pk = ref_id)
+   
+    # Reverse Related Object Lookup
+    factor_list = thisreference.factor_set.all()
 
-
-    context = {'page_title': 'CEDAR: Reference Details',
+    context = {'page_title': 'CEDAR: Reference ' + str(ref_id),
                'reference': thisreference,
+               'reference_factors': factor_list,
                }
 
     return render(request, 'cedar_core/detail_reference.html', context)
