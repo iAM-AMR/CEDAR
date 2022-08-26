@@ -139,6 +139,19 @@ def edit_reference(request, ref_id):
 
 
 
+def detail_res_outcome(request, reference_id, factor_id, res_outcome_id):
+
+    thisresoutcome = get_object_or_404(res_outcome, pk = res_outcome_id)
+
+    context = {'page_title': 'CEDAR: Outcome ' + str(res_outcome_id),
+               'res_outcome': thisresoutcome,
+               }
+
+    return render(request, 'cedar_core/detail_res_outcome.html', context)
+
+
+    path('references/<int:ref_id>/factors/<int:fac_id>/outcomes/<int:ro_id>', details.detail_res_outcome, name='detail_res_outcome'),
+
 
 # --------------------------------------------------------------- detail_factor
 
@@ -166,9 +179,12 @@ def detail_reference(request, ref_id):
     # Reverse Related Object Lookup
     factor_list = thisreference.factor_set.all()
 
+    location_list = thisreference.reference_join_location_set.all()
+
     context = {'page_title': 'CEDAR: Reference ' + str(ref_id),
                'reference': thisreference,
                'reference_factors': factor_list,
+               'reference_locations': location_list,
                }
 
     return render(request, 'cedar_core/detail_reference.html', context)

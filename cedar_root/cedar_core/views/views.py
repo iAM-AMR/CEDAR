@@ -84,7 +84,7 @@ def browse_factors(request):
 
 @login_required
 @permission_required('cedar_core.add_factor')
-def view_factors(request, ref_id):
+def edit_reference_factor_list(request, ref_id):
     
     try:
         ref = reference.objects.get(pk=ref_id)
@@ -124,7 +124,7 @@ def view_factors(request, ref_id):
         'ref_factors': ref_factors,
         'page_title': 'View Factors',
     }
-    return render(request, 'cedar_core/view_factors.html', context)
+    return render(request, 'cedar_core/edit_reference_factor_list.html', context)
 
 @login_required
 @permission_required('cedar_core.add_factor')
@@ -558,7 +558,7 @@ def add_new_obj(request, obj_id, form_type):
 
 @login_required
 @permission_required('cedar_core.add_factor')
-def factor_detail(request, ref_id, fac_id):
+def edit_factor(request, ref_id, fac_id):
     
     ref = reference.objects.get(pk=ref_id)
     
@@ -592,7 +592,7 @@ def factor_detail(request, ref_id, fac_id):
                'fac_form': fac_form,
                'page_title': 'Edit Factor',
     }
-    return render(request, 'cedar_core/factor_detail_new.html', context)
+    return render(request, 'cedar_core/edit_factor.html', context)
 
 
 @login_required

@@ -29,7 +29,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                       <li class="breadcrumb-item"><a href="{% url 'detail_reference' ref_id=factor.reference_id %}">Reference</a></li>
-                      <li class="breadcrumb-item"><a href="{% url 'view_factors' ref_id=factor.reference_id %}">Factors</a></li>
+                      <li class="breadcrumb-item"><a href="{% url 'edit_reference_factor_list' ref_id=factor.reference_id %}">Factors</a></li>
                       <li class="breadcrumb-item active" aria-current="page">{{ factor.factor_title }}</li>
                     </ol>
                 </nav>
@@ -42,7 +42,7 @@
 
             <div class="col-2">
                 <a class="btn btn-primary btn-block" href="{% url 'detail_reference' ref_id=factor.reference_id %}">Reference</a>
-                <a class="btn btn-secondary btn-block" href="{% url 'view_factors' ref_id=factor.reference_id %}">Factor List</a>
+                <a class="btn btn-secondary btn-block" href="{% url 'edit_reference_factor_list' ref_id=factor.reference_id %}">Factor List</a>
             </div>
             
          
