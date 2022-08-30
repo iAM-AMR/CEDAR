@@ -23,6 +23,7 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('', include('cedar_core.urls')),
+    path('favicon.ico', views.favicon),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     #path('accounts/login/', auth_views.LoginView.as_view(template_name='cedar_site/login.html'), name='login'),
