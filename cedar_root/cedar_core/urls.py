@@ -9,7 +9,7 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     ##path('accounts/', include('django.contrib.auth.urls')), #create_field='publish-id-autocomplete'
     re_path(r'^publish-id-autocomplete/$', PublisherAutocomplete.as_view(), name='publish-id-autocomplete',),
-    path('accounts/login/', auth_views.LoginView.as_view(template_name='cedar_core/login.html')),
+    #path('accounts/login/', auth_views.LoginView.as_view(template_name='cedar_core/login.html')),
     path('references/', views.browse_references, name='browse_references'),
     path('references/<int:ref_id>/', details.detail_reference, name='detail_reference'),
     path('references/<int:ref_id>/edit/', details.edit_reference, name='edit_reference'),
