@@ -9,70 +9,85 @@
 {% load widget_tweaks %}
 
 {% block head_css %}
-  <!-- CSS (optional) -->
+    <link rel="stylesheet" type="text/css" href="{% static 'cedar_core/detail_style.css' %}">
 {% endblock head_css %}
 
 
 {% block content %}
+<div class="container-fluid maxWidth">
 
-    <div class="container-fluid maxWidth">
-        
-        <!-- The header. -->
-        <div class="row justify-content-center align-items-center border-bottom">
-            
+    {% include "cedar_core/detail_reference_header.html" %}
+    {% include "cedar_core/breadcrumb.html" with whereami='detail_factor' %}
 
-
-
-            <div class="col-10">
-
-
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                      <li class="breadcrumb-item"><a href="{% url 'detail_reference' ref_id=factor.reference_id %}">Reference</a></li>
-                      <li class="breadcrumb-item"><a href="{% url 'edit_reference_factor_list' ref_id=factor.reference_id %}">Factors</a></li>
-                      <li class="breadcrumb-item active" aria-current="page">{{ factor.factor_title }}</li>
-                    </ol>
-                </nav>
-
-
-                <h1>{{ factor.factor_title }}</h1>
-                <p>{{ factor.host_level_01 }} {{ factor.host_level_02 }} </p>
-                <p> </p>
-            </div>
-
-            <div class="col-2">
-                <a class="btn btn-primary btn-block" href="{% url 'detail_reference' ref_id=factor.reference_id %}">Reference</a>
-                <a class="btn btn-secondary btn-block" href="{% url 'edit_reference_factor_list' ref_id=factor.reference_id %}">Factor List</a>
-            </div>
-            
-         
-
+    <div class="row mt-4 justify-content-center">
+        <div class="col-9">
+            <h2 style="text-align: center;">{{  factor.factor_title  }}</h2>
+            <p style="text-align: center;">{{ factor.host_level_01 }} | {{ factor.host_level_02 }} </p>
         </div>
+    </div>
 
-        <!-- The factor contents. -->
-        <div class="row justify-content-center align-items-center">
-
-            <div class="col">
-                <p> {{ factor.factor_description }} </p>
-            </div>
-
-            <div class="col">
-                <p> {{ factor.group_comparator }} </p>
-            </div>
-
-            <div class="col">
-                <p> {{ factor.group_factor }} </p>
-            </div>
-
+    <div class="row justify-content-center">
+        <div class="col">
+            <table id="factor_table" class="table">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Comparator (Reference) Group</th>
+                        <th>Factor Group</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ factor.factor_description }}</td>
+                        <td>{{ factor.group_comparator }}</td>
+                        <td>{{ factor.group_factor }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
+    </div>
 
+    {% for res_out in resistance_outcomes %}
+
+       <p>{{ res_out.resistance }}</p> 
+       <p>{{ res_out.contable_a }}</p>
+       <p>{{ res_out.moa_type }}</p>
+    {% endfor %}
+
+    <div class="row">
+        <div class="col">
+            <table id="contingency_table" class="table">
+                <thead>
+                    <tr>
+                        <th>/</th>
+                        <th>AMR+</th>
+                        <th>AMR-</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for res_out in resistance_outcomes %}
+                    <tr>
+                        <td>Factor Group</td>
+                        <td>{{ res_out.contable_a }}</td>
+                        <td>{{ res_out.contable_b }}</td>
+                        <td>{{ res_out.table_n_ab }}</td>
+                    </tr>
+                    <tr>
+                        <td>Comparator Group</td>
+                        <td>{{ res_out.contable_c }}</td>
+                        <td>{{ res_out.contable_d }}</td>
+                        <td>{{ res_out.table_n_cd }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
 
 
     </div>
 
 
-
-
-
+</div>
 {% endblock content %}

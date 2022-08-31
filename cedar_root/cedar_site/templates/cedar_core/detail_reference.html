@@ -223,7 +223,7 @@
             <td>{{ factor.host_level_01 }}</td>
             <td>{{ factor.host_level_02 }}</td>
             <td>{{ factor.group_allocate_production_stage }}</td>
-            <td><a href="{% url 'detail_factor' ref_id=reference.id factor_id=factor.id %}">{{ factor.factor_title }}</a></td>
+            <td><a href="{% url 'detail_factor' reference_id=reference.id factor_id=factor.id %}">{{ factor.factor_title }}</a></td>
             <td>{{ factor.factor_description }}</td>
 
           </tr>

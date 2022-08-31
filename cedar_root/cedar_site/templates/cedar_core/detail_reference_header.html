@@ -1,0 +1,13 @@
+
+
+<div class="d-flex flex-row flex-wrap justify-content-between align-items-center my-0">
+      
+    <div class="col-auto text-nowrap" >
+      <h1 >{{reference.id}} | <small class="text-muted">{{reference.key_bibtex}} {% if reference.is_excluded_extract %}(Excluded){% endif %}</small></h1>
+    </div>
+    
+    <div class="col-auto text-nowrap">
+          <a class="btn btn-secondary" role="button" href="https://dx.doi.org/{{reference.publish_doi}}" target="_blank">{{ reference.publish_doi }}</a>   
+    </div>
+
+</div>

@@ -13,6 +13,22 @@
     </div>
 </div>
 
+{% elif whereami == 'detail_factor' %}
+
+    <div class="row ">
+        <div class="col ps-lg-5">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'browse_references' %}">References</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'detail_reference' ref_id=factor.reference_id %}">{{ reference.key_bibtex }}</a></li>
+                      <li class="breadcrumb-item"><a href="{% url 'edit_reference_factor_list' ref_id=factor.reference_id %}">Factors</a></li>
+                      <li class="breadcrumb-item active" aria-current="page">{{ factor.factor_title }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+
 {% else %}
 
 {% endif %}

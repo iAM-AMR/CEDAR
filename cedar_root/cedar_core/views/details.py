@@ -155,13 +155,19 @@ def detail_res_outcome(request, reference_id, factor_id, res_outcome_id):
 
 # --------------------------------------------------------------- detail_factor
 
-def detail_factor(request, ref_id, factor_id):
+def detail_factor(request, reference_id, factor_id):
 
     thisfactor = get_object_or_404(factor, pk = factor_id)
+
+    thisreference = get_object_or_404(reference, pk = reference_id)
+
+    resistance_outcome_list = thisfactor.res_outcome_set.all()
 
     context = {'page_title': 'CEDAR: Factor ' + str(factor_id),
                'navstatus_factors': 'active', 
                'factor': thisfactor,
+               'reference': thisreference,
+               'resistance_outcomes': resistance_outcome_list,
                }
 
     return render(request, 'cedar_core/detail_factor.html', context)
