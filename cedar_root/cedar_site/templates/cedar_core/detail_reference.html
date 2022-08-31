@@ -27,27 +27,14 @@
             <a class="btn btn-secondary" role="button" href="https://dx.doi.org/{{reference.publish_doi}}" target="_blank">{{ reference.publish_doi }}</a>   
       </div>
 
-
   </div>
 
-  <div class="row ">
-    <div class="col ps-lg-5 mb-4">
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="{% url 'browse_references' %}">References</a></li>
-          <li class="breadcrumb-item active" aria-current="page">{{ reference.key_bibtex }}</li>
-        </ol>
-    </nav>
-    </div>
-
-  </div>
-
-
-
+ 
+  {% include "cedar_core/breadcrumb.html" with whereami='detail_reference' %}
 
 
   <!-- Title -->
-  <div class="row mb-2 justify-content-center">
+  <div class="row mt-4 mb-2 justify-content-center">
     <div class="col-9">
       <h2 style="text-align: center;">{{reference.ref_title}}.</h2>
     </div>

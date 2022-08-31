@@ -1,0 +1,18 @@
+
+
+{% if whereami == 'detail_reference' %}
+
+<div class="row ">
+    <div class="col ps-lg-5 mb-4">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'browse_references' %}">References</a></li>
+          <li class="breadcrumb-item active" aria-current="page">{{ reference.key_bibtex }}</li>
+        </ol>
+      </nav>
+    </div>
+</div>
+
+{% else %}
+
+{% endif %}
