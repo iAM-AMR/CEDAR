@@ -17,47 +17,72 @@
 <div class="container-fluid maxWidth">
         
   <!-- The header. -->
-  <div class="row justify-content-start align-items-center">
+  <div class="d-flex flex-row flex-wrap justify-content-between align-items-center mb-0">
       
-      <div class="col">
-        <h1 class="mb-0">Reference: {{reference.id}}</h1>
-        <h1 class="mt-0"><small class="text-muted">{{reference.key_bibtex}}</small></h1>
+      <div class="col-auto text-nowrap" >
+        <h1 >{{reference.id}} | <small class="text-muted">{{reference.key_bibtex}} {% if reference.is_excluded_extract %}(Excluded){% endif %}</small></h1>
       </div>
       
-      <div class="col d-flex justify-content-end text-nowrap">
-          <a class="btn btn-secondary" role="button" href="{% url 'edit_reference_factor_list' ref_id=reference.id %}">Factor List</a>
+      <div class="col-auto text-nowrap">
+            <a class="btn btn-secondary" role="button" href="https://dx.doi.org/{{reference.publish_doi}}" target="_blank">{{ reference.publish_doi }}</a>   
       </div>
-      
-      <div class="col-auto d-flex justify-content-end">
-          <a class="btn btn-secondary" role="button" href="https://dx.doi.org/{{reference.publish_doi}}" target="_blank">{{ reference.publish_doi }}</a>
-      </div> 
+
 
   </div>
 
-  <!-- The title (below header). -->
-  <div class="row">
-
-      <div class="col-12 mt-3">
-          <h2>{{reference.ref_title}}.</h2>
-          <hr class="mt-0 mb-0" style="border-width:3px;">
-      </div>
-
-  </div>
-
-  <!-- The reference contents. -->
-  <div class="row justify-content-center align-items-center mb-0">
-
-      <div class="col mt-0 mb-0">
-          <p class="mb-0"><i>{{ reference.ref_author }}</i> ({{ reference.ref_country }}) </p>
-          <p>{{ reference.publisher }} ({{ reference.publish_year }})</p>
-      </div>
+  <div class="row ">
+    <div class="col ps-lg-5 mb-4">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'browse_references' %}">References</a></li>
+          <li class="breadcrumb-item active" aria-current="page">{{ reference.key_bibtex }}</li>
+        </ol>
+    </nav>
+    </div>
 
   </div>
 
-  <div class="row justify-content-center align-items-center">
+
+
+
+
+  <!-- Title -->
+  <div class="row mb-2 justify-content-center">
+    <div class="col-9">
+      <h2 style="text-align: center;">{{reference.ref_title}}.</h2>
+    </div>
+  </div>
+
+  <!-- Horizontal Rule -->
+  <div class="row my-0 justify-content-center">
+    <div class="col-6">
+      <hr class="my-0" style="border-width:3px;">
+    </div>
+  </div>
+
+  <!-- Author (Country) -->
+  <div class="row mt-1 mb-0 justify-content-center">
+      <div class="col-5">
+          <p class="my-0" style="text-align: center;"><i>{{ reference.ref_author }}</i> ({{ reference.ref_country|default:"No&nbspLocation" }}) </p>
+      </div>
+  </div>
+
+  <!-- Publisher and Year of Publication -->
+  <div class="row mt-1 mb-0 justify-content-center">
+    <div class="col-5">
+        <p class="my-0" style="text-align: center;">{{ reference.publisher }} ({{ reference.publish_year }})</p>
+    </div>
+  </div>
+
+
+
+  <div class="row mt-3 justify-content-center">
 
     <div class="col">
-      <!-- Begin Tabs -->
+
+      <h3>Reference</h3>
+      <hr class="mt-0 mb-3" style="border-width:5px;">
+
       <!-- Begin Tab Definitions -->
       <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
@@ -77,9 +102,14 @@
 
       <!-- Begin Tab Contents -->
       <div class="tab-content pt-3" id="myTabContent">
+
+        <!-- Begin Tab 1 Content (Main) -->
         <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-          <!-- Begin Accordion (Tab 1 Content) -->
+          
+          <!-- Begin Accordion -->
           <div class="accordion accordion-flush" id="accordionPanelsStayOpenExample">
+            
+            <!-- Accordion 1 (Study Design Details) -->
             <div class="accordion-item">
               <h2 class="accordion-header" id="panelsStayOpen-headingOne">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
@@ -92,6 +122,8 @@
                 </div>
               </div>
             </div>
+
+            <!-- Accordion 2 (Sampling Methodology) -->
             <div class="accordion-item">
               <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
@@ -104,6 +136,8 @@
                 </div>
               </div>
             </div>
+
+            <!-- Accordion 3 (AST and Reporting Characteristics) -->
             <div class="accordion-item">
               <h2 class="accordion-header" id="panelsStayOpen-headingThree">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
@@ -118,40 +152,54 @@
                 </div>
               </div>
             </div>
+
+          <!-- End Accordion -->
           </div>
-          <!-- End Accordion (Tab 1 Content) -->
+                    
+        <!-- End Tab 1 Content (Main) -->
         </div>
 
-        <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">...</div>
+        <!-- Begin Tab 2 Content (Review) -->
+        <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+          <p>Is Excluded: {{ reference.is_excluded_extract }}</p>
+
+        <!-- End Tab 2 Content (Review) -->  
+        </div>
         
-        <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
+        <!-- Begin Tab 3 Content (Locale) -->
+        <div class="tab-pane fade px-4" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
+          
           <table id="location_table" class="table table-bordered stripe" cellspacing="0" width="100%">
+            
             <thead>
               <tr>
                 <th>Country</th>
                 <th>Sub-Region</th>
                 <th>Sub-Region Detail</th>
-             
               </tr>
             </thead>
+
             <tbody>
               {% for loc in reference_locations %}
                 <tr>
                   <td>{{ loc.location_main_id }}</td>
                   <td>{{ loc.location_sub_id }}</td>
                   <td>{{ loc.location_detail }}</td>
-        
-        
                 </tr>
               {% endfor %}
             </tbody>
+
           </table>
+        
+        <!-- End Tab 3 Content (Locale) -->  
         </div>
+
+        <!-- Start Tab 4 Content (Notes) -->
         <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">...</div>
-      </div>
-      <!-- Begin Tab Contents -->
-      <!-- End Tabs -->
       
+      <!-- End Tab Contents -->
+      </div>
+
     </div>
 
   </div>
@@ -159,7 +207,7 @@
 
 
   <!-- The factors -->
-  <div class="row justify-content-center align-items-center mt-5">
+  <div class="row justify-content-center align-items-center mt-4">
 
       <div class="col">
           <h3>Factors</h3>
@@ -219,14 +267,5 @@
     });
   </script>
 
-<script type="text/javascript">
-  $(document).ready(function () {
-    $('#location_table').DataTable({
-      "scrollY": "100%",
-      "scrollCollapse": true,
-    });
-    $('.dataTables_length').addClass('bs-select');
-  });
-</script>
   
 {% endblock body_scripts %}
