@@ -12,7 +12,10 @@ from django.conf import settings
 
 
 def index(request):
-    return render(request, 'cedar_site/index.html')
+
+    context = {'page_title': 'Welcome to CEDAR'}
+
+    return render(request, 'cedar_site/index.html', context)
 
 
 @require_GET
