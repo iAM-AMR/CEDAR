@@ -10,6 +10,9 @@
 
 {% block head_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'cedar_core/detail_style.css' %}">
+
+ 
+    
 {% endblock head_css %}
 
 
@@ -23,24 +26,24 @@
         <div class="col-9">
             <h2 style="text-align: center;">{{  factor.factor_title  }}</h2>
             <p style="text-align: center;">{{ factor.host_level_01 }} | {{ factor.host_level_02 }} </p>
+            <p style="text-align: center; font-weight: bold;"> {{ resistance_outcomes|length }}</p>
+            
         </div>
     </div>
 
-    <div class="row justify-content-center">
+    <div class="row mb-4 justify-content-center">
         <div class="col">
             <table id="factor_table" class="table">
                 <thead>
                     <tr>
                         <th>Description</th>
-                        <th>Comparator (Reference) Group</th>
-                        <th>Factor Group</th>
+                       
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>{{ factor.factor_description }}</td>
-                        <td>{{ factor.group_comparator }}</td>
-                        <td>{{ factor.group_factor }}</td>
+                       
                     </tr>
                 </tbody>
             </table>
@@ -60,7 +63,14 @@
                 <tbody>
                     {% for res_out in resistance_outcomes %}
                     <tr>
-                        <td>{{ res_out.resistance }}</td>
+                        <td>
+                            {{ res_out.resistance|title }} {{ res_out.resistance_gene|default_if_none:"" }} </br>
+                            {% include "cedar_core/prod_stage_icons.html" %} </br>
+                            {{ res_out.microbe_level_01 }} {{ res_out.microbe_level_02 }} </br>
+                            n = {{ res_out.moa_unit|default_if_none:"Not Available"}} </br>
+                            {{ res_out.place_in_text }} 
+
+                        </td>
                         <td>{% include "cedar_core/resistance_outcome_raw.html" %}</td>
                     </tr>
                     
@@ -80,3 +90,11 @@
 
 </div>
 {% endblock content %}
+
+
+{% block body_scripts %}
+
+
+
+  
+{% endblock body_scripts %}

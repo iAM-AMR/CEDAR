@@ -5,25 +5,25 @@
     <table id="contingency_table" class="table">
         <thead>
             <tr>
-                <th>/</th>
+                <th>// From: {{ res_out.place_in_text|default_if_none:"No Location Provided" }} //</th>
                 <th>AMR+ (n)</th>
                 <th>AMR- (n)</th>
-                <th>Total</th>
+                <th>Total (n)</th>
             </tr>
         </thead>
         <tbody>
           
             <tr>
-                <td>Factor Group</td>
-                <td>{{ res_out.contable_a }}</td>
-                <td>{{ res_out.contable_b }}</td>
-                <td>{{ res_out.table_n_ab }}</td>
+                <td>{{ factor.group_factor }}</td>
+                <td>{{ res_out.contable_a|default_if_none:"" }}</td>
+                <td>{{ res_out.contable_b|default_if_none:"" }}</td>
+                <td>{{ res_out.table_n_ab|default_if_none:"" }}</td>
             </tr>
             <tr>
-                <td>Comparator Group</td>
-                <td>{{ res_out.contable_c }}</td>
-                <td>{{ res_out.contable_d }}</td>
-                <td>{{ res_out.table_n_cd }}</td>
+                <td>{{ factor.group_comparator }}</td>
+                <td>{{ res_out.contable_c|default_if_none:"" }}</td>
+                <td>{{ res_out.contable_d|default_if_none:"" }}</td>
+                <td>{{ res_out.table_n_cd|default_if_none:"" }}</td>
             </tr>
           
         </tbody>
@@ -34,25 +34,49 @@
     <table class="table">
         <thead>
             <tr>
-                <th></th>
+                <th>// From: {{ res_out.place_in_text|default_if_none:"No Location Provided" }} //</th>
                 <th>AMR+ (%)</th>
                 <th>AMR- (%)</th>
-                <th>Total</th>
+                <th>Total (n)</th>
             </tr>
         </thead>
         <tbody>
           
             <tr>
-                <td>Factor Group</td>
-                <td>{{ res_out.prevtable_a }}</td>
-                <td>{{ res_out.prevtable_b }}</td>
-                <td>{{ res_out.table_n_ab }}</td>
+                <td>{{ factor.group_factor }}</td>
+                <td>{{ res_out.prevtable_a|default_if_none:"" }}</td>
+                <td>{{ res_out.prevtable_b|default_if_none:"" }}</td>
+                <td>{{ res_out.table_n_ab|default_if_none:"" }}</td>
             </tr>
             <tr>
-                <td>Comparator Group</td>
-                <td>{{ res_out.prevtable_c }}</td>
-                <td>{{ res_out.prevtable_d }}</td>
-                <td>{{ res_out.table_n_cd }}</td>
+                <td>{{ factor.group_comparator }}</td>
+                <td>{{ res_out.prevtable_c|default_if_none:"" }}</td>
+                <td>{{ res_out.prevtable_d|default_if_none:"" }}</td>
+                <td>{{ res_out.table_n_cd|default_if_none:"" }}</td>
+            </tr>
+          
+        </tbody>
+    </table>
+
+    {% elif res_out.moa_type|stringformat:"s" == 'Odds Ratio' %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>// From: {{ res_out.place_in_text|default_if_none:"No Location Provided" }} //</th>
+                <th>OR Low CI</th>
+                <th>Odds Ratio</th>
+                <th>OR Upper CI</th>
+            </tr>
+        </thead>
+        <tbody>
+          
+           
+            <tr>
+                <td>{{ factor.group_factor }} vs. {{ factor.group_comparator }}</td>
+                <td>{{ res_out.odds_ratio_lo }}</td>
+                <td>{{ res_out.odds_ratio }}</td>
+                <td>{{ res_out.odds_ratio_up }}</td>
             </tr>
           
         </tbody>
@@ -60,6 +84,6 @@
 
 {% else %}
 
-{{moa_type}}
+{{res_out.moa_type}}
 
 {% endif %}

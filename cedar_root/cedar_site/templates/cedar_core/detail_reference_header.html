@@ -7,7 +7,7 @@
     </div>
     
     <div class="col-auto text-nowrap">
-          <a class="btn btn-secondary" role="button" href="https://dx.doi.org/{{reference.publish_doi}}" target="_blank">{{ reference.publish_doi }}</a>   
+          <a class="btn btn-secondary" role="button" href="https://dx.doi.org/{{reference.publish_doi}}" target="_blank">{{ reference.publish_doi|default:"No DOI" }}</a>   
     </div>
 
 </div>

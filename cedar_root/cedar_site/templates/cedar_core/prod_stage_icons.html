@@ -1,0 +1,37 @@
+
+
+{% if factor.group_allocate_production_stage|stringformat:"s" == 'Farm' %}
+
+    <i data-bs-toggle="tooltip" data-toggle="tooltip" data-placement="top" data-bs-title="Farm" data-title="Farm" class="fa-solid fa-tractor "></i> / 
+
+{% elif factor.group_allocate_production_stage|stringformat:"s" == 'Abattoir' %}
+
+    <i data-bs-toggle="tooltip" data-placement="top" data-bs-title="Abattoir" class="fa-solid fa-warehouse"></i> /
+
+{% elif factor.group_allocate_production_stage|stringformat:"s" == 'Retail' %}
+
+    <i data-bs-toggle="tooltip" data-placement="top" data-bs-title="Retail"class="fa-solid fa-store"></i> /
+
+
+{% else %}
+
+{% endif %}
+
+
+
+{% if res_out.group_observe_production_stage|stringformat:"s" == 'Farm' %}
+
+<i data-bs-toggle="tooltip" data-placement="top" data-bs-title="Farm" class="fa-solid fa-tractor "></i>
+
+{% elif res_out.group_observe_production_stage|stringformat:"s" == 'Abattoir' %}
+
+<i data-bs-toggle="tooltip" data-placement="top" data-bs-title="Abattoir" class="fa-solid fa-warehouse"></i>
+
+{% elif res_out.group_observe_production_stage|stringformat:"s" == 'Retail' %}
+
+<i data-bs-toggle="tooltip" data-placement="top" data-bs-title="Retail"class="fa-solid fa-store"></i>
+
+
+{% else %}
+
+{% endif %}
