@@ -128,3 +128,6 @@ dmypy.json
 # Graphviz
 !Graphviz/
 Graphviz/**/
+
+# Static Files
+cedar_root/staticfiles/**

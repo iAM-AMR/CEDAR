@@ -1,4 +1,5 @@
 
+import os
 
 from django.http import HttpResponse,  FileResponse
 from django.shortcuts import render
@@ -16,5 +17,5 @@ def index(request):
 
 @require_GET
 def favicon(request):
-    file = (settings.BASE_DIR / "cedar_site" / "static" / "tree.svg").open("rb")
+    file = open(os.path.join(settings.STATIC_ROOT, 'tree.svg'), "rb")
     return FileResponse(file)
