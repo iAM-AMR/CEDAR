@@ -1,13 +1,13 @@
 
 
-{% if moatype == 'Contingency Table' %}
+{% if res_out.moa_type|stringformat:"s" == 'Contingency Table' %}
 
     <table id="contingency_table" class="table">
         <thead>
             <tr>
                 <th>/</th>
-                <th>AMR+</th>
-                <th>AMR-</th>
+                <th>AMR+ (n)</th>
+                <th>AMR- (n)</th>
                 <th>Total</th>
             </tr>
         </thead>
@@ -29,14 +29,14 @@
         </tbody>
     </table>
 
-{% elif moatype == 'prevalencetable' %}
+{% elif res_out.moa_type|stringformat:"s" == 'Prevalence Table' %}
 
-    <table id="contingency_table" class="table">
+    <table class="table">
         <thead>
             <tr>
-                <th>/</th>
-                <th>AMR+</th>
-                <th>AMR-</th>
+                <th></th>
+                <th>AMR+ (%)</th>
+                <th>AMR- (%)</th>
                 <th>Total</th>
             </tr>
         </thead>

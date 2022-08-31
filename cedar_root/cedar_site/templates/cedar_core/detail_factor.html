@@ -61,11 +61,7 @@
                     {% for res_out in resistance_outcomes %}
                     <tr>
                         <td>{{ res_out.resistance }}</td>
-                        <td>{% if res_out.moa_type|stringformat:"s" == 'Prevalence Table' %}
-                                {% include "cedar_core/resistance_outcome_raw.html" with moatype="prevalencetable" %}
-                            {% endif %}
-                            
-                            {% include "cedar_core/resistance_outcome_raw.html" %}</td>
+                        <td>{% include "cedar_core/resistance_outcome_raw.html" %}</td>
                     </tr>
                     
                     {% endfor %}
