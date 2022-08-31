@@ -47,38 +47,27 @@
         </div>
     </div>
 
-    {% for res_out in resistance_outcomes %}
-
-       <p>{{ res_out.resistance }}</p> 
-       <p>{{ res_out.contable_a }}</p>
-       <p>{{ res_out.moa_type }}</p>
-    {% endfor %}
 
     <div class="row">
         <div class="col">
             <table id="contingency_table" class="table">
                 <thead>
                     <tr>
-                        <th>/</th>
-                        <th>AMR+</th>
-                        <th>AMR-</th>
-                        <th>Total</th>
+                        <th>Resistance</th>
+                        <th>Outcome</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for res_out in resistance_outcomes %}
                     <tr>
-                        <td>Factor Group</td>
-                        <td>{{ res_out.contable_a }}</td>
-                        <td>{{ res_out.contable_b }}</td>
-                        <td>{{ res_out.table_n_ab }}</td>
+                        <td>{{ res_out.resistance }}</td>
+                        <td>{% if res_out.moa_type|stringformat:"s" == 'Prevalence Table' %}
+                                {% include "cedar_core/resistance_outcome_raw.html" with moatype="prevalencetable" %}
+                            {% endif %}
+                            
+                            {% include "cedar_core/resistance_outcome_raw.html" %}</td>
                     </tr>
-                    <tr>
-                        <td>Comparator Group</td>
-                        <td>{{ res_out.contable_c }}</td>
-                        <td>{{ res_out.contable_d }}</td>
-                        <td>{{ res_out.table_n_cd }}</td>
-                    </tr>
+                    
                     {% endfor %}
                 </tbody>
             </table>
@@ -87,6 +76,10 @@
 
 
     </div>
+
+
+
+
 
 
 </div>

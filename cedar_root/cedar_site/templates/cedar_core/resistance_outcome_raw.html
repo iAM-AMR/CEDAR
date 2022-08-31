@@ -1,0 +1,65 @@
+
+
+{% if moatype == 'Contingency Table' %}
+
+    <table id="contingency_table" class="table">
+        <thead>
+            <tr>
+                <th>/</th>
+                <th>AMR+</th>
+                <th>AMR-</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+                <td>Factor Group</td>
+                <td>{{ res_out.contable_a }}</td>
+                <td>{{ res_out.contable_b }}</td>
+                <td>{{ res_out.table_n_ab }}</td>
+            </tr>
+            <tr>
+                <td>Comparator Group</td>
+                <td>{{ res_out.contable_c }}</td>
+                <td>{{ res_out.contable_d }}</td>
+                <td>{{ res_out.table_n_cd }}</td>
+            </tr>
+          
+        </tbody>
+    </table>
+
+{% elif moatype == 'prevalencetable' %}
+
+    <table id="contingency_table" class="table">
+        <thead>
+            <tr>
+                <th>/</th>
+                <th>AMR+</th>
+                <th>AMR-</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+                <td>Factor Group</td>
+                <td>{{ res_out.prevtable_a }}</td>
+                <td>{{ res_out.prevtable_b }}</td>
+                <td>{{ res_out.table_n_ab }}</td>
+            </tr>
+            <tr>
+                <td>Comparator Group</td>
+                <td>{{ res_out.prevtable_c }}</td>
+                <td>{{ res_out.prevtable_d }}</td>
+                <td>{{ res_out.table_n_cd }}</td>
+            </tr>
+          
+        </tbody>
+    </table>
+
+{% else %}
+
+{{moa_type}}
+
+{% endif %}
