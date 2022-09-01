@@ -8,7 +8,7 @@
                 <th>// From: {{ res_out.place_in_text|default_if_none:"No Location Provided" }} //</th>
                 <th>AMR+ (n)</th>
                 <th>AMR- (n)</th>
-                <th>Total (n)</th>
+                <th data-bs-toggle="tooltip" data-placement="top" data-bs-title={{ res_out.moa_unit|default_if_none:'Unit_Not_Available' }}>Total (n)</th>
             </tr>
         </thead>
         <tbody>
@@ -37,7 +37,7 @@
                 <th>// From: {{ res_out.place_in_text|default_if_none:"No Location Provided" }} //</th>
                 <th>AMR+ (%)</th>
                 <th>AMR- (%)</th>
-                <th>Total (n)</th>
+                <th data-bs-toggle="tooltip" data-placement="top" data-bs-title= {{ res_out.moa_unit|default_if_none:"Unit_Not_Available" }}>Total (n)</th>
             </tr>
         </thead>
         <tbody>
