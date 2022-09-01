@@ -1,37 +1,55 @@
 
 
+{% comment %}
+<!-- 
+    This section sets the icon for the group allocation production stage.
+ -->
+{% endcomment %}
+
+
 {% if factor.group_allocate_production_stage|stringformat:"s" == 'Farm' %}
 
-    <i data-bs-toggle="tooltip" data-toggle="tooltip" data-placement="top" data-bs-title="Farm" data-title="Farm" class="fa-solid fa-tractor "></i> / 
+    <i data-bs-toggle="tooltip" data-placement="top" data-bs-title="Farm" class="fa-solid fa-tractor" style="color:firebrick"></i> / 
 
 {% elif factor.group_allocate_production_stage|stringformat:"s" == 'Abattoir' %}
 
-    <i data-bs-toggle="tooltip" data-placement="top" data-bs-title="Abattoir" class="fa-solid fa-warehouse"></i> /
+    <i data-bs-toggle="tooltip" data-placement="top" data-bs-title="Abattoir" class="fa-solid fa-heart-pulse" style="color:blue"></i> /
 
 {% elif factor.group_allocate_production_stage|stringformat:"s" == 'Retail' %}
 
-    <i data-bs-toggle="tooltip" data-placement="top" data-bs-title="Retail"class="fa-solid fa-store"></i> /
-
+    <i data-bs-toggle="tooltip" data-placement="top" data-bs-title="Retail"class="fa-solid fa-cart-shopping"></i> /
 
 {% else %}
+
+    <p>Failure in Production Stage (allocation) Icons</p>
 
 {% endif %}
 
 
 
+
+
+{% comment %}
+<!-- 
+    This section sets the icon for the group observation production stage.
+ -->
+{% endcomment %}
+
+
 {% if res_out.group_observe_production_stage|stringformat:"s" == 'Farm' %}
 
-<i data-bs-toggle="tooltip" data-placement="top" data-bs-title="Farm" class="fa-solid fa-tractor "></i>
+    <i data-bs-toggle="tooltip" data-placement="top" data-bs-title="Farm" class="fa-solid fa-tractor" style="color:firebrick"></i>
 
 {% elif res_out.group_observe_production_stage|stringformat:"s" == 'Abattoir' %}
 
-<i data-bs-toggle="tooltip" data-placement="top" data-bs-title="Abattoir" class="fa-solid fa-warehouse"></i>
+    <i data-bs-toggle="tooltip" data-placement="top" data-bs-title="Abattoir" class="fa-solid fa-heart-pulse" style="color:blue"></i>
 
 {% elif res_out.group_observe_production_stage|stringformat:"s" == 'Retail' %}
 
-<i data-bs-toggle="tooltip" data-placement="top" data-bs-title="Retail"class="fa-solid fa-store"></i>
-
+    <i data-bs-toggle="tooltip" data-placement="top" data-bs-title="Retail"class="fa-solid fa-cart-shopping"></i>
 
 {% else %}
+
+    <p>Failure in Production Stage (observation) Icons</p>
 
 {% endif %}

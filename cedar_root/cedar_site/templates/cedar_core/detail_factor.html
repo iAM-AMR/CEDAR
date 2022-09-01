@@ -53,10 +53,11 @@
 
     <div class="row">
         <div class="col">
-            <table id="contingency_table" class="table">
+            <table id="res_out_table" class="table">
                 <thead>
                     <tr>
                         <th>Resistance</th>
+                        <th>Microbe</th>
                         <th>Outcome</th>
                     </tr>
                 </thead>
@@ -64,12 +65,15 @@
                     {% for res_out in resistance_outcomes %}
                     <tr>
                         <td>
-                            {{ res_out.resistance|title }} {{ res_out.resistance_gene|default_if_none:"" }} </br>
-                            {% include "cedar_core/prod_stage_icons.html" %} </br>
-                            {{ res_out.microbe_level_01 }} {{ res_out.microbe_level_02 }} </br>
-                            n = {{ res_out.moa_unit|default_if_none:"Not Available"}} </br>
-                            {{ res_out.place_in_text }} 
+                            {% with  x=res_out.resistance|default:"" %}
+                                {{x|title}}
+                            {% endwith %}
 
+                            {{ res_out.resistance_gene|default_if_none:"" }} </br>
+                            {% include "cedar_core/prod_stage_icons.html" %} </br>
+                        </td>
+                        <td>
+                            <span data-bs-toggle="tooltip" data-placement="top" data-bs-title="Microbe">{{ res_out.microbe_level_01 }}</span> <span data-bs-toggle="tooltip" data-placement="top" data-bs-title="Microbe Sub-type">{{ res_out.microbe_level_02 }}</span>  
                         </td>
                         <td>{% include "cedar_core/resistance_outcome_raw.html" %}</td>
                     </tr>
@@ -94,6 +98,23 @@
 
 {% block body_scripts %}
 
+<script>
+
+$(document).ready(function () {
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+    $('#res_out_table').DataTable({
+        "scrollY": "100%",
+        "scrollCollapse": true,
+        order: [[0, 'asc']],
+      });
+      $('.dataTables_length').addClass('bs-select');
+
+});
+
+
+</script>
 
 
   
