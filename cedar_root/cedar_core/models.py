@@ -1360,7 +1360,7 @@ class reference_join_location(models.Model): # =================================
 
 
 
-class reference_join_reference_note(models.Model): #former matrix table m_reference_note
+class reference_note(models.Model): #former matrix table m_reference_note
     """
     A note written for a particular reference.
     """

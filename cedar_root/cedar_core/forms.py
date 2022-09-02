@@ -1,7 +1,7 @@
 from turtle import width
 from django.forms import ModelForm
 from django import forms
-from cedar_core.models import factor, reference, reference_join_location, reference_join_reference_note, res_outcome, location_01, location_02, host_01, microbe_01, atc_vet, dict_help, dict_capt
+from cedar_core.models import factor, reference, reference_join_location, reference_note, res_outcome, location_01, location_02, host_01, microbe_01, atc_vet, dict_help, dict_capt
 from django.utils.translation import gettext_lazy as _
 
 from crispy_forms.bootstrap import Tab, TabHolder, FormActions, PrependedText, AppendedText
@@ -214,7 +214,7 @@ RefLocFormSet = inlineformset_factory(reference, reference_join_location, form=R
 
 class RefNoteForm(ModelForm):
     class Meta:
-        model = reference_join_reference_note
+        model = reference_note
         fields = ['reference_note', 'user', 'is_resolved']
         #labels = {
             #'resolved': 'is_resolved?',
@@ -256,7 +256,7 @@ class RefNoteFormSetHelper(FormHelper):
             ),
         )
         
-RefNoteFormSet = inlineformset_factory(reference, reference_join_reference_note, form=RefNoteForm, extra=0, can_delete=True)
+RefNoteFormSet = inlineformset_factory(reference, reference_note, form=RefNoteForm, extra=0, can_delete=True)
 
 class TopicTabForm(forms.Form):
     
