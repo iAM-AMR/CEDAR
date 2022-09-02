@@ -1364,14 +1364,35 @@ class reference_join_reference_note(models.Model): #former matrix table m_refere
     """
     A note written for a particular reference.
     """
-    fk_reference_join_note_reference_id = models.ForeignKey(reference, on_delete=models.CASCADE, blank=True, null=True, help_text=get_help_text('fk_reference_join_note_reference_id'))
-    note = models.TextField(blank=True, null=True, help_text=get_help_text('note'))
-    fk_reference_join_note_user_id = models.ForeignKey(legacy_user, on_delete=models.SET_NULL, blank=True, null=True, help_text=get_help_text('fk_reference_join_note_user_id'))
-    resolved = models.BooleanField(default=False, help_text=get_help_text('resolved'))
-    is_apply_factor = models.BooleanField(default=False, help_text=get_help_text('is_apply_factor'))
+    reference                                              = models.ForeignKey(
+        to         = reference, 
+        null       = True,
+        blank      = True,
+        on_delete  = models.CASCADE,   
+        help_text  = get_help_text('reference'))
+
+    reference_note                                          = models.TextField(
+        null       = True, 
+        blank      = True, 
+        help_text  = get_help_text('reference_note'))
+
+    user                                                   = models.ForeignKey(
+        to         = legacy_user,                                                # To Update
+        null       = True,
+        blank      = True,  
+        on_delete  = models.SET_NULL, 
+        help_text  = get_help_text('user'))
+
+    is_resolved                                          = models.BooleanField(
+        default    = False, 
+        help_text  = get_help_text('is_resolved'))
+    
+    is_factor_note                                       = models.BooleanField(
+        default    = False, 
+        help_text  = get_help_text('is_factor_note'))
     
     def __str__(self):
-        return 'Reference %s: %s' % (self.fk_note_ref_id, self.note)
+        return self.reference_note
 
 
 

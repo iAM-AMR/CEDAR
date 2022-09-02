@@ -215,13 +215,13 @@ RefLocFormSet = inlineformset_factory(reference, reference_join_location, form=R
 class RefNoteForm(ModelForm):
     class Meta:
         model = reference_join_reference_note
-        fields = ['note', 'fk_reference_join_note_user_id', 'resolved']
+        fields = ['reference_note', 'user', 'is_resolved']
         #labels = {
-            #'resolved': 'Resolved?',
+            #'resolved': 'is_resolved?',
         #}
         help_texts = {}
         for fieldname in fields:
-            if fieldname != 'note':
+            if fieldname != 'reference_note':
                 help_texts[fieldname] = None
 
     def __init__(self, *args, **kwargs):
@@ -241,11 +241,11 @@ class RefNoteFormSetHelper(FormHelper):
             Div(
                 Column(
                     Row(
-                        Column(PrependedText('fk_reference_join_note_user_id', 'User'), css_class='form-group col-md-8 mx-0'),
-                        Column(PrependedText('resolved', 'Resolved?', css_class='ml-2 mt-2'), css_class='form-group col-md-4 mx-0'),
+                        Column(PrependedText('user', 'User'), css_class='form-group col-md-8 mx-0'),
+                        Column(PrependedText('is_resolved', 'Resolved?', css_class='ml-2 mt-2'), css_class='form-group col-md-4 mx-0'),
                         css_class='form-row'
                     ),
-                    Field('note', css_class='col-md-9'),
+                    Field('reference_note', css_class='col-md-9'),
                     FormActions(
                         Submit('save', 'Save changes', style="margin-left: 0px;")
                     ),
