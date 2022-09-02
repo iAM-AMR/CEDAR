@@ -150,8 +150,6 @@ def detail_res_outcome(request, reference_id, factor_id, res_outcome_id):
     return render(request, 'cedar_core/detail_res_outcome.html', context)
 
 
-    path('references/<int:ref_id>/factors/<int:fac_id>/outcomes/<int:ro_id>', details.detail_res_outcome, name='detail_res_outcome'),
-
 
 # --------------------------------------------------------------- detail_factor
 

@@ -446,6 +446,23 @@ class FactorForm(ModelForm):
             ),
         )
 
+# https://docs.djangoproject.com/en/4.1/topics/forms/modelforms/
+class EditResistanceOutcomeForm(ModelForm):
+    
+    class Meta:
+        model = res_outcome
+        exclude = ['']
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'resout_form'
+        self.helper.form_class = ''
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'submit_survey'
+        self.helper.add_input(Submit('submit', 'Submit'))
+
+
 # TO DO: add genetic element id (gene), extract user, figure extract, and figure extract method to the form
 class ResistanceOutcomeForm(ModelForm):
     class Meta:
