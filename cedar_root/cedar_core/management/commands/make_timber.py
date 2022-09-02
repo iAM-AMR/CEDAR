@@ -1,5 +1,17 @@
 
 
+# Make Timber
+
+# Use
+# As script: python manage.py shell < myscript.py
+# As script: python manage.py runscript myscript.py
+# As a management command (preferred): 
+#   python manage.py make_timber
+
+
+
+
+
 # python .\cedar_root\manage.py make_timber
 
 import csv, datetime
