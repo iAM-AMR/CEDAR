@@ -76,13 +76,13 @@
           <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Main</button>
         </li>
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Review</button>
+          <button class="nav-link" id="review-tab" data-bs-toggle="tab" data-bs-target="#review-tab-pane" type="button" role="tab" aria-controls="review-tab-pane" aria-selected="false">Review</button>
         </li>
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Locale</button>
+          <button class="nav-link" id="locale-tab" data-bs-toggle="tab" data-bs-target="#locale-tab-pane" type="button" role="tab" aria-controls="locale-tab-pane" aria-selected="false">Locale</button>
         </li>
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="disabled-tab" data-bs-toggle="tab" data-bs-target="#disabled-tab-pane" type="button" role="tab" aria-controls="disabled-tab-pane" aria-selected="false" disabled>Disabled</button>
+          <button class="nav-link" id="notes-tab" data-bs-toggle="tab" data-bs-target="#notes-tab-pane" type="button" role="tab" aria-controls="notes-tab-pane" aria-selected="false">Notes</button>
         </li>
       </ul>
       <!-- End Tab Definitions -->
@@ -147,14 +147,14 @@
         </div>
 
         <!-- Begin Tab 2 Content (Review) -->
-        <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+        <div class="tab-pane fade" id="review-tab-pane" role="tabpanel" aria-labelledby="review-tab" tabindex="0">
           <p>Is Excluded: {{ reference.is_excluded_extract }}</p>
 
         <!-- End Tab 2 Content (Review) -->  
         </div>
         
         <!-- Begin Tab 3 Content (Locale) -->
-        <div class="tab-pane fade px-4" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
+        <div class="tab-pane fade px-4" id="locale-tab-pane" role="tabpanel" aria-labelledby="locale-tab" tabindex="0">
           
           <table id="location_table" class="table table-bordered stripe" cellspacing="0" width="100%">
             
@@ -182,7 +182,31 @@
         </div>
 
         <!-- Start Tab 4 Content (Notes) -->
-        <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">...</div>
+        <div class="tab-pane fade" id="notes-tab-pane" role="tabpanel" aria-labelledby="notes-tab" tabindex="0">
+        
+          <table id="notes_table" class="table table-bordered stripe" cellspacing="0" width="100%">
+            
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Note</th>
+                <th>Resolution</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for note in reference_notes %}
+                <tr>
+                  <td>{{ note.id }}</td>
+                  <td>{{ note.reference_note }}</td>
+                  <td>{{ note.is_resolved }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+
+          </table>
+
+        </div>
       
       <!-- End Tab Contents -->
       </div>

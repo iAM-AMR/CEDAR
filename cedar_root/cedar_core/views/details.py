@@ -187,10 +187,13 @@ def detail_reference(request, ref_id):
 
     location_list = thisreference.reference_join_location_set.all()
 
+    notes_list = thisreference.reference_note_set.all()
+
     context = {'page_title': 'CEDAR: Reference ' + str(ref_id),
                'reference': thisreference,
                'reference_factors': factor_list,
                'reference_locations': location_list,
+               'reference_notes': notes_list,
                }
 
     return render(request, 'cedar_core/detail_reference.html', context)
