@@ -23,6 +23,8 @@ urlpatterns = [
     path('references/<int:reference_id>/factors/<int:factor_id>/outcomes/<int:pk>/add/', resoutCreateView.as_view(), name='resout-add'), 
     path('references/<int:reference_id>/factors/<int:factor_id>/outcomes/<int:pk>/update/', resoutUpdateView.as_view(), name='resout-update'),
     path('references/<int:reference_id>/factors/<int:factor_id>/outcomes/<int:pk>/delete/', resoutDeleteView.as_view(), name='resout-delete'),
+    path('references/<int:reference_id>/factors/<int:factor_id>/outcomes/<int:pk>/details/', resoutView.as_view(), name='resout-details'),
+
     path('references/<int:reference_id>/factors/<int:factor_id>/outcomes/<int:pk>/cptest/', views.resistance_outcome_detail, name='resout-delete'),
     #path('references/<int:ref_id>/factors/<int:fac_id>/expand/', views.expand_factor, name='expand_factor'),
     path('references/<int:ref_id>/factors/<int:fac_id>/delete/', views.delete_factor, name='delete_factor'),

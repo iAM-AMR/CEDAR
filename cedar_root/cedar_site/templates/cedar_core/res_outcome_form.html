@@ -31,6 +31,7 @@
           <div class="form-group col-md-6 mb-0">
             {{ form.resistance|as_crispy_field }}
             {{ form.moa_type|as_crispy_field }}
+            {{ form.microbe_level_01|as_crispy_field }}
             
           </div>
         </div>
@@ -51,7 +52,7 @@
                     <td></td>
                     <td>{{ form.contable_a }}</td>
                     <td>{{ form.contable_b }}</td>
-                    <td rowspan="2">{{ form.table_n_ab }}</td>
+                    <td rowspan="2 style="align-items-center">{{ form.table_n_ab }}</td>
                 </tr>
                 <tr>
                     <td></td>

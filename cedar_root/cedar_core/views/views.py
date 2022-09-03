@@ -635,6 +635,6 @@ def resistance_outcome_detail(request, reference_id, factor_id, pk):
                'ro_form': ro_form,
                'page_title': 'Edit Association with Resistance',
                'ref': ref,
-               'fac': fac,
+               'factor': fac,
     }
     return render(request, 'cedar_core/resistance_outcome_detail.html', context)

@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% load crispy_forms_tags %}
+
+{% block head_css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'cedar_core/resistance_out.css' %}">
+{% endblock head_css %}
 
 {% load widget_tweaks %}
 

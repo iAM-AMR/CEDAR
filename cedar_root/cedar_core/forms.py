@@ -446,6 +446,24 @@ class FactorForm(ModelForm):
             ),
         )
 
+
+class TestResistanceOutcomeForm(ModelForm):
+    
+    class Meta:
+        model = res_outcome
+        exclude = ['factor']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = ''
+        self.helper.form_class = ''
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'submit_survey'
+        self.helper.form_show_labels = True
+        self.helper.add_input(Submit('submit', 'Submit'))
+
+
 # https://docs.djangoproject.com/en/4.1/topics/forms/modelforms/
 class EditResistanceOutcomeForm(ModelForm):
     
@@ -590,39 +608,40 @@ class ResistanceOutcomeForm(ModelForm):
         self.helper.form_show_labels = False
         self.helper.layout = Layout(
             Div(
-                HTML(''' <br> '''),
                 Row(
                     Column(
-                        Row(
-                            PrependedText('microbe_level_01', 'Microbe'), 
-                            'microbe_level_02',
-                        ),
+                        PrependedText('microbe_level_01', 'Microbe'),
+                        css_class='col-md-6',
+                    ),
+                    Column(
+                        PrependedText('microbe_level_02', 'Microbe'),
+                        css_class='col-md-6',
+                    ), 
+                ),
+                Row(
+                    Column(
+                        PrependedText('resistance', 'Resistance (Phenotypic)'), 
+                        css_class='col-md-6',
+                    ),
+
+                    Column(
+                        PrependedText('resistance_gene', 'Resistance (Genomic)'), 
                         css_class='col-md-6',
                     ),
                 ),
                 Row(
                     Column(
-                        PrependedText('resistance', 'AMR'), 
-                        css_class='col-md-10',
-                        #css_class='form-label-md-2'
+                        HTML(''' {{factor.group_allocate_production_stage}}  ''')
                     ),
-                ),
-                Row(
                     Column(
-                        PrependedText('resistance_gene', 'Gene'), 
-                        css_class='col-md-10',
-                        #css_class='form-label-md-2'
+                        PrependedText('group_observe_production_stage', 'Observed Production Stage'), 
+                        css_class='col-md-6',
                     ),
                 ),
-                HTML('''<hr style="border-width:5px;">'''),
-                HTML('''<br>'''),
-                Row(
-                    HTML(''' <h5 class="col-2">Stage</h5> '''),
-                    Column(
-                        'group_observe_production_stage',
-                        css_class='col-md-4',
-                    ),
-                ),
+
+                HTML('''<hr class="mb-4" style="border-width:5px;">'''),
+
+                
                 HTML('''<br>'''),
                 Row(
                     HTML(''' <h5 class="col-2">Location</h5> '''),
@@ -651,7 +670,7 @@ class ResistanceOutcomeForm(ModelForm):
                 #HTML('''<br> <h5 class="col-2">Factor Data</h5> '''),
                 HTML('''
                         <br>
-                        <table id="fullFacData" class="table table-borderless">
+                        <table id="fullFacData" class="table table-bordered">
                             <tr>
                                 <td></td>
                                 <td></td>
@@ -666,18 +685,18 @@ class ResistanceOutcomeForm(ModelForm):
                                 </td>
                             </tr>
                             <tr>
-                                <td rowspan="2"><h5>Exposed <br> Group</h5></td>
+                                <td rowspan="2" class="rotate align-middle "><h5>Factor</h5></td>
                                 <td rowspan="2">'''),
-                HTML(''' <br> <h5 class="col-2">{{ ro.fk_factor_id.group_exposed }}</h5> '''), # TO DO: make uneditable as this is factor-level info
+                HTML(''' <h5>{{ factor.group_factor }}</h5> '''), # TO DO: make uneditable as this is factor-level info
                 HTML('''        </td>
                                 <td>'''),
-                Field('contable_a', css_id='ct_a'),
+                AppendedText('contable_a', '(n)'),
                 HTML('''        </td>
                                 <td>'''),
                 Field('contable_b', css_id='ct_b'),
                 HTML('''        </td>
                                 <td rowspan="2">'''),
-                Field('table_n_ab', css_id='total_exp', style="height: 125px"),
+                Field('table_n_ab', css_id='total_exp'),
                 HTML('''        </td>
                             </tr>
                             <tr>
@@ -689,7 +708,7 @@ class ResistanceOutcomeForm(ModelForm):
                 HTML('''        </td>
                             </tr>
                             <tr>
-                                <td rowspan="2"><h5>Referent <br> Group</h5></td>
+                                <td class="rotate" rowspan="2"><h5>Comparator</h5></td>
                                 <td rowspan="2">'''),
                 # Referent (comparator group) TO DO: make uneditable as this is factor-level info
                 HTML(''' <br> <h5 class="col-2">{{ ro.fk_factor_id.group_referent }}</h5> '''),

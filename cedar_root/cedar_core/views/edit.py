@@ -1,5 +1,5 @@
 
-
+from django.urls import reverse
 from multiprocessing import context
 from webbrowser import get
 from django.core.exceptions import ObjectDoesNotExist
@@ -11,9 +11,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic import DetailView
+from django.views import View
 
 from cedar_core.models import reference, reference_join_location, reference_note, factor, publisher, res_outcome
-from cedar_core.forms  import ReferenceForm, RefLocForm, RefLocFormSet, RefLocFormSetHelper, RefNoteForm, RefNoteFormSet, RefNoteFormSetHelper, QuerySelectForm, TopicTabForm, FactorForm, ResistanceOutcomeForm, EditResistanceOutcomeForm
+from cedar_core.forms  import ReferenceForm, RefLocForm, RefLocFormSet, RefLocFormSetHelper, RefNoteForm, RefNoteFormSet, RefNoteFormSetHelper, QuerySelectForm, TopicTabForm, FactorForm, ResistanceOutcomeForm, EditResistanceOutcomeForm, TestResistanceOutcomeForm
 
 from django.forms.models import model_to_dict
 from django.db.models import F, Q
@@ -69,21 +71,58 @@ https://docs.djangoproject.com/en/4.1/topics/class-based-views/generic-editing/#
 """
 
 
+
+
+
+
 class resoutCreateView(CreateView):
     model = res_outcome
     fields = ['factor', 'resistance']
 
+
+class resoutDetailView(DetailView):
+    model = res_outcome
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = TestResistanceOutcomeForm(initial=model_to_dict(self.object))
+        context['resout'] = self.object
+        return context
+
+   
+
+    
+
+
 class resoutUpdateView(UpdateView):
     model = res_outcome
-    fields = ['factor', 'resistance', 'resistance_gene', 'place_in_text', 
-                  'microbe_level_01', 'microbe_level_02', 'group_observe_production_stage',
-                  'moa_type', 'moa_unit', 'contable_a', 'contable_b', 'contable_c', 'contable_d',
-                  'prevtable_a', 'prevtable_b', 'prevtable_c', 'prevtable_d', 'table_n_ab', 'table_n_cd',
-                  'odds_ratio', 'odds_ratio_lo', 'odds_ratio_up', 'odds_ratio_sig', 'is_figure_extract',
-                  'figure_extract_method', 'extract_user_legacy']
+    form_class = TestResistanceOutcomeForm
+    
+    
+    
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
 
 
 
 class resoutDeleteView(DeleteView):
     model = res_outcome
     success_url = reverse_lazy('index')
+
+
+class resoutView(View):
+
+    def get(self, request, *args, **kwargs):
+        view = resoutDetailView.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = resoutUpdateView.as_view()
+        return view(request, *args, **kwargs)
