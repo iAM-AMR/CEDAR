@@ -1,4 +1,5 @@
 
+from urllib import request
 from django.urls import reverse
 from multiprocessing import context
 from webbrowser import get
@@ -79,6 +80,16 @@ class resoutCreateView(CreateView):
     model = res_outcome
     fields = ['factor', 'resistance', 'moa_type', 'microbe_level_01', 'contable_a']
 
+    
+
+
+    def get_initial(self, *args, **kwargs):
+        initial = super().get_initial(**kwargs)
+        initial['factor'] = self.kwargs['factor_id']
+        return initial
+
+
+
 
 class resoutDetailView(DetailView):
     model = res_outcome
@@ -89,7 +100,7 @@ class resoutDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = TestResistanceOutcomeForm(initial=model_to_dict(self.object))
+        context['form'] = TestResistanceOutcomeForm(initial=model_to_dict(self.object)) # Missing instance?
         context['resout'] = self.object
         return context
 

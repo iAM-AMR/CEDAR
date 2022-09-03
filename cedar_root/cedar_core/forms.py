@@ -451,7 +451,7 @@ class TestResistanceOutcomeForm(ModelForm):
     
     class Meta:
         model = res_outcome
-        exclude = ['factor']
+        exclude = ['']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
