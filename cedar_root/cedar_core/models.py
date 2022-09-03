@@ -25,6 +25,7 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from decimal import Decimal
+from django.urls import reverse
 
 import pandas
 
@@ -526,8 +527,14 @@ class res_outcome(models.Model): # =============================================
     v12_ID_reference_v2_initial = models.IntegerField(blank=True, null=True, help_text=get_help_text('v12_ID_reference_v2_initial'))
     v12_solo_extraction_2016 = models.BooleanField(blank=True, null=True, help_text=get_help_text('v12_solo_extraction_2016'))
     
+    def get_absolute_url(self):
+        return reverse('resout-detail', kwargs={'pk': self.pk})
+
+
     def __str__(self):
         return '%s_%s' % (self.factor, self.resistance)
+
+    
     
     # The clean method is called automatically when model is used in a form. These are commented out for now, as extracted data may have errors that mean these conditions are rarely met
     #def clean(self):
@@ -1386,10 +1393,6 @@ class reference_note(models.Model): #former matrix table m_reference_note
     is_resolved                                          = models.BooleanField(
         default    = False, 
         help_text  = get_help_text('is_resolved'))
-    
-    is_factor_note                                       = models.BooleanField(
-        default    = False, 
-        help_text  = get_help_text('is_factor_note'))
     
     def __str__(self):
         return self.reference_note

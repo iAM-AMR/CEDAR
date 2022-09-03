@@ -460,7 +460,66 @@ class EditResistanceOutcomeForm(ModelForm):
         self.helper.form_class = ''
         self.helper.form_method = 'post'
         self.helper.form_action = 'submit_survey'
-        self.helper.add_input(Submit('submit', 'Submit'))
+
+        self.helper.form_show_labels = False
+
+        self.helper.layout = Layout(
+            Row(
+
+                Column(
+                    PrependedText('microbe_level_01', dict_capt['microbe_level_01'])
+                ),
+
+                Column(
+                    PrependedText('microbe_level_02', dict_capt['microbe_level_02'])
+                ),
+
+            ),
+
+            HTML('''
+                {% load crispy_forms_tags %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>// From: {{ resout.place_in_text|default_if_none:"No Location Provided" }} //</th>
+                            <th>AMR+ (%)</th>
+                            <th>AMR- (%)</th>
+                            <th data-bs-toggle="tooltip" data-placement="top" data-bs-title= {{ res_out.moa_unit|default_if_none:"Unit_Not_Available" }}>Total (n)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    
+                        <tr>
+                            <td></td>
+                            <td class="form-group input">{{ resistance_outcome.prevtable_a }}</td>
+                            <td>{{ resistance_outcome.prevtable_b|default_if_none:"" }}</td>
+                            <td>{{ resistance_outcome.table_n_ab }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>{{ resistance_outcome.prevtable_c|default_if_none:"" }}</td>
+                            <td>{{ resistance_outcome.prevtable_d|default_if_none:"" }}</td>
+                            <td>{{ resistance_outcome.table_n_cd|default_if_none:"" }}</td>
+                        </tr>
+                    
+                    </tbody>
+                </table>
+            
+            
+            
+            
+            '''
+
+
+            ),
+
+            
+
+            FormActions(
+                Submit('save', 'Save changes'),
+            )
+            
+        )
 
 
 # TO DO: add genetic element id (gene), extract user, figure extract, and figure extract method to the form
@@ -528,7 +587,7 @@ class ResistanceOutcomeForm(ModelForm):
                   'prevtable_a', 'prevtable_b', 'prevtable_c', 'prevtable_d', 'table_n_cd']
         for i in range(0,len(to_exclude)-1):
             self.fields[to_exclude[i]].label = False
-        #self.helper.form_show_labels = False
+        self.helper.form_show_labels = False
         self.helper.layout = Layout(
             Div(
                 HTML(''' <br> '''),
@@ -543,7 +602,7 @@ class ResistanceOutcomeForm(ModelForm):
                 ),
                 Row(
                     Column(
-                        PrependedText('fk_resistance_atc_vet_id', 'AMR'), 
+                        PrependedText('resistance', 'AMR'), 
                         css_class='col-md-10',
                         #css_class='form-label-md-2'
                     ),
@@ -560,7 +619,7 @@ class ResistanceOutcomeForm(ModelForm):
                 Row(
                     HTML(''' <h5 class="col-2">Stage</h5> '''),
                     Column(
-                        'fk_group_observe_prod_stage_id',
+                        'group_observe_production_stage',
                         css_class='col-md-4',
                     ),
                 ),

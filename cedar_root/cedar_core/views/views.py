@@ -597,19 +597,19 @@ def edit_factor(request, ref_id, fac_id):
 
 @login_required
 @permission_required('cedar_core.add_factor')
-def resistance_outcome_detail(request, ref_id, fac_id, prev_ro_id):
+def resistance_outcome_detail(request, reference_id, factor_id, pk):
     
-    ref = reference.objects.get(pk=ref_id)
-    fac = factor.objects.get(pk=fac_id)
+    ref = reference.objects.get(pk=reference_id)
+    fac = factor.objects.get(pk=factor_id)
     
     #Get RO
     try:
-        prev_ro = res_outcome.objects.get(pk=prev_ro_id)
+        prev_ro = res_outcome.objects.get(pk=pk)
     except fac.DoesNotExist:
         raise Http404("Resistance outcome does not exist")
 
     # New extraction (duplicate) under the same soid
-    ro = res_outcome.objects.create(soid=prev_ro.soid, extract_date_ro=timezone.now)
+    #ro = res_outcome.objects.create(id=prev_ro.id)
     
     #Set fields to read only (example code just for reference)
     #for f in range(len(factor_forms)):
@@ -619,7 +619,7 @@ def resistance_outcome_detail(request, ref_id, fac_id, prev_ro_id):
         ##factor_forms[f].fields['factor_title'].disabled = True
         
     if request.method == 'POST':
-        ro_form = ResistanceOutcomeForm(request.POST, initial=model_to_dict(ro), instance=ro)
+        ro_form = ResistanceOutcomeForm(request.POST, initial=model_to_dict(prev_ro), instance=ro)
         
         if ro_form.is_valid():
             
@@ -629,9 +629,9 @@ def resistance_outcome_detail(request, ref_id, fac_id, prev_ro_id):
             output = ro_form.save(commit=False)
 
     else:
-        ro_form = ResistanceOutcomeForm(initial=model_to_dict(ro), instance=ro)
+        ro_form = ResistanceOutcomeForm(initial=model_to_dict(prev_ro), instance=prev_ro)
 
-    context = {'ro': ro,
+    context = {'ro': prev_ro,
                'ro_form': ro_form,
                'page_title': 'Edit Association with Resistance',
                'ref': ref,
