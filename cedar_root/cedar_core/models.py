@@ -528,7 +528,8 @@ class res_outcome(models.Model): # =============================================
     v12_solo_extraction_2016 = models.BooleanField(blank=True, null=True, help_text=get_help_text('v12_solo_extraction_2016'))
     
     def get_absolute_url(self):
-        return reverse('resout-details', kwargs={'pk': self.pk, 'factor_id': self.factor_id, 'reference_id': self.factor_id})
+        x = factor.objects.get(pk=self.factor_id)
+        return reverse('resout-details', kwargs={'pk': self.pk, 'factor_id': self.factor_id, 'reference_id': x.reference_id})
 
 
     def __str__(self):

@@ -77,7 +77,7 @@ https://docs.djangoproject.com/en/4.1/topics/class-based-views/generic-editing/#
 
 class resoutCreateView(CreateView):
     model = res_outcome
-    fields = ['factor', 'resistance']
+    fields = ['factor', 'resistance', 'moa_type', 'microbe_level_01', 'contable_a']
 
 
 class resoutDetailView(DetailView):
@@ -101,7 +101,6 @@ class resoutDetailView(DetailView):
 class resoutUpdateView(UpdateView):
     model = res_outcome
     form_class = TestResistanceOutcomeForm
-    
     
     
     def post(self, request, *args, **kwargs):
