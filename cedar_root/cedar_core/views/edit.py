@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic import DetailView
@@ -21,6 +21,7 @@ from cedar_core.forms  import ReferenceForm, RefLocForm, RefLocFormSet, RefLocFo
 from django.forms.models import model_to_dict
 from django.db.models import F, Q
 
+from cedar_core.forms import TestResistanceOutcomeForm
 
 from django.utils import timezone
 
@@ -76,12 +77,20 @@ https://docs.djangoproject.com/en/4.1/topics/class-based-views/generic-editing/#
 
 
 
-class resoutCreateView(CreateView):
+class resoutCreateView(LoginRequiredMixin, CreateView):
     model = res_outcome
-    fields = ['factor', 'resistance', 'moa_type', 'microbe_level_01', 'contable_a']
+    template_name = "cedar_core/res_outcome_detail.html"
+    #fields = ['factor', 'resistance', 'moa_type', 'microbe_level_01']
 
+    form_class = TestResistanceOutcomeForm
+
+# initial = {'key', 'value'}
     
-
+    # An attempt to use the same form.
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['form'] = TestResistanceOutcomeForm()
+    #     return context
 
     def get_initial(self, *args, **kwargs):
         initial = super().get_initial(**kwargs)

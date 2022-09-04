@@ -10,32 +10,46 @@
 
 {% block head_css %}
 
+    <link rel="stylesheet" type="text/css" href="{% static 'cedar_core/detail_style.css' %}">
+
 {% endblock head_css %}
+
 
 
 {% block content %}
 
 <div class="container-fluid maxWidth">
 
-   
     <form method="post" action="">
 
+        <!-- Duplication? BS table may add this for us. -->
         {% csrf_token %}
     
         {% crispy form %}
     
     </form>
     
-
-
-
 </div>
 
-
-
-
-
-
-
-
 {% endblock content %}
+
+
+
+{% block body_scripts %}
+
+<script>
+
+    // Prevent scrolling from inadvertently modifying number in active numeric field. 
+    document.addEventListener("wheel", function(event){
+        if(document.activeElement.type === "number"){
+            document.activeElement.blur();
+        }
+    });
+
+</script>
+
+{% endblock body_scripts %}
+
+
+
+

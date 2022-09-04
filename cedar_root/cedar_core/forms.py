@@ -457,11 +457,171 @@ class TestResistanceOutcomeForm(ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_id = ''
-        self.helper.form_class = ''
+        self.helper.form_class = 'res-out-detail'
         self.helper.form_method = 'post'
         self.helper.form_action = 'submit_survey'
         self.helper.form_show_labels = True
         self.helper.add_input(Submit('submit', 'Submit'))
+
+        self.helper.layout = Layout(
+            Div(
+                Row(
+                    Column(
+                        PrependedText('microbe_level_01', 'Microbe'),
+                        css_class='col-md-6',
+                    ),
+                    Column(
+                        PrependedText('microbe_level_02', 'Microbe'),
+                        css_class='col-md-6',
+                    ), 
+                ),
+                Row(
+                    Column(
+                        PrependedText('resistance', 'Resistance (Phenotypic)'), 
+                        css_class='col-md-6',
+                    ),
+
+                    Column(
+                        PrependedText('resistance_gene', 'Resistance (Genomic)'), 
+                        css_class='col-md-6',
+                    ),
+                ),
+                Row(
+                    Column(
+                        HTML(''' {{factor.group_allocate_production_stage}}  ''')
+                    ),
+                    Column(
+                        PrependedText('group_observe_production_stage', 'Observed Production Stage'), 
+                        css_class='col-md-6',
+                    ),
+                ),
+
+                HTML('''<hr class="mb-4" style="border-width:5px;">'''),
+
+                
+                HTML('''<br>'''),
+                Row(
+                    HTML(''' <h5 class="col-2">Location</h5> '''),
+                    Column(
+                        'place_in_text',
+                        css_class='col-md-8',
+                    ), 
+                ),
+                HTML('''<br>'''),
+                Row(
+                    HTML(''' <h5 class="col-2">Result Unit</h5> '''),
+                    Column(
+                        'moa_unit',
+                        css_class='col-md-8',
+                    ), 
+                ),
+                HTML('''<br>'''),
+                Row(
+                    HTML(''' <h5 class="col-2">Grain/Type</h5> '''),
+                    Column(
+                        Field('moa_type', css_id='moa_type_id'),
+                        css_class='col-md-8',
+                    ), 
+                ),
+                HTML('''<hr style="border-width:5px;">'''),
+                #HTML('''<br> <h5 class="col-2">Factor Data</h5> '''),
+                HTML('''
+                        <br>
+                        <table id="fullFacData" class="table table-bordered">
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <h6>AMR+</h6>
+                                </td>
+                                <td>
+                                    <h6>AMR-</h6>
+                                </td>
+                                <td>
+                                    <h6>Total</h6>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2" class="rotate align-middle "><h5>Factor</h5></td>
+                                <td rowspan="2">'''),
+                HTML(''' <h5>{{ factor.group_factor }}</h5> '''), # TO DO: make uneditable as this is factor-level info
+                HTML('''        </td>
+                                <td>'''),
+                AppendedText('contable_a', '(n)'),
+                HTML('''        </td>
+                                <td>'''),
+                Field('contable_b', css_id='ct_b'),
+                HTML('''        </td>
+                                <td rowspan="2">'''),
+                Field('table_n_ab', css_id='total_exp'),
+                HTML('''        </td>
+                            </tr>
+                            <tr>
+                                <td>'''),
+                Field('prevtable_a', css_id='pt_a'),
+                HTML('''        </td>
+                                <td>'''),
+                Field('prevtable_b', css_id='pt_b'),
+                HTML('''        </td>
+                            </tr>
+                            <tr>
+                                <td class="rotate" rowspan="2"><h5>Comparator</h5></td>
+                                <td rowspan="2">'''),
+                # Referent (comparator group) TO DO: make uneditable as this is factor-level info
+                HTML(''' <br> <h5 class="col-2">{{ ro.fk_factor_id.group_referent }}</h5> '''),
+                HTML('''        </td>
+                                <td>'''),
+                Field('contable_c', css_id='ct_c'),
+                HTML('''        </td>
+                                <td>'''),
+                Field('contable_d', css_id='ct_d'),
+                HTML('''        </td>
+                                <td rowspan="2">'''),
+                Field('table_n_cd', css_id='total_ref', style="height: 125px"),
+                HTML('''        </td>
+                            </tr>
+                            <tr>
+                                <td>'''),
+                Field('prevtable_c', css_id='pt_c'),
+                HTML('''        </td>
+                                <td>'''),
+                Field('prevtable_d', css_id='pt_d'),
+                HTML('''        </td>
+                            </tr>
+                        </table>
+                '''),
+                HTML('''<br>'''),
+                Row(
+                    Column(
+                        HTML(''' <h6 style="margin-left: 10px;">Odds Ratio</h6> '''),
+                        #css_class='col-md-2 ml-1',
+                    ),
+                    #HTML(''' <h6 class="col-2">Test</h6> '''),
+                    Column(Field('odds_ratio', css_id='or'), css_class='col-2'), 
+                    Column(Field('odds_ratio_lo', css_id='or_lo'), css_class='col-2'),
+                    Column(Field('odds_ratio_up', css_id='or_up'), css_class='col-2'),
+                    Column(Field('odds_ratio_sig', css_id='or_sig'), css_class='col-4'),
+                ),
+                # JavaScript experimenting with changing attributes of numerical fields (show/hide etc.) depending on dropdown selection of Contingency Table, Prevalence Table, etc.
+                HTML('''
+                    <script>
+                        $('#moa_type_id').change(function () {
+                            var end = this.value;
+                            //if (end == 2){ //Prevalence Table
+                            $('#ct_a').css( "border", "3px solid red" );
+                            //}
+                            //else {
+                                //$('[name="otherInstitute"]').hide();
+                            //}
+                        })
+                    </script>
+                '''),
+                # css_class='col no-gutters',
+                FormActions(
+                    Submit('save', 'Save changes')
+                ),
+            ),
+        )
 
 
 # https://docs.djangoproject.com/en/4.1/topics/forms/modelforms/
