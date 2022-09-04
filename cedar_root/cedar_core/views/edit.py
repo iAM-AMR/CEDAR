@@ -75,13 +75,20 @@ https://docs.djangoproject.com/en/4.1/topics/class-based-views/generic-editing/#
 
 
 
-
+# LoginRequiredMixin must be in first position; requires user is logged-in.
 
 class resoutCreateView(LoginRequiredMixin, CreateView):
+    
+    # Create a ModelForm
     model = res_outcome
-    template_name = "cedar_core/res_outcome_detail.html"
-    #fields = ['factor', 'resistance', 'moa_type', 'microbe_level_01']
 
+    # Set template. CreateView defaults to *_form. 
+    template_name = "cedar_core/res_outcome_detail.html"
+
+    # Set template alternate approach: 
+    # template_name_suffix = '_detail'
+
+    # Do not specify fields and create a form; select existing (crispy) form. 
     form_class = TestResistanceOutcomeForm
 
 # initial = {'key', 'value'}
