@@ -21,6 +21,7 @@ crispy-bootstrap5 = "*"
 django-autocomplete-light = "*"
 django-bootstrap5 = "*"
 fontawesomefree = "*"
+whitenoise = "*"
 
 [requires]
 python_version = "3.10"

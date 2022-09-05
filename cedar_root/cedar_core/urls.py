@@ -1,10 +1,19 @@
-from django.urls import include, path, reverse, re_path
+
+
+# URLS
+
+from django.urls import path, re_path
 
 from cedar_core.views import *
-
 from cedar_core.views import PublisherAutocomplete
 
-from django.contrib.auth import views as auth_views
+# from django.urls include
+# from django.contrib.auth import views as auth_views
+
+# TODO: Namespace the app. https://docs.djangoproject.com/en/4.1/intro/tutorial03/#namespacing-url-names
+# This requires updating all tags in templates.
+
+# app_name = 'cedar'
 
 urlpatterns = [
     ##path('accounts/', include('django.contrib.auth.urls')), #create_field='publish-id-autocomplete'

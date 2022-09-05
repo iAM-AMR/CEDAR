@@ -1,14 +1,10 @@
 
 import os
 
-from django.http import HttpResponse,  FileResponse
-from django.shortcuts import render
-
-
-from django.views.decorators.http import require_GET
-
 from django.conf import settings
-
+from django.http import FileResponse, HttpResponse
+from django.shortcuts import render
+from django.views.decorators.http import require_GET
 
 
 def index(request):

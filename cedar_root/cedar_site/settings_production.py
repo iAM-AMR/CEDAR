@@ -1,35 +1,61 @@
 
 
+# PRODUCTION SETTINGS
 
-from pathlib import Path
+# This file imports base settings and applies production settings (deployed on
+#  Azure App Service).
+
+
+
 import os
+
+# Try base settings import; error if fail.
 
 try:
     from .settings import *
-except ImportError as error_local_settings:
+except ImportError as error_production_import_settings_base:
     pass
 
 
-ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
+
+
+# If DEBUG is False, you also need to properly set the ALLOWED_HOSTS setting. 
+# Failing to do so will result in all requests being returned as “Bad Request (400)”.
+# See https://docs.djangoproject.com/en/4.1/ref/settings/#allowed-hosts
 
 DEBUG = False
 
-# SECRET_KEY --> ENVIRONMENT VAR
 
-STATIC_URL = '/static/'
+# We set WEBSITE_HOSTNAME on Azure App Service. If missing, set an empty
+# ALLOWED_HOSTS to return bad requests.
+
+ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
+
+
+# SECRET_KEY is an environment variable.
+
+
+
+# STATIC FILES
+# -------------------------------------
+
+# See comments in base settings re: static files. The following are defined
+# in base settings:
+#  - STATIC_URL (the URL to use when referring to static files located in STATIC_ROOT)
+
+# STATIC_ROOT is the absolute path to the directory where collectstatic() will 
+# collect static files for deployment.
+# See https://docs.djangoproject.com/en/4.1/ref/contrib/staticfiles/#collectstatic
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'cedar_site/static'
-]
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  
 
 
 
 
 
+
+# --- END PROD/DEV FORMAT PARITY
 
 
 
