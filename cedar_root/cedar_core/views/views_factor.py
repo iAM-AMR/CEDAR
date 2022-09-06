@@ -80,13 +80,8 @@ def detail_factor(request, reference_id, pk):
 
 def edit_factor(request, reference_id, pk):
     
-    ref = reference.objects.get(pk=reference_id)
-    
-    #Get factor
-    try:
-        fac = factor.objects.get(pk=pk)
-    except fac.DoesNotExist:
-        raise Http404("Factor does not exist")
+    ref = get_object_or_404(reference, pk = reference_id)
+    fac = get_object_or_404(factor, pk = pk)
     
     # Sample code for setting fields to read only
     #for f in range(len(factor_forms)):

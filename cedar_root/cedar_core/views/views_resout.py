@@ -1,6 +1,6 @@
 
 
-from cedar_core.forms import FactorForm, EditResistanceOutcomeForm, TestResistanceOutcomeForm
+from cedar_core.forms import FactorForm, EditResistanceOutcomeForm, TestResistanceOutcomeForm, ResistanceOutcomeForm
 from cedar_core.models import factor, reference, res_outcome
 from django.contrib.auth.decorators import login_required, permission_required
 from django.forms.models import model_to_dict
@@ -33,11 +33,8 @@ def resistance_outcome_detail(request, reference_id, factor_id, pk):
     ref = reference.objects.get(pk=reference_id)
     fac = factor.objects.get(pk=factor_id)
     
-    #Get RO
-    try:
-        prev_ro = res_outcome.objects.get(pk=pk)
-    except fac.DoesNotExist:
-        raise Http404("Resistance outcome does not exist")
+    prev_ro = get_object_or_404(res_outcome, pk = pk)
+
 
     # New extraction (duplicate) under the same soid
     #ro = res_outcome.objects.create(id=prev_ro.id)
@@ -50,7 +47,8 @@ def resistance_outcome_detail(request, reference_id, factor_id, pk):
         ##factor_forms[f].fields['factor_title'].disabled = True
         
     if request.method == 'POST':
-        ro_form = ResistanceOutcomeForm(request.POST, initial=model_to_dict(prev_ro), instance=ro)
+        # ro_form = ResistanceOutcomeForm(request.POST, initial=model_to_dict(prev_ro), instance=ro)
+        ro_form = ResistanceOutcomeForm(request.POST, initial=model_to_dict(prev_ro))
         
         if ro_form.is_valid():
             
