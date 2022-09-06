@@ -67,12 +67,18 @@
     {% endblock head_css %}
 
 
+    {% block    head_contents %}
+        {# <!-- Content to add to page head. --> #}
+    {% endblock head_contents %}
+
+
     <!-- OTHER ============================================================ -->
 
     <!-- Django template block for replacement during extend. -->
     <!-- page_title can be specified in the context of a view. -->
+    
     <title>
-      {% block title %}
+      {% block    title %}
         {{ page_title|default:"Untitled Page" }}
       {% endblock title %}
     </title>
@@ -179,31 +185,44 @@
     {% block content    %}
     {% endblock content %}
 
+    {% block    body_contents %}
+        {# <!-- Content to add to page body. --> #}
+    {% endblock body_contents %}
 
-    <!-- SCRIPTS (BODY) =================================================== -->
 
-    <!-- Bootstrap -->
-    <!-- See https://getbootstrap.com/docs/5.2/getting-started/introduction/ -->
+
+    <!-- SCRIPTS ========================================================== -->
+
+    {% comment    %}
+        <!-- These scripts are loaded on every page. Additional scripts are loaded below, in body_scripts. -->
+        
+        <!-- Bootstrap -->
+        <!-- See https://getbootstrap.com/docs/5.2/getting-started/introduction/ -->
+
+        <!-- DataTables -->
+        <!-- See https://datatables.net/manual/installation -->
+
+    {% endcomment %}
+    
     <script 
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" 
         integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" 
         crossorigin="anonymous">
     </script>
 
-    <!-- DataTables -->
-    <!-- See https://datatables.net/manual/installation -->
     <script 
         src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js">
     </script>
     
-    <!-- Django template block for replacement during extend. -->
-    {% block body_scripts    %}
+    {% block    body_scripts %}
+        {# <!-- Scripts to add to page body. --> #}
     {% endblock body_scripts %}
+
 
 
     <!-- FOOTER =========================================================== -->
 
-    {% block footer    %}
+    {% block    footer %}
     {% endblock footer %}
 
   </body>
