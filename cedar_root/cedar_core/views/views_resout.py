@@ -1,43 +1,76 @@
 
-from urllib import request
-from django.urls import reverse
-from multiprocessing import context
-from webbrowser import get
-from django.core.exceptions import ObjectDoesNotExist
-from django.contrib import messages
+
+from cedar_core.forms import FactorForm, EditResistanceOutcomeForm, TestResistanceOutcomeForm
+from cedar_core.models import factor, reference, res_outcome
 from django.contrib.auth.decorators import login_required, permission_required
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.forms.models import model_to_dict
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic import DetailView
 from django.views import View
+from django.core.exceptions import PermissionDenied
 
-from cedar_core.models import reference, reference_join_location, reference_note, factor, publisher, res_outcome
-from cedar_core.forms  import ReferenceForm, RefLocForm, RefLocFormSet, RefLocFormSetHelper, RefNoteForm, RefNoteFormSet, RefNoteFormSetHelper, QuerySelectForm, TopicTabForm, FactorForm, ResistanceOutcomeForm, EditResistanceOutcomeForm, TestResistanceOutcomeForm
 
-from django.forms.models import model_to_dict
-from django.db.models import F, Q
+def detail_res_outcome(request, reference_id, factor_id, res_outcome_id):
 
-from cedar_core.forms import TestResistanceOutcomeForm
+    thisresoutcome = get_object_or_404(res_outcome, pk = res_outcome_id)
 
-from django.utils import timezone
+    context = {'page_title': 'CEDAR: Outcome ' + str(res_outcome_id),
+               'res_outcome': thisresoutcome,
+               }
 
-import csv
-import numpy as np
-
+    return render(request, 'cedar_core/detail_res_outcome.html', context)
 
 
 
 
-from crispy_forms.utils import render_crispy_form
+@login_required
+@permission_required('cedar_core.add_factor')
+def resistance_outcome_detail(request, reference_id, factor_id, pk):
+    
+    ref = reference.objects.get(pk=reference_id)
+    fac = factor.objects.get(pk=factor_id)
+    
+    #Get RO
+    try:
+        prev_ro = res_outcome.objects.get(pk=pk)
+    except fac.DoesNotExist:
+        raise Http404("Resistance outcome does not exist")
+
+    # New extraction (duplicate) under the same soid
+    #ro = res_outcome.objects.create(id=prev_ro.id)
+    
+    #Set fields to read only (example code just for reference)
+    #for f in range(len(factor_forms)):
+        #curr_factor = factor_forms[f]
+        #for key in curr_factor.fields:
+            #curr_factor.fields[key].disabled = True
+        ##factor_forms[f].fields['factor_title'].disabled = True
+        
+    if request.method == 'POST':
+        ro_form = ResistanceOutcomeForm(request.POST, initial=model_to_dict(prev_ro), instance=ro)
+        
+        if ro_form.is_valid():
+            
+            print('CLEANED DATA')
+            print(ro_form.cleaned_data)
+            
+            output = ro_form.save(commit=False)
+
+    else:
+        ro_form = ResistanceOutcomeForm(initial=model_to_dict(prev_ro), instance=prev_ro)
+
+    context = {'ro': prev_ro,
+               'ro_form': ro_form,
+               'page_title': 'Edit Association with Resistance',
+               'ref': ref,
+               'factor': fac,
+    }
+    return render(request, 'cedar_core/resistance_outcome_detail.html', context)
 
 
-from dal import autocomplete
-
-import re
 
 
 
@@ -62,6 +95,8 @@ def edit_resistance_outcome(request, reference_id, factor_id, res_outcome_id):
     }
 
     return render(request, 'cedar_core/edit_resistance_outcome.html', context)
+
+
 
 
 """ 
@@ -101,7 +136,7 @@ class resoutCreateView(LoginRequiredMixin, CreateView):
 
     def get_initial(self, *args, **kwargs):
         initial = super().get_initial(**kwargs)
-        initial['factor'] = self.kwargs['factor_id']
+        initial['factor'] = self.kwargs['pk']
         return initial
 
 
@@ -132,7 +167,7 @@ class resoutUpdateView(UpdateView):
     
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return HttpResponseForbidden()
+            raise PermissionDenied
         self.object = self.get_object()
         return super().post(request, *args, **kwargs)
 
@@ -141,6 +176,8 @@ class resoutUpdateView(UpdateView):
 class resoutDeleteView(DeleteView):
     model = res_outcome
     success_url = reverse_lazy('index')
+
+
 
 
 class resoutView(View):

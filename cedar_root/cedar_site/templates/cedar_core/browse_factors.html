@@ -27,8 +27,8 @@
           {% for factor in factor_list %}
             <tr>
               <td>{{ factor.id }}</td>
-              <td><a href="{% url 'detail_factor' reference_id=factor.reference__id factor_id=factor.id %}">{{ factor.factor_title }}</td>
-              <td><a href="{% url 'detail_reference' ref_id=factor.reference__id %}">{{ factor.reference__id }}</a></td>
+              <td><a href="{% url 'detail_factor' reference_id=factor.reference__id pk=factor.id %}">{{ factor.factor_title }}</td>
+              <td><a href="{% url 'detail_reference' pk=factor.reference__id %}">{{ factor.reference__id }}</a></td>
 
             </tr>
           {% endfor %}

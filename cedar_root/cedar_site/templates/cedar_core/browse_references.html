@@ -33,7 +33,7 @@
               <td>{{ reference.key_bibtex }} {% if reference.is_excluded_extract %}<i class="fa-solid fa-ban fa-sm"></i>{% endif %}</td>
               <td>
                 <!-- <a href="/cedar_core/references/{{ reference.id }}/">{{ reference.study_title }}</a> -->
-                <a href="{% url 'detail_reference' ref_id=reference.id %}">{{ reference.ref_title }}</a>
+                <a href="{% url 'detail_reference' pk=reference.id %}">{{ reference.ref_title }}</a>
               </td>
             </tr>
           {% endfor %}
