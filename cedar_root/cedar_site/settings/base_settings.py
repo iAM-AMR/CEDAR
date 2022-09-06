@@ -9,8 +9,8 @@
 
 from pathlib import Path
 
-
-BASE_DIR = Path(__file__).resolve().parent.parent
+# Get to the parent /cedar_root/ folder.
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # INSTALLED_APPS are default unless otherwise specified.
 INSTALLED_APPS = [

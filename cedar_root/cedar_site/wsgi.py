@@ -16,7 +16,7 @@ from django.core.wsgi import get_wsgi_application
 # production_settings.py. Otherwise, we're running in development, and should 
 # use the development settings is development_settings.py.
 
-settings_module = "cedar_site.settings_production" if 'WEBSITE_HOSTNAME' in os.environ else 'cedar_site.settings_stage'
+settings_module = "cedar_site.settings.production_settings" if 'WEBSITE_HOSTNAME' in os.environ else 'cedar_site.settings.development_settings'
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings_module)
 
 application = get_wsgi_application()

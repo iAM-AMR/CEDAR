@@ -12,14 +12,14 @@ import os
 # Try base settings import; error if fail.
 
 try:
-    from .settings import *
+    from .base_settings import *
 except ImportError as error_development_import_settings_base:
     pass
 
 # Try local settings import; error if fail.
 
 try:
-    from .settings_local import *
+    from .local_settings import *
 except ImportError as error_local_settings:
     pass
 
