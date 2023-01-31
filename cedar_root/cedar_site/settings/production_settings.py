@@ -32,7 +32,7 @@ DEBUG = [os.environ['DEBUG']] == 'TRUE'
 ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
 
 
-# SECRET_KEY is an environment variable.
+SECRET_KEY = [os.environ['SECRET_KEY']]
 
 
 

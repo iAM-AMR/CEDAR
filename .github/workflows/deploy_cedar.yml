@@ -4,9 +4,6 @@
 
 name: Build and deploy Python app to Azure Web App - cedar
 
-env:
-  WEBSITE_HOSTNAME: cedar.iam.pub
-
 on:
   push:
     branches:
