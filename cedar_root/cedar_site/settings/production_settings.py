@@ -23,7 +23,7 @@ except ImportError as error_production_import_settings_base:
 # Failing to do so will result in all requests being returned as “Bad Request (400)”.
 # See https://docs.djangoproject.com/en/4.1/ref/settings/#allowed-hosts
 
-DEBUG = False
+DEBUG = [os.environ['DEBUG']] == 'TRUE'
 
 
 # We set WEBSITE_HOSTNAME on Azure App Service. If missing, set an empty
