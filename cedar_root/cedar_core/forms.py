@@ -1,4 +1,3 @@
-from turtle import width
 from django.forms import ModelForm
 from django import forms
 from cedar_core.models import factor, reference, reference_join_location, reference_note, res_outcome, location_01, location_02, host_01, microbe_01, atc_vet, dict_help, dict_capt
