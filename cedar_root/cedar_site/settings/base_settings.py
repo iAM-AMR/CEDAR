@@ -1,20 +1,36 @@
 
+"""
+Base Settings
+"""
 
-# BASE SETTINGS
+# A Django settings file contains the configuration of the Django installation.
+# There are multiple CEDAR settings files - this is the BASE SETTINGS file.
 
-# This file sets base settings, shared between development and production
-# environments.
+# These settings are always used - both in deployment and in production.  
+# This file is imported by settings_development.py and settings_production.py.
+
+# The command pythonmanage.pydiffsettingsdisplays differences between the current 
+# settings file and Django’s default settings.
 
 
 
 from pathlib import Path
 
-# Get to the parent /cedar_root/ folder.
+# All paths specified in the project are relative to BASE_DIR.
+# Set BASE_DIR to the parent (.../cedar_root/) folder.
+# The BASE_DIR is set relative to this file.
+# This path is .../cedar_root/cedar_site/settings/settings_base, 
+# Use parent x3 to traverse three levels from .../settings_base.
+
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-# INSTALLED_APPS are default unless otherwise specified.
+
+# INSTALLED_APPS is a list of strings designating all applications that are 
+# enabled in the Django installation. These applications are enabled by 
+# default unless otherwise noted by comment.
+
 INSTALLED_APPS = [
-    # cedar_core (the CEDAR app)
+    # Add cedar_core (the true CEDAR app)
     'cedar_core.apps.CedarCoreConfig',
     # Django-autocomplete-light
     'dal',
@@ -38,15 +54,18 @@ INSTALLED_APPS = [
     'django_bootstrap5',
     # Use Bootstrap5 with crispy_forms
     "crispy_bootstrap5",
-    # Use Font Awesome
-    #'fontawesomefree',
     # Use WhiteNoise
     "whitenoise.runserver_nostatic",
 ]
 
 
+# "Django middleware is a system that allows developers to hook into the 
+# request-response cycle of a Django web application."
 
-# MIDDLEWARE are default unless otherwise specified.
+# Middleware specified in MIDDLEWARE are enabled; middlewear must also be 
+# enabled in INSTALLED_APPS. Those specified below are enabled by default 
+# unless otherwise noted. 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     # Use Whitenoise
@@ -60,18 +79,9 @@ MIDDLEWARE = [
 ]
 
 
-# https://docs.djangoproject.com/en/4.1/ref/settings/#templates
-
-# Here’s a setup that tells the Django template engine to load templates from the templates subdirectory inside each installed application:
-
-# Here, we specify Templates to collect templates out of a common directory. 
-
-# - 'APP_DIRS':
-#   Default: False
-#   Whether the engine should look for template source files inside installed applications.
-#
-# - 
-# https://docs.djangoproject.com/en/4.1/ref/templates/api/#using-requestcontext
+# TEMPLATE is a list containing the settings for all template engines to be used 
+# with Django. These are the default settings for TEMPLATE, which enable all 
+# templates in the specified DIR (and all sub-directories).
 
 TEMPLATES = [
     {
@@ -90,9 +100,8 @@ TEMPLATES = [
 ]
 
 
-
-# Use all available password validators. See:
-# https://docs.djangoproject.com/en/4.1/topics/auth/passwords/#enabling-password-validation
+# Password validation is configured in the AUTH_PASSWORD_VALIDATORS setting.
+# These are the default validators.
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -110,9 +119,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-
+# Enable Bootstrap 5. 
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 ROOT_URLCONF = 'cedar_site.urls'
 WSGI_APPLICATION = 'cedar_site.wsgi.application'
@@ -122,7 +132,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 
 # LOCALIZATION 
-# -----------------------------========
+# -------------------------------------
 
 LANGUAGE_CODE = 'en-us'
 

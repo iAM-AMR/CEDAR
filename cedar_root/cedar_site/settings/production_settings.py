@@ -1,10 +1,16 @@
 
+"""
+Production Settings
+"""
 
-# PRODUCTION SETTINGS
+# A Django settings file contains the configuration of the Django installation.
+# There are multiple CEDAR settings files - this is the PRODUCTION SETTINGS file.
 
-# This file imports base settings and applies production settings (deployed on
-#  Azure App Service).
+# These settings are used in production. 
+# This file imports SETTINGS_BASE.
 
+# The command pythonmanage.pydiffsettingsdisplays differences between the current 
+# settings file and Django’s default settings.
 
 
 import os
@@ -18,19 +24,27 @@ except ImportError as error_production_import_settings_base:
 
 
 
+# DEBUG is specified using an environment variable, and should be False in production.
+
+# Environment variables are read as strings, but DEBUG must be set using a boolean. So 
+# create a boolean from the string by evaluating the equality of 'true' and the contents 
+# of environment variable DEBUG (which returns 'False' if not specified). Use .lower to
+# ensure true, True, and TRUE are equivalent. 
+
+DEBUG = (os.getenv('DEBUG', default = 'False').lower() == 'true')
+
+
 
 # If DEBUG is False, you also need to properly set the ALLOWED_HOSTS setting. 
 # Failing to do so will result in all requests being returned as “Bad Request (400)”.
 # See https://docs.djangoproject.com/en/4.1/ref/settings/#allowed-hosts
 
-DEBUG = True
-
-
 # We set WEBSITE_HOSTNAME on Azure App Service. If missing, set an empty
 # ALLOWED_HOSTS to return bad requests.
 
-ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
+# ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
 
+ALLOWED_HOSTS =  ['cedar.amr.pub']
 
 SECRET_KEY = [os.environ['SECRET_KEY']]
 
