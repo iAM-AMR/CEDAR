@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     # Use Font Awesome
     'fontawesomefree',
+    # Use WhiteNoise
+    "whitenoise.runserver_nostatic",
 ]
 
 
