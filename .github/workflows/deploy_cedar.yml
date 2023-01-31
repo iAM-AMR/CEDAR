@@ -31,7 +31,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Collect static
-        run: ./cedar_root/manage.py collectstatic
+        run: cedar_root/manage.py collectstatic
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
       
