@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     # Use Bootstrap5 with crispy_forms
     "crispy_bootstrap5",
     # Use Font Awesome
-    'fontawesomefree',
+    #'fontawesomefree',
     # Use WhiteNoise
     "whitenoise.runserver_nostatic",
 ]
