@@ -44,7 +44,7 @@ DEBUG = (os.getenv('DEBUG', default = 'False').lower() == 'true')
 
 # ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
 
-ALLOWED_HOSTS =  ['cedar.amr.pub']
+ALLOWED_HOSTS =  os.environ.get('ALLOWED_HOSTS').split(' ')
 
 SECRET_KEY = [os.environ['SECRET_KEY']]
 
