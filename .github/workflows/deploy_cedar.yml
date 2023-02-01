@@ -35,13 +35,14 @@ jobs:
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
       
+      - name: Zip artifact for deployment
+        run: zip release.zip ./* -r
+
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v3
         with:
           name: python-app
-          path: |
-            . 
-            !venv/
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -51,11 +52,13 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-      - name: Download artifact from build job
+      - name: Download zipped artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: python-app
-          path: .
+          name: release.zip
+      
+      - name: unzip artifact for deployment
+        run: unzip release.zip
           
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
