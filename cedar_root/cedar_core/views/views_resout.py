@@ -71,7 +71,8 @@ def resistance_outcome_detail(request, reference_id, factor_id, pk):
 
 
 
-
+@login_required
+@permission_required('cedar_core.add_factor')
 def edit_resistance_outcome(request, reference_id, factor_id, res_outcome_id):
 
     resout = get_object_or_404(res_outcome, pk = res_outcome_id)

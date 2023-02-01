@@ -113,8 +113,8 @@ def edit_factor(request, reference_id, pk):
 
 
 
-@login_required
-@permission_required('cedar_core.add_factor')
+#@login_required
+#@permission_required('cedar_core.add_factor')
 def list_resistance_outcomes(request, reference_id, pk):
 
     thisfactor    = get_object_or_404(factor,    pk = pk)

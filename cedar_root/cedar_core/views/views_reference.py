@@ -28,8 +28,8 @@ from django.utils import timezone
 
 
 
-@login_required
-@permission_required('cedar_core.add_factor') # this permission check serves to verify that the logged in user is part of the "Edit" permissions group
+#@login_required
+#@permission_required('cedar_core.add_factor') # this permission check serves to verify that the logged in user is part of the "Edit" permissions group
 def browse_references(request):
     
     refs_list = reference.objects.filter(is_archived = False)
