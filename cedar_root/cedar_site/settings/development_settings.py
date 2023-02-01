@@ -23,6 +23,9 @@ try:
 except ImportError as error_local_settings:
     pass
 
+
+# DEBUG is specified using an environment variable, and should be False in production.
+
 DEBUG = True
 
 # When DEBUG is True and ALLOWED_HOSTS is empty, the host is validated against

@@ -13,7 +13,6 @@ Base Settings
 # settings file and Django’s default settings.
 
 
-
 from pathlib import Path
 
 # All paths specified in the project are relative to BASE_DIR.
@@ -119,20 +118,32 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# et al.
+# -----------------------------------------------------------------------------
+
 # Enable Bootstrap 5. 
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+# Set the root (default or top-level) URLconf.
 ROOT_URLCONF = 'cedar_site.urls'
+
+# The full Python path of the WSGI application object that Django’s built-in
+# servers (e.g. runserver) will use.
 WSGI_APPLICATION = 'cedar_site.wsgi.application'
+
+
 LOGIN_URL = '/accounts/login/'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
+# Default primary key field type to use for models that don’t have a field 
+# with primary_key=True. Default: 'django.db.models.AutoField'. Alternative:
+# BigAutoField (a 64 bit integer).
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
 # LOCALIZATION 
-# -------------------------------------
+# -----------------------------------------------------------------------------
 
 LANGUAGE_CODE = 'en-us'
 
@@ -173,7 +184,7 @@ USE_L10N = True
 
 
 # STATIC FILES
-# -------------------------------------
+# -----------------------------------------------------------------------------
 
 # Websites generally need to serve additional files such as images, JavaScript, 
 # or CSS. In Django, we refer to these files as “static files”. Django provides 

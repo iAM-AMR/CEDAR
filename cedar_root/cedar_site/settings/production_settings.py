@@ -35,16 +35,20 @@ DEBUG = (os.getenv('DEBUG', default = 'False').lower() == 'true')
 
 
 
-# If DEBUG is False, you also need to properly set the ALLOWED_HOSTS setting. 
-# Failing to do so will result in all requests being returned as “Bad Request (400)”.
-# See https://docs.djangoproject.com/en/4.1/ref/settings/#allowed-hosts
+# ALLOWED_HOSTS is list of strings representing the host/domain names that this 
+# Django site can serve. Default: [] (Empty list). When DEBUG is True and 
+# ALLOWED_HOSTS is empty, the host is validated against ['.localhost', '127.0.0.1', '[::1]'].
+# When DEBUG is False, ALLOWED_HOSTS must be set. Else, all requests are returned
+# as 400 Bad Requests.
 
-# We set WEBSITE_HOSTNAME on Azure App Service. If missing, set an empty
-# ALLOWED_HOSTS to return bad requests.
-
-# ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
+# Environment variable ALLOWED_HOSTS is a string of IP addresses, FQDNs, or 
+# '.' wild-cards, seperated by a space.
 
 ALLOWED_HOSTS =  os.environ.get('ALLOWED_HOSTS').split(' ')
+
+
+
+# SECRET_KEY is a salt; it is used for hashing. 
 
 SECRET_KEY = [os.environ['SECRET_KEY']]
 
