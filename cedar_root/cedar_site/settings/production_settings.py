@@ -48,6 +48,15 @@ ALLOWED_HOSTS =  os.environ.get('ALLOWED_HOSTS').split(' ')
 
 
 
+# CSRF_TRUSTED_ORIGIN is a list of strings representing the host/domain names
+# of trusted origins for unsafe requests (e.g., POST).
+
+# MORE DETAIL HERE
+
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS').split(' ')
+
+
+
 # SECRET_KEY is a salt; it is used for hashing. 
 
 SECRET_KEY = [os.environ['SECRET_KEY']]
