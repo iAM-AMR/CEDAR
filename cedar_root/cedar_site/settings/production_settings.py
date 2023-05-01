@@ -48,12 +48,35 @@ ALLOWED_HOSTS =  os.environ.get('ALLOWED_HOSTS').split(' ')
 
 
 
-# CSRF_TRUSTED_ORIGIN is a list of strings representing the host/domain names
-# of trusted origins for unsafe requests (e.g., POST).
+# CSRF_TRUSTED_ORIGIN is a list trusted origins for unsafe requests (e.g. POST).
+# For requests that include the Origin header, Django’s CSRF protection requires 
+# that header match the origin present in the Host header. For a secure unsafe 
+# request that doesn’t include the Origin header, the request must have a Referer 
+# header that matches the origin present in the Host header.
 
-# MORE DETAIL HERE
+# Note, this may not be needed where SECURE_PROXY_SSL_HEADER is set, below, as is_secure()
+# should not automatically fail on Azure App Service.
 
-CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS').split(' ')
+# CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS').split(' ')
+
+
+
+#  SECURE_PROXY_SSL_HEADER is a tuple representing an HTTP header/value combination 
+# that signifies a request is secure. By default, is_secure() determines if a 
+# request is secure by confirming that a requested URL uses https://. This method 
+# is important for Django’s CSRF protection, and it may be used by your own code 
+# or third-party apps. If your Django app is behind a proxy, though, the proxy may
+# be “swallowing” whether the original request uses HTTPS or not. In this situation, 
+# configure your proxy to set a custom HTTP header that tells Django whether the 
+# request came in via HTTPS, and set SECURE_PROXY_SSL_HEADER so that Django knows
+# what header to look for. https://docs.djangoproject.com/en/4.2/ref/settings/#secure-proxy-ssl-header
+
+# As per https://learn.microsoft.com/en-us/azure/app-service/configure-language-python#detect-https-session, 
+# In Azure App Service, TLS/SSL termination happens at the network load balancers, 
+# so all HTTPS requests reach your app as unencrypted HTTP requests. If your app 
+# logic needs to check if the user requests are encrypted or not, inspect the X-Forwarded-Proto header.
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 
