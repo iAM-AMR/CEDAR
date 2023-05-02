@@ -6,6 +6,9 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404, render, redirect
 
+from django.http import (HttpResponse, HttpResponseNotFound,
+                         HttpResponseRedirect)
+
 # --------------------------------------------------------------- detail_factor
 
 
@@ -31,23 +34,12 @@ def browse_factors(request):
 
 @login_required
 @permission_required('cedar_core.add_factor')
-def delete_factor(request, reference_id, pk):
-    
-    # Delete the factor
-    del_fac = factor.objects.get(id=pk)
-    del_fac.delete(commit=False)
-    
-    # Reload the view factors page
-    ref = reference.objects.get(pk=reference_id)
-    ref_factors = ref.factor_set.all()
-    
-    context = {
-        'ref': ref,
-        'ref_factors': ref_factors,
-    }
-    
-    return redirect('/cedar_core/references/' + str(reference_id) + '/factors/')
 
+def delete_factor(request, pk):
+    
+    factor.objects.get(id=pk).delete()
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 
