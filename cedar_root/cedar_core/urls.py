@@ -34,6 +34,7 @@ urlpatterns = [
 
     # FACTORS -------------------------
     path('reference/<int:reference_id>/factor/<int:pk>/',             views_factor.detail_factor, name='detail_factor_generic'), # No Generic Template
+    path('reference/<int:reference_id>/factor/new/',                  views.new_blank_factor,     name='new_blank_factor'),
     path('reference/<int:reference_id>/factor/<int:pk>/details/',     views_factor.detail_factor, name='detail_factor'),
     path('reference/<int:reference_id>/factor/<int:pk>/delete/',      views_factor.delete_factor, name='delete_factor'),
     path('reference/<int:reference_id>/factor/<int:pk>/edit/',        views_factor.edit_factor,   name='edit_factor'),

@@ -22,24 +22,58 @@ from django.shortcuts import get_object_or_404, redirect, render
 @permission_required('cedar_core.add_factor')
 def add_new_obj(request, obj_id, form_type):
     
-    # TO DO: create a case for creating a new res_outcome (when the new res_outcome button on the view_resistance_outcomes page) -- very similar to the new factor button on the view factors page
+    # This function is being depreciated; too much complexity for too little DRY improvement.
+
+    # obj_id would be better as "parent object ID"
 
     obj = reference.objects.get(pk=obj_id)
 
     if form_type == 'loc':
         new_obj = reference_join_location(reference_id = obj)
         redir_path = '/cedar_core/references/' + str(obj_id) + '/#loc-md'
+    
     elif form_type == 'note':
         new_obj = reference_join_reference_note(fk_reference_join_note_reference_id = obj)
         redir_path = '/cedar_core/references/' + str(obj_id) + '/#notes-md'
+    
     else: #form_type = 'fac'
-        new_obj = factor(fk_factor_reference_id = obj)
-        redir_path = '/cedar_core/references/' + str(obj_id) + '/factors'
+        new_obj = factor(reference = obj)
+        redir_path = '/reference/' + str(obj_id) + '/factors'
     
     # Save new object and redirect
     new_obj.save()
     
     return redirect(redir_path)
+
+
+
+
+
+@login_required
+@permission_required('cedar_core.add_factor')
+
+def new_blank_factor(request, reference_id): # ======================================================================================================
+    #                                          ------------------------------------------------------------------------------------- NEW_BLANK_FACTOR
+    # ===============================================================================================================================================
+
+    """
+    This function creates a new blank factor associated with the reference 
+    indicated by "reference_id". 
+    """
+
+    # Get parent reference
+    parent_reference = reference.objects.get(pk=reference_id)
+
+    # Create new blank factor with reference field complete. ID 
+    # is assigned by auto-increment. 
+    new_factor = factor(reference = parent_reference)
+
+    # Save new factor
+    new_factor.save()
+
+    # Return to referer. Where no referer, home.
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
 
 
 

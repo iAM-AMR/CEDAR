@@ -51,7 +51,7 @@
 
       <!-- Add new factors button -->
 
-      <a title="New Factor" href="{% url 'add_new_obj' obj_id=ref.id form_type='fac' %}" class="btn btn-success btn-lg" role="button">
+      <a title="New Factor" href="{% url 'new_blank_factor' reference_id=ref.id %}" class="btn btn-success btn-lg" role="button">
         <i class="fas fa-plus-square"></i>
       </a>
 
@@ -77,7 +77,7 @@
 
               <td style='white-space: nowrap'>
                 
-                  <a title="Edit Factor Data" href="{% url 'detail_factor' reference_id=ref.id pk=factor.id %}" class="btn btn-info btn-xs" role="button">
+                  <a title="Edit Factor Data" href="{% url 'edit_factor' reference_id=ref.id pk=factor.id %}" class="btn btn-info btn-xs" role="button">
                     <i class="fas fa-pencil-alt"></i>
                   </a>
                   <a title="Delete" href="{% url 'delete_factor' reference_id=ref.id pk=factor.id %}" class="btn btn-danger btn-xs" role="button">
