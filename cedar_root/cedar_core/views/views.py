@@ -4,7 +4,7 @@ import csv
 import numpy as np
 from cedar_core.forms import (QuerySelectForm, TopicTabForm)
 from cedar_core.models import (factor, publisher, reference,
-                               reference_join_location)
+                               reference_join_location, res_outcome)
 from dal import autocomplete
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import F, Q
@@ -74,6 +74,303 @@ def new_blank_factor(request, reference_id): # =================================
     # Return to referer. Where no referer, home.
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
+
+
+
+def get_timber(request):
+
+
+    timber_qs_all = res_outcome.objects.all().values_list(
+    'id',
+    'pid_ro',
+    'factor__reference__id',
+    'factor__reference__pid_reference',
+    'factor__reference__refwk',
+    'factor__reference__publish_doi',
+    'factor__reference__publish_pmid',
+    'factor__reference__key_bibtex',
+    'factor__reference__ref_title',
+    'factor__reference__ref_country__country',
+    'factor__reference__study_design__study_design_name',
+    'factor__id',
+    'factor__pid_factor',
+    'factor__factor_title',
+    'factor__factor_description',
+    'factor__group_factor',
+    'factor__group_comparator',
+    'factor__host_level_01__host_01_name',
+    'factor__host_level_02__host_subtype_name',
+    'factor__host_production_stream',
+    'factor__host_life_stage',
+    'factor__group_allocate_production_stage__production_stage_name',
+    'group_observe_production_stage__production_stage_name',
+    'moa_type__moa_type_name',
+    'moa_unit__outcome_unit_name',
+    'resistance__levelname_4_coarse',
+    'resistance__levelname_5',
+    'resistance_gene__genetic_element_name',
+    'microbe_level_01__microbe_01_name',
+    'microbe_level_02__microbe_02_name',
+    'is_figure_extract',
+    'figure_extract_method__method_name',
+    'figure_extract_reproducible',
+    'contable_a',
+    'contable_b',
+    'contable_c', 
+    'contable_d',
+    'prevtable_a',
+    'prevtable_b',
+    'prevtable_c',
+    'prevtable_d',
+    'table_n_ab',
+    'table_n_cd',
+    'odds_ratio',
+    'odds_ratio_lo',
+    'odds_ratio_up',
+    'odds_ratio_sig',
+    'odds_ratio_confidence',
+    )
+
+    tmbr_default_col_names = [
+    # See write_timber_csv() for description.
+    # Note, missing comma will silently fail.
+    'id_res_out',
+    'pid_res_out',
+    'id_reference',
+    'pid_reference',
+    'ref_rwid',
+    'ref_doi',
+    'ref_pmid',
+    'ref_bibtex_key',
+    'ref_title',
+    'country',
+    'study_design',
+    'id_factor',
+    'pid_factor',
+    'factor_title',
+    'factor_description',
+    'factor_group',
+    'comparator_group',
+    'host_level_01',
+    'host_level_02',
+    'host_production_stream',
+    'host_life_stage',
+    'stage_allocate',
+    'stage_observe',
+    'moa_type',
+    'moa_unit',
+    'resistance_class',
+    'resistance',
+    'resistance_gene',
+    'microbe_level_01',
+    'microbe_level_02',
+    'is_figure_extract',
+    'figure_extract_method',
+    'figure_extract_reproducible',
+    'contable_a',
+    'contable_b',
+    'contable_c', 
+    'contable_d',
+    'prevtable_a',
+    'prevtable_b',
+    'prevtable_c',
+    'prevtable_d',
+    'table_n_exp',
+    'table_n_ref',
+    'odds_ratio',
+    'odds_ratio_lo',
+    'odds_ratio_up',
+    'odds_ratio_sig',
+    'odds_ratio_confidence',
+    ] 
+
+
+
+
+    context = {'all_timber': timber_qs_all, 'col_list': tmbr_default_col_names, 'page_title': 'Query Papers Based on Host and Microbe'}
+    return render(request, 'cedar_core/get_timber.html', context)
+
+
+
+
+
+def export_timber_csv(request):
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(
+        content_type="text/csv",
+        headers={"Content-Disposition": 'attachment; filename="somefilename.csv"'},
+    )
+
+    tmbr_default_field_names = [
+    # See write_timber_csv() for description. 
+    'id',
+    'pid_ro',
+    'factor__reference__id',
+    'factor__reference__pid_reference',
+    'factor__reference__refwk',
+    'factor__reference__publish_doi',
+    'factor__reference__publish_pmid',
+    'factor__reference__key_bibtex',
+    'factor__reference__ref_title',
+    'factor__reference__ref_country__country',
+    'factor__reference__study_design__study_design_name',
+    'factor__id',
+    'factor__pid_factor',
+    'factor__factor_title',
+    'factor__factor_description',
+    'factor__group_factor',
+    'factor__group_comparator',
+    'factor__host_level_01__host_01_name',
+    'factor__host_level_02__host_subtype_name',
+    'factor__host_production_stream',
+    'factor__host_life_stage',
+    'factor__group_allocate_production_stage__production_stage_name',
+    'group_observe_production_stage__production_stage_name',
+    'moa_type__moa_type_name',
+    'moa_unit__outcome_unit_name',
+    'resistance__levelname_4_coarse',
+    'resistance__levelname_5',
+    'resistance_gene__genetic_element_name',
+    'microbe_level_01__microbe_01_name',
+    'microbe_level_02__microbe_02_name',
+    'is_figure_extract',
+    'figure_extract_method__method_name',
+    'figure_extract_reproducible',
+    'contable_a',
+    'contable_b',
+    'contable_c', 
+    'contable_d',
+    'prevtable_a',
+    'prevtable_b',
+    'prevtable_c',
+    'prevtable_d',
+    'table_n_ab',
+    'table_n_cd',
+    'odds_ratio',
+    'odds_ratio_lo',
+    'odds_ratio_up',
+    'odds_ratio_sig',
+    'odds_ratio_confidence',
+    ] 
+
+    tmbr_default_col_names = [
+    # See write_timber_csv() for description.
+    # Note, missing comma will silently fail.
+    'id_res_out',
+    'pid_res_out',
+    'id_reference',
+    'pid_reference',
+    'ref_rwid',
+    'ref_doi',
+    'ref_pmid',
+    'ref_bibtex_key',
+    'ref_title',
+    'country',
+    'study_design',
+    'id_factor',
+    'pid_factor',
+    'factor_title',
+    'factor_description',
+    'factor_group',
+    'comparator_group',
+    'host_level_01',
+    'host_level_02',
+    'host_production_stream',
+    'host_life_stage',
+    'stage_allocate',
+    'stage_observe',
+    'moa_type',
+    'moa_unit',
+    'resistance_class',
+    'resistance',
+    'resistance_gene',
+    'microbe_level_01',
+    'microbe_level_02',
+    'is_figure_extract',
+    'figure_extract_method',
+    'figure_extract_reproducible',
+    'contable_a',
+    'contable_b',
+    'contable_c', 
+    'contable_d',
+    'prevtable_a',
+    'prevtable_b',
+    'prevtable_c',
+    'prevtable_d',
+    'table_n_exp',
+    'table_n_ref',
+    'odds_ratio',
+    'odds_ratio_lo',
+    'odds_ratio_up',
+    'odds_ratio_sig',
+    'odds_ratio_confidence',
+    ] 
+
+    timber_qs_all = res_outcome.objects.all().values(
+    'id',
+    'pid_ro',
+    'factor__reference__id',
+    'factor__reference__pid_reference',
+    'factor__reference__refwk',
+    'factor__reference__publish_doi',
+    'factor__reference__publish_pmid',
+    'factor__reference__key_bibtex',
+    'factor__reference__ref_title',
+    'factor__reference__ref_country__country',
+    'factor__reference__study_design__study_design_name',
+    'factor__id',
+    'factor__pid_factor',
+    'factor__factor_title',
+    'factor__factor_description',
+    'factor__group_factor',
+    'factor__group_comparator',
+    'factor__host_level_01__host_01_name',
+    'factor__host_level_02__host_subtype_name',
+    'factor__host_production_stream',
+    'factor__host_life_stage',
+    'factor__group_allocate_production_stage__production_stage_name',
+    'group_observe_production_stage__production_stage_name',
+    'moa_type__moa_type_name',
+    'moa_unit__outcome_unit_name',
+    'resistance__levelname_4_coarse',
+    'resistance__levelname_5',
+    'resistance_gene__genetic_element_name',
+    'microbe_level_01__microbe_01_name',
+    'microbe_level_02__microbe_02_name',
+    'is_figure_extract',
+    'figure_extract_method__method_name',
+    'figure_extract_reproducible',
+    'contable_a',
+    'contable_b',
+    'contable_c', 
+    'contable_d',
+    'prevtable_a',
+    'prevtable_b',
+    'prevtable_c',
+    'prevtable_d',
+    'table_n_ab',
+    'table_n_cd',
+    'odds_ratio',
+    'odds_ratio_lo',
+    'odds_ratio_up',
+    'odds_ratio_sig',
+    'odds_ratio_confidence',
+    )
+
+
+    writer_head = csv.writer(response)
+    writer_head.writerow(tmbr_default_col_names)
+
+    writer = csv.DictWriter(f=response,                     
+                        fieldnames=tmbr_default_field_names,  # Field names (matching QuerySet)
+                        extrasaction='ignore')        # Ignore non-selected fields (through omission in tmbr_field_names) in tmbr_qs. 
+
+        # Loop, writing each line of the QuerySet to the .CSV.
+    for eachline in timber_qs_all:
+        writer.writerow(eachline)
+
+
+    return response
 
 
 

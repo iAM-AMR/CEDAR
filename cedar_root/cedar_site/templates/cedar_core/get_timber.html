@@ -1,0 +1,78 @@
+
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block head_css %}
+  <!-- CSS (optional) -->
+  <link rel="stylesheet" type="text/css" href="{% static 'cedar_core/get_timber_style.css' %}">
+{% endblock head_css %}
+
+
+{% block content %}
+
+<div class="container-fluid maxWidth">
+
+  <!-- table of references -->
+  <div class="row justify-content-center"> <!-- container-lg -->
+    <div class="col-12">
+
+      <h1>Get Timber</h1>
+      <hr style="border-width:5px;">
+      <br>
+
+      <table id="myTable" class="table table-bordered table-sm stripe" cellspacing="0" width="100%">
+        <thead>
+          <tr>
+            {% for item in col_list %}
+                <th>{{ item }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for ro in all_timber %}
+            <tr>
+                {% for x in ro %}
+                    <td>{{x}}</td>
+                {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+{% endblock %}
+
+
+{% block body_scripts %}
+
+  <!-- Table scrolling and default order -->
+
+  <!-- The order is set using a zero-indexed column number. -->
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $('#myTable').DataTable({
+        "scrollY": "100%",
+        "scrollX": true,
+        "scrollCollapse": true,
+        order: [[1, 'asc']],
+      });
+      $('.dataTables_length').addClass('bs-select');
+    });
+  </script>
+
+
+
+{% endblock body_scripts %}
