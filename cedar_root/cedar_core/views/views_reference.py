@@ -26,6 +26,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils import timezone
 
+from cedar_core.filters import reference_filter
 
 
 #@login_required
@@ -34,9 +35,12 @@ def browse_references(request):
     
     refs_list = reference.objects.filter(is_archived = False)
     
+    refs_filter = reference_filter(request.GET, queryset=refs_list)
     
-    
-    context = {'refs_list': refs_list, 
+
+
+    context = {'refs_list': refs_list,
+               'refs_filter': refs_filter, 
                'page_title': 'CEDAR: Browse References', 
                'view_references': 'active'}
 

@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Django-extensions
     'django_extensions',
+    # Dynamically filter sets based on user input.
+    'django_filters',
     # Tweak the form field rendering in templates, not in python-level form
     # definitions.
     'widget_tweaks',

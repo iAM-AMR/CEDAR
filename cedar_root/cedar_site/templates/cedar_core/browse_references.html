@@ -18,7 +18,14 @@
       <hr style="border-width:5px;">
       <br>
 
-      <table id="myTable" class="table table-bordered table-sm stripe" cellspacing="0" width="100%">
+      <form method="get">
+        {{ refs_filter.form.as_p }}
+        <button type="submit">Filter</button>
+      </form>
+      <br>
+
+
+      <table id="referenceTable" class="table table-bordered table-sm stripe" cellspacing="0" width="100%">
         <thead>
           <tr>
             <th>ID</th>
@@ -27,10 +34,10 @@
           </tr>
         </thead>
         <tbody>
-          {% for reference in refs_list %}
+          {% for reference in refs_filter.qs %}
             <tr>
               <td > <span>{{ reference.id }}</span> </td>
-              <td>{{ reference.key_bibtex }} {% if reference.is_excluded_extract %}<i class="fa-solid fa-ban fa-sm"></i>{% endif %}</td>
+              <td>{{ reference.key_bibtex }} {% if reference.is_excluded_extract %}<i data-bs-toggle="tooltip" data-placement="top" data-bs-title="Excluded" class="fa-solid fa-ban fa-sm"></i>{% endif %}</td>
               <td>
                 <!-- <a href="/cedar_core/references/{{ reference.id }}/">{{ reference.study_title }}</a> -->
                 <a href="{% url 'detail_reference' pk=reference.id %}">{{ reference.ref_title }}</a>
@@ -47,15 +54,24 @@
 
 
 {% block body_scripts %}
-  <!-- Table scrolling -->
+
   <script type="text/javascript">
+
     $(document).ready(function () {
-      $('#myTable').DataTable({
+
+      // Enable Tool Tips
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+  
+      // Customize Table
+      $('#referenceTable').DataTable({
         "scrollY": "100%",
         "scrollCollapse": true,
         order: [[1, 'asc']],
       });
       $('.dataTables_length').addClass('bs-select');
     });
+
   </script>
+
 {% endblock body_scripts %}
