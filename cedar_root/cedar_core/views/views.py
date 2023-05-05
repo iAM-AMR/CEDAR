@@ -705,3 +705,9 @@ def topic_tab_query(request):
     context = {'query_form': query_form, 'page_title': 'Query Papers Based on Host and Microbe'}
     return render(request, 'cedar_core/query_topic_tab.html', context)
     
+
+def about(request):
+
+
+    context = {'page_title': 'Help with CEDAR'}
+    return render(request, 'cedar_core/about.html', context)
