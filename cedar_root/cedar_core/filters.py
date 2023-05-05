@@ -1,5 +1,5 @@
 
-from cedar_core.models import reference, res_outcome, host_01
+from cedar_core.models import reference, res_outcome, host_01, microbe_01
 
 import django_filters
 
@@ -36,21 +36,22 @@ class reference_filter(django_filters.FilterSet):
 class timber_filter(django_filters.FilterSet):
     
     """
-    Filter references shown during timber query.
+    Filter resistance outcomes in 'get_timber'.
     """
 
-    # By default for a Boolean, django-filter displays a drop-down with 
-    # "Unknown", "True", and 'False'. To customize these choices, we 
-    # must manually define a choice mapping, and specify a ChoiceFilter. 
-    # The null value is specified in the ChoiceFilter.
-
+    # Unclear if this is the best implementation. Also unlear if queryset target is appropriate.
+    host = django_filters.ModelMultipleChoiceFilter(field_name = 'factor__host_level_01__host_01_name', 
+                                                    queryset=host_01.objects.all(), 
+                                                    label = "Host",
+                                                    )
     
-    
-    host = django_filters.ModelMultipleChoiceFilter(field_name = 'factor__host_level_01__host_01_name', queryset=host_01.objects.all())
-
+    # Unclear if this is the best implementation. Also unlear if queryset target is appropriate.
+    microbe = django_filters.ModelMultipleChoiceFilter(field_name = 'microbe_level_01__microbe_01_name', 
+                                                       queryset=microbe_01.objects.all(), 
+                                                       label = "Microbe")
 
     class Meta:
         model = res_outcome
-        fields = ['microbe_level_01', 'host']
+        fields = ['host', 'microbe']
 
-        
+

@@ -59,11 +59,7 @@ urlpatterns = [
     #path('reference/<int:obj_id>/add/<str:form_type>/', views.add_new_obj, name='add_new_obj'),
     #path('references/<int:ref_id>/factors/<int:fac_id>/expand/', views.expand_factor, name='expand_factor'),
     path('export/', views.get_timber, name='get_timber'),
-    path('export/csv/', views.export_timber_csv, name='export_timber_csv'),
-
     path('about/', views.about, name='about'),
-    path('exportpart/', views.export_timber_part, name='export_timber_part'),
-
 ]
 
 
