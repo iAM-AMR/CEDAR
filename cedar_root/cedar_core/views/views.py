@@ -254,12 +254,10 @@ def get_timber(request):
             writer_head = csv.writer(response)
             writer_head.writerow(tmbr_default_col_names)
 
-            writer = csv.DictWriter(f=response,                     
-                                    fieldnames=tmbr_default_field_names,  # Field names (matching QuerySet)
-                                    extrasaction='ignore')        # Ignore non-selected fields (through omission in tmbr_field_names) in tmbr_qs. 
+            writer = csv.writer(response)        # Ignore non-selected fields (through omission in tmbr_field_names) in tmbr_qs. 
 
                 # Loop, writing each line of the QuerySet to the .CSV.
-            for eachline in filtered_timber.qs.values():
+            for eachline in filtered_timber.qs:
                 writer.writerow(eachline)
 
             return(response)
