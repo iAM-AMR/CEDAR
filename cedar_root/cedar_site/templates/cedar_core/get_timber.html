@@ -24,7 +24,8 @@
 
       <form method="get">
         {{ filtered_timber.form.as_p }}
-        <button type="submit">Filter</button>
+        <button type="submit" value="filternow">Filter</button>
+        <button type="submit" value="exportnow" name="exportnow">Export</button>
       </form>
       <br>
 
@@ -47,11 +48,7 @@
         </tbody>
       </table>
 
-      <form method="get", action=" {% url 'export_timber_part' %} ">
-        {{ filtered_timber.form.as_p }}
-        <button type="submit">Export</button>
-      </form>
-      <br>
+   
 
     </div>
   </div>
