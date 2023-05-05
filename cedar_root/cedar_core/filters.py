@@ -1,5 +1,5 @@
 
-from cedar_core.models import reference, res_outcome
+from cedar_core.models import reference, res_outcome, host_01
 
 import django_filters
 
@@ -44,13 +44,13 @@ class timber_filter(django_filters.FilterSet):
     # must manually define a choice mapping, and specify a ChoiceFilter. 
     # The null value is specified in the ChoiceFilter.
 
-    THECHOICES = {
-        (True, 'Excluded'),
-        (False, 'Included')
-    }
     
+    
+    host = django_filters.ModelMultipleChoiceFilter(field_name = 'factor__host_level_01__host_01_name', queryset=host_01.objects.all())
+
 
     class Meta:
         model = res_outcome
-        fields = ['microbe_level_01']
+        fields = ['microbe_level_01', 'host']
 
+        
