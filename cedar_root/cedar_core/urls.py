@@ -61,7 +61,8 @@ urlpatterns = [
     path('export/', views.get_timber, name='get_timber'),
     path('export/csv/', views.export_timber_csv, name='export_timber_csv'),
 
-    path('about/', views.about, name='about')
+    path('about/', views.about, name='about'),
+    path('exportpart/', views.export_timber_part, name='export_timber_part'),
 
 ]
 
