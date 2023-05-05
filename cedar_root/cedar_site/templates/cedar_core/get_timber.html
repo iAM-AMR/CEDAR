@@ -22,6 +22,12 @@
       <hr style="border-width:5px;">
       <br>
 
+      <form method="get">
+        {{ filtered_timber.form.as_p }}
+        <button type="submit">Filter</button>
+      </form>
+      <br>
+
       <table id="myTable" class="table table-bordered table-sm stripe" cellspacing="0" width="100%">
         <thead>
           <tr>
@@ -31,7 +37,7 @@
           </tr>
         </thead>
         <tbody>
-          {% for ro in all_timber %}
+          {% for ro in filtered_timber.qs %}
             <tr>
                 {% for x in ro %}
                     <td>{{x}}</td>

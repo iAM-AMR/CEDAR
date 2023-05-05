@@ -1,4 +1,5 @@
-from cedar_core.models import reference
+
+from cedar_core.models import reference, res_outcome
 
 import django_filters
 
@@ -29,3 +30,27 @@ class reference_filter(django_filters.FilterSet):
     class Meta:
         model = reference
         fields = ['is_excluded']
+
+
+
+class timber_filter(django_filters.FilterSet):
+    
+    """
+    Filter references shown during timber query.
+    """
+
+    # By default for a Boolean, django-filter displays a drop-down with 
+    # "Unknown", "True", and 'False'. To customize these choices, we 
+    # must manually define a choice mapping, and specify a ChoiceFilter. 
+    # The null value is specified in the ChoiceFilter.
+
+    THECHOICES = {
+        (True, 'Excluded'),
+        (False, 'Included')
+    }
+    
+
+    class Meta:
+        model = res_outcome
+        fields = ['microbe_level_01']
+

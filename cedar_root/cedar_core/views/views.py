@@ -13,7 +13,7 @@ from django.http import (HttpResponse, HttpResponseNotFound,
                          HttpResponseRedirect)
 from django.shortcuts import get_object_or_404, redirect, render
 
-
+from cedar_core.filters import timber_filter
 
 
 
@@ -184,11 +184,15 @@ def get_timber(request):
     'odds_ratio_confidence',
     ] 
 
+    filtered_timber = timber_filter(request.GET, queryset=timber_qs_all)
 
 
-
-    context = {'all_timber': timber_qs_all, 'col_list': tmbr_default_col_names, 'page_title': 'Query Papers Based on Host and Microbe'}
+    context = {'all_timber': timber_qs_all, 'filtered_timber': filtered_timber, 'col_list': tmbr_default_col_names, 'page_title': 'Query Papers Based on Host and Microbe'}
     return render(request, 'cedar_core/get_timber.html', context)
+
+
+
+
 
 
 
