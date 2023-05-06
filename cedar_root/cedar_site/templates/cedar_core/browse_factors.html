@@ -1,71 +1,62 @@
+
+
 {% extends 'base.html' %}
 
 {% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block head %}
+  
+    <link rel="stylesheet" type="text/css" href="{% static 'cedar_core/browse_style.css' %}">
+  
+    <script type="text/javascript" src=" {% static 'cedar_core/browse.js' %} "></script>
+
+{% endblock head %}
+
 
 
 {% block content %}
 
 <div class="container-fluid maxWidth">
 
-  <!-- table of references -->
-  <div class="row justify-content-center"> <!-- container-lg -->
-    <div class="col-12">
+    <div class="row justify-content-center">
+      
+        <div class="col-12">
 
-      <h1>Browse Factors</h1>
-      <hr style="border-width:5px;">
-      <br>
+            <h1>Browse Factors</h1>
+            <hr style="border-width:5px;">
 
-      <table id="myTable" class="table table-bordered table-sm stripe" cellspacing="0" width="100%">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Reference</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for factor in factor_list %}
-            <tr>
-              <td>{{ factor.id }}</td>
-              <td><a href="{% url 'detail_factor' reference_id=factor.reference__id pk=factor.id %}">{{ factor.factor_title }}</td>
-              <td><a href="{% url 'detail_reference' pk=factor.reference__id %}">{{ factor.reference__id }}</a></td>
+            <table id="factorTable" class="table table-borderless table-hover table-sm browse-table" cellspacing="0" width="100%">
+                
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Reference</th>
+                    </tr>
+                </thead>
 
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+                <tbody>
+                    {% for factor in factor_list %}
+                      <tr>
+                          <td>{{ factor.id }}</td>
+                          <td><a href="{% url 'detail_factor' reference_id=factor.reference__id pk=factor.id %}">{{ factor.factor_title }}</td>
+                          <td><a href="{% url 'detail_reference' pk=factor.reference__id %}">{{ factor.reference__id }}</a></td>
+                      </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+
+        </div>
+
     </div>
-  </div>
 
 </div>
 
+{% endblock content %}
 
 
 
 
-
-
-
-{% endblock %}
-
-
-{% block body_scripts %}
-
-  <!-- Table scrolling and default order -->
-
-  <!-- The order is set using a zero-indexed column number. -->
-
-  <script type="text/javascript">
-    $(document).ready(function () {
-      $('#myTable').DataTable({
-        "scrollY": "100%",
-        "scrollCollapse": true,
-        order: [[1, 'asc']],
-      });
-      $('.dataTables_length').addClass('bs-select');
-    });
-  </script>
-
-
-
-{% endblock body_scripts %}
