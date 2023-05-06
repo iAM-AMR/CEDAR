@@ -3,30 +3,55 @@
 
 {% load static %}
 
+{% load crispy_forms_tags %}
 
 {% block head_css %}
-  <!-- CSS (optional) -->
   <link rel="stylesheet" type="text/css" href="{% static 'cedar_core/get_timber_style.css' %}">
 {% endblock head_css %}
+
+
+
 
 
 {% block content %}
 
 <div class="container-fluid maxWidth">
 
-  <!-- table of references -->
-  <div class="row justify-content-center"> <!-- container-lg -->
+  <div class="row justify-content-center">
+    
     <div class="col-12">
 
       <h1>Get Timber</h1>
       <hr style="border-width:5px;">
-      <br>
+
+      <p>Browse and export resistance outcomes in CEDAR. Learn more about the structure of CEDAR and each of these fields in the CEDAR ontology.</p>
+      <p>This table - and the exported CSV - are formatted as 'timber'; the format used in the iAM.AMR project. You can select multiple items (and de-select items) from each list by CTRL (mac?) clicking.</p>
 
       <form method="GET">
-        {{ filtered_timber.form.as_p }}
+
+        <div class="row">
+          <div class="form-group col-md-6 mb-0">
+            {{ filtered_timber.form.host|as_crispy_field }}
+          </div>
+          <div class="form-group col-md-6 mb-0">
+            {{ filtered_timber.form.microbe|as_crispy_field }}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6 mb-0">
+            {{ filtered_timber.form.resistance_class|as_crispy_field }}
+          </div>
+          <div class="form-group col-md-6 mb-0">
+            {{ filtered_timber.form.resistance|as_crispy_field }}
+          </div>
+        </div>
+
         <button class="btn btn-primary" type="submit">Filter</button>
         <button type="submit" class="btn btn-secondary" name="csv">Export as CSV</button>
+
       </form>
+      
       <br>
 
       <table id="myTable" class="table table-bordered table-sm stripe" cellspacing="0" width="100%">
@@ -48,28 +73,19 @@
         </tbody>
       </table>
 
-   
-
     </div>
+
   </div>
 
 </div>
 
-
-
-
-
-
-
-
 {% endblock %}
 
 
+
+
+
 {% block body_scripts %}
-
-  <!-- Table scrolling and default order -->
-
-  <!-- The order is set using a zero-indexed column number. -->
 
   <script type="text/javascript">
     $(document).ready(function () {
@@ -82,7 +98,5 @@
       $('.dataTables_length').addClass('bs-select');
     });
   </script>
-
-
 
 {% endblock body_scripts %}
