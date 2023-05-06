@@ -3,6 +3,7 @@
 
 {% load static %}
 
+{% load crispy_forms_tags %}
 
 {% block head_css %}
   <!-- CSS (optional) -->
@@ -23,7 +24,7 @@
       <br>
 
       <form method="GET">
-        {{ filtered_timber.form.as_p }}
+        {{ filtered_timber.form | crispy }}
         <button class="btn btn-primary" type="submit">Filter</button>
         <button type="submit" class="btn btn-secondary" name="csv">Export as CSV</button>
       </form>
