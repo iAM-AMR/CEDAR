@@ -1,60 +1,63 @@
 
 
 import csv
-import numpy as np
-from cedar_core.forms import (QuerySelectForm, TopicTabForm)
-from cedar_core.models import (factor, publisher, reference,
-                               reference_join_location, res_outcome)
+from cedar_core.filters import timber_filter
+from cedar_core.models import factor, publisher, reference, res_outcome
 from dal import autocomplete
 from django.contrib.auth.decorators import login_required, permission_required
-from django.db.models import F, Q
-from django.forms.models import model_to_dict
-from django.http import (HttpResponse, HttpResponseNotFound,
-                         HttpResponseRedirect)
-from django.shortcuts import get_object_or_404, redirect, render
-
-from cedar_core.filters import timber_filter
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
 
 
 
-# Add either a new reference note, reference location, factor, or res_outcome
+
+
+def about(request): # =============================================================================
+    #                 ----------------------------------------------------------------------- ABOUT
+    # =============================================================================================
+
+    """
+    Return the 'About' page.
+    """
+    context = {
+        'page_title': 'About CEDAR'    
+    }
+
+    return render(request, 'cedar_core/about.html', context)
+
+
+
+
+
+class PublisherAutocomplete(autocomplete.Select2QuerySetView): # ==================================
+    #                                                            ------------ PUBLISHERAUTOCOMPLETE
+    # =============================================================================================
+
+    """
+    The purpose of this function is unclear, but is evidently related to 
+    auto-completing the publisher (journal) name in the reference model.
+    """
+    
+    def get_queryset(self):
+
+        if not self.request.user.is_authenticated:
+            return publisher.objects.none()
+
+        qs = publisher.objects.all()
+
+        if self.q:
+            qs = qs.filter(pub_title__istartswith=self.q)
+
+        return qs
+
+
+
+
 @login_required
 @permission_required('cedar_core.add_factor')
-def add_new_obj(request, obj_id, form_type):
-    
-    # This function is being depreciated; too much complexity for too little DRY improvement.
-
-    # obj_id would be better as "parent object ID"
-
-    obj = reference.objects.get(pk=obj_id)
-
-    if form_type == 'loc':
-        new_obj = reference_join_location(reference_id = obj)
-        redir_path = '/cedar_core/references/' + str(obj_id) + '/#loc-md'
-    
-    elif form_type == 'note':
-        new_obj = reference_join_reference_note(fk_reference_join_note_reference_id = obj)
-        redir_path = '/cedar_core/references/' + str(obj_id) + '/#notes-md'
-    
-    else: #form_type = 'fac'
-        new_obj = factor(reference = obj)
-        redir_path = '/reference/' + str(obj_id) + '/factors'
-    
-    # Save new object and redirect
-    new_obj.save()
-    
-    return redirect(redir_path)
-
-
-
-
-
-@login_required
-@permission_required('cedar_core.add_factor')
-
-def new_blank_factor(request, reference_id): # ======================================================================================================
-    #                                          ------------------------------------------------------------------------------------- NEW_BLANK_FACTOR
-    # ===============================================================================================================================================
+def new_blank_factor(request, reference_id): # ====================================================
+    #                                          ----------------------------------- NEW_BLANK_FACTOR
+    # =============================================================================================
 
     """
     This function creates a new blank factor associated with the reference 
@@ -77,9 +80,9 @@ def new_blank_factor(request, reference_id): # =================================
 
 
 
-def get_timber(request): # ==========================================================================================================================
-    #                      --------------------------------------------------------------------------------------------------------------- GET_TIMBER
-    # ===============================================================================================================================================
+def get_timber(request): # ========================================================================
+    #                      ------------------------------------------------------------- GET_TIMBER
+    # =============================================================================================
 
     """
     This function informs the "Get Timber" page, which allows users to filter 
@@ -231,24 +234,35 @@ def get_timber(request): # =====================================================
 
 
 
-class PublisherAutocomplete(autocomplete.Select2QuerySetView):
-    def get_queryset(self):
-
-        if not self.request.user.is_authenticated:
-            return publisher.objects.none()
-
-        qs = publisher.objects.all()
-
-        if self.q:
-            qs = qs.filter(pub_title__istartswith=self.q)
-
-        return qs
 
 
 
-def about(request):
-    context = {'page_title': 'About CEDAR'}
-    return render(request, 'cedar_core/about.html', context)
 
 
+# Add either a new reference note, reference location, factor, or res_outcome
+# @login_required
+# @permission_required('cedar_core.add_factor')
+# def add_new_obj(request, obj_id, form_type):
+    
+#     # This function is being depreciated; too much complexity for too little DRY improvement.
 
+#     # obj_id would be better as "parent object ID"
+
+#     obj = reference.objects.get(pk=obj_id)
+
+#     if form_type == 'loc':
+#         new_obj = reference_join_location(reference_id = obj)
+#         redir_path = '/cedar_core/references/' + str(obj_id) + '/#loc-md'
+    
+#     elif form_type == 'note':
+#         new_obj = reference_join_reference_note(fk_reference_join_note_reference_id = obj)
+#         redir_path = '/cedar_core/references/' + str(obj_id) + '/#notes-md'
+    
+#     else: #form_type = 'fac'
+#         new_obj = factor(reference = obj)
+#         redir_path = '/reference/' + str(obj_id) + '/factors'
+    
+#     # Save new object and redirect
+#     new_obj.save()
+    
+#     return redirect(redir_path)

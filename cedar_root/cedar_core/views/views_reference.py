@@ -1,71 +1,38 @@
 
-import csv
-import re
-from multiprocessing import context
-from webbrowser import get
 
-import numpy as np
 from cedar_core.filters import reference_filter
-from cedar_core.forms import (FactorForm, QuerySelectForm, ReferenceForm,
-                              RefLocForm, RefLocFormSet, RefLocFormSetHelper,
-                              RefNoteForm, RefNoteFormSet,
-                              RefNoteFormSetHelper, ResistanceOutcomeForm,
-                              TopicTabForm)
-from cedar_core.models import (factor, publisher, reference,
-                               reference_join_location, reference_note,
-                               res_outcome)
-from crispy_forms.utils import render_crispy_form
-from dal import autocomplete
-from django.contrib import messages
+from cedar_core.forms import (ReferenceForm, RefLocFormSet,
+                              RefLocFormSetHelper, RefNoteFormSet,
+                              RefNoteFormSetHelper)
+from cedar_core.models import factor, reference
 from django.contrib.auth.decorators import login_required, permission_required
-from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Count, F, Q
+from django.db.models import Count, F
 from django.forms.models import model_to_dict
-from django.http import (HttpResponse, HttpResponseNotFound,
-                         HttpResponseRedirect)
-from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
-from django.utils import timezone
+from django.shortcuts import get_object_or_404, render
 
 
-def browse_references(request):
+
+
+
+def browse_references(request): # =================================================================
+    #                             ----------------------------------------------- BROWSE_REFERENCES
+    # =============================================================================================
+
+    """
+    Browse CEDAR by reference.
+    """
     
-    refs_list = reference.objects.filter(is_archived = False)
-    
+    refs_list   = reference.objects.filter(is_archived = False)
     refs_filter = reference_filter(request.GET, queryset=refs_list)
     
-
-
-    context = {'refs_list': refs_list,
-               'refs_filter': refs_filter, 
-               'page_title': 'CEDAR: Browse References', 
-               'view_references': 'active'}
-
-               
+    context = {
+        'page_title': 'Browse CEDAR by Reference', 
+        'refs_list': refs_list,
+        'refs_filter': refs_filter, 
+        'view_references': 'active',
+    }
+           
     return render(request, 'cedar_core/browse_references.html', context)
-
-
-
-def detail_reference(request, pk):
-# Get the details of a single reference, and list associated factors.
-
-    thisreference = get_object_or_404(reference, pk = pk)
-   
-    # Reverse Related Object Lookup
-    factor_list = thisreference.factor_set.all()
-
-    location_list = thisreference.reference_join_location_set.all()
-
-    notes_list = thisreference.reference_note_set.all()
-
-    context = {'page_title': 'CEDAR: Reference ' + str(pk),
-               'reference': thisreference,
-               'reference_factors': factor_list,
-               'reference_locations': location_list,
-               'reference_notes': notes_list,
-               }
-
-    return render(request, 'cedar_core/detail_reference.html', context)
 
 
 
@@ -97,11 +64,31 @@ def list_child_factors(request, pk): # =========================================
 
 
 
+def detail_reference(request, pk): # ==============================================================
+    #                                --------------------------------------------- DETAIL_REFERENCE
+    # =============================================================================================\
 
+    """
+    Get the details of a single reference, and list associated factors.
+    """
 
+    thisreference = get_object_or_404(reference, pk = pk)
+   
+    # Reverse Related Object Lookup
+    factor_list = thisreference.factor_set.all()
 
+    location_list = thisreference.reference_join_location_set.all()
 
+    notes_list = thisreference.reference_note_set.all()
 
+    context = {'page_title': 'CEDAR: Reference ' + str(pk),
+               'reference': thisreference,
+               'reference_factors': factor_list,
+               'reference_locations': location_list,
+               'reference_notes': notes_list,
+               }
+
+    return render(request, 'cedar_core/detail_reference.html', context)
 
 
 
