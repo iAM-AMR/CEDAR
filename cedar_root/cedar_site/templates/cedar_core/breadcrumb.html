@@ -25,7 +25,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{% url 'browse_references' %}">References</a></li>
                     <li class="breadcrumb-item"><a href="{% url 'detail_reference' pk=factor.reference_id %}">{{ reference.key_bibtex }}</a></li>
-                      <li class="breadcrumb-item"><a href="{% url 'list_children_reference' pk=factor.reference_id %}">Factors</a></li>
+                      <li class="breadcrumb-item"><a href="{% url 'list_child_factors' pk=factor.reference_id %}">Factors</a></li>
                       <li class="breadcrumb-item active" aria-current="page">{{ factor.factor_title }}</li>
                 </ol>
             </nav>

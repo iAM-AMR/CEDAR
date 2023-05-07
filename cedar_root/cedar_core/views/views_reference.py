@@ -5,6 +5,7 @@ from multiprocessing import context
 from webbrowser import get
 
 import numpy as np
+from cedar_core.filters import reference_filter
 from cedar_core.forms import (FactorForm, QuerySelectForm, ReferenceForm,
                               RefLocForm, RefLocFormSet, RefLocFormSetHelper,
                               RefNoteForm, RefNoteFormSet,
@@ -18,7 +19,7 @@ from dal import autocomplete
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import F, Q
+from django.db.models import Count, F, Q
 from django.forms.models import model_to_dict
 from django.http import (HttpResponse, HttpResponseNotFound,
                          HttpResponseRedirect)
@@ -26,11 +27,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils import timezone
 
-from cedar_core.filters import reference_filter
 
-
-#@login_required
-#@permission_required('cedar_core.add_factor') # this permission check serves to verify that the logged in user is part of the "Edit" permissions group
 def browse_references(request):
     
     refs_list = reference.objects.filter(is_archived = False)
@@ -74,25 +71,27 @@ def detail_reference(request, pk):
 
 
 
-@login_required
-@permission_required('cedar_core.add_factor')
+def list_child_factors(request, pk): # ============================================================
+    #                                  ----------------------------------------- LIST_CHILD_FACTORS
+    # =============================================================================================
+    
+    """
+    Get factors associated with a reference whose ID is passed as pk.
+    """
 
-def list_children_reference(request, pk):
+    thisreference = get_object_or_404(reference, pk = pk)
     
-    try:
-        ref = reference.objects.get(pk=pk)
-    except ObjectDoesNotExist:
-        return HttpResponseNotFound('<h1>Page not found</h1>')
-    
-    # Reverse Related Object Lookup
-    ref_factors = ref.factor_set.all()
-    
+    # Get related factors, annotating each factor with the number of associated
+    # resistance outcomes. Access via res_outcome__count in template.
+    child_factors = thisreference.factor_set.all().annotate(Count('res_outcome'))
+
     context = {
-        'reference': ref,
-        'children': ref_factors,
-        'page_title': 'View Factors',
+        'page_title': 'List of Factors',
+        'reference':  thisreference,
+        'children':   child_factors,
     }
-    return render(request, 'cedar_core/list_children_reference.html', context)
+
+    return render(request, 'cedar_core/list_child_factors.html', context)
 
 
 

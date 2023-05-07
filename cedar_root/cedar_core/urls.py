@@ -32,7 +32,7 @@ urlpatterns = [
     path('browse/references/',          views_reference.browse_references, name='browse_references'),
     
     # Children
-    path('reference/<int:pk>/factors/', views_reference.list_children_reference, name='list_children_reference'),
+    path('reference/<int:pk>/factors/', views_reference.list_child_factors, name='list_child_factors'),
 
     # Details
     path('reference/<int:pk>/',         views_reference.detail_reference, name='detail_reference'), 
@@ -55,7 +55,7 @@ urlpatterns = [
     path('browse/factors/',    views_factor.browse_factors, name='browse_factors'),
 
     # Children
-    path('reference/<int:reference_id>/factor/<int:pk>/outcomes/',    views_factor.list_resistance_outcomes, name='list_resistance_outcomes'),
+    path('reference/<int:reference_id>/factor/<int:pk>/outcomes/',    views_factor.list_child_resistance_outcomes, name='list_child_resistance_outcomes'),
 
     # Details
     path('reference/<int:reference_id>/factor/<int:pk>/',             views_factor.detail_factor, name='detail_factor'),

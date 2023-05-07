@@ -38,6 +38,7 @@
             <th>Description</th>
             <th>Host</th>
             <th>Host Type</th>
+            <th>Outcomes</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -48,14 +49,20 @@
               <td>{{ factor.factor_description }}</td>
               <td>{{ factor.host_level_01 }}</td>
               <td>{{ factor.host_level_02 }}</td>
+              <td>{{ factor.res_outcome__count }}</td>
 
               <td style='white-space: nowrap'>
                 
-                  <a title="Edit Factor Data" href="{% url 'edit_factor' reference_id=reference.id pk=factor.id %}" class="btn btn-info btn-xs" role="button">
-                    <i class="fas fa-pencil-alt"></i>
+                  <a title="Edit Factor Data" href="{% url 'edit_factor' reference_id=reference.id pk=factor.id %}" class="btn btn-primary btn-xs" role="button">
+                    <i class="fa-solid fa-pencil-alt"></i>
                   </a>
+
+                  <a title="View Resistance Outcomes" href="{% url 'list_child_resistance_outcomes' reference_id=reference.id pk=factor.id %}" class="btn btn-secondary btn-xs" role="button">
+                    <i class="fa-solid fa-list"></i>
+                  </a>
+
                   <a title="Delete" href="{% url 'delete_factor' pk=factor.id %}" class="btn btn-danger btn-xs" role="button">
-                    <i class="far fa-trash-alt"></i>
+                    <i class="fa-regular fa-trash-alt"></i>
                   </a>
               </td>
             </tr>

@@ -105,12 +105,12 @@ def edit_factor(request, reference_id, pk):
 
 
 
-#@login_required
-#@permission_required('cedar_core.add_factor')
-def list_resistance_outcomes(request, reference_id, pk):
+def list_child_resistance_outcomes(request, reference_id, pk):
 
     thisfactor    = get_object_or_404(factor,    pk = pk)
     thisreference = get_object_or_404(reference, pk = reference_id)
+
+    # TODO: Remove reliance on reference_id.
     
     resistance_outcomes = thisfactor.res_outcome_set.all()
     
@@ -120,5 +120,5 @@ def list_resistance_outcomes(request, reference_id, pk):
         'resistance_outcomes': resistance_outcomes,
         'page_title': 'List ROs for Factor ' + str(pk),
     }
-    return render(request, 'cedar_core/list_resistance_outcomes.html', context)
+    return render(request, 'cedar_core/list_child_resistance_outcomes.html', context)
 
