@@ -446,7 +446,11 @@ class FactorForm(ModelForm):
         )
 
 
-class TestResistanceOutcomeForm(ModelForm):
+
+
+
+
+class EditResistanceOutcomeForm(ModelForm):
     
     class Meta:
         model = res_outcome
@@ -459,7 +463,7 @@ class TestResistanceOutcomeForm(ModelForm):
         self.helper.form_class = 'res-out-detail'
         self.helper.form_method = 'post'
         self.helper.form_action = 'submit_survey'
-        self.helper.form_show_labels = True
+        self.helper.form_show_labels = False
         self.helper.add_input(Submit('submit', 'Submit'))
 
         self.helper.layout = Layout(
@@ -487,7 +491,7 @@ class TestResistanceOutcomeForm(ModelForm):
                 ),
                 Row(
                     Column(
-                        HTML(''' {{factor.group_allocate_production_stage}}  ''')
+                        HTML(''' <p>Group Allocation Production Stage:  {{factor.group_allocate_production_stage}} </p> ''')
                     ),
                     Column(
                         PrependedText('group_observe_production_stage', 'Observed Production Stage'), 
@@ -623,8 +627,10 @@ class TestResistanceOutcomeForm(ModelForm):
         )
 
 
+
+
 # https://docs.djangoproject.com/en/4.1/topics/forms/modelforms/
-class EditResistanceOutcomeForm(ModelForm):
+class EditResistanceOutcomeFormOLD(ModelForm):
     
     class Meta:
         model = res_outcome

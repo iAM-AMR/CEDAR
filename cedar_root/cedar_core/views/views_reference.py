@@ -76,7 +76,8 @@ def detail_reference(request, pk):
 
 @login_required
 @permission_required('cedar_core.add_factor')
-def edit_reference_factor_list(request, pk):
+
+def list_children_reference(request, pk):
     
     try:
         ref = reference.objects.get(pk=pk)
@@ -86,37 +87,12 @@ def edit_reference_factor_list(request, pk):
     # Reverse Related Object Lookup
     ref_factors = ref.factor_set.all()
     
-    # **********Legacy code (depreciated): Retrieve 2x2 table info (contingency or prevalence) (back when resistance outcomes & factors were in the same table)*********************
-    
-    #fac_data = {} # stores 2x2 info in order of A, B, C, D (or P, R, Q, S)
-    #for f in ref_factors:
-        #if f.moa_type == 'Contingency Table':
-            #fac_data = [f.contable_a, f.contable_b, f.contable_c, f.contable_d]
-        #else if f.moa_type == 'Prevalence Table':
-            #fac_data = [f.prevtable_a, f.prevtable_b, f.prevtable_c, f.prevtable_d]
-            
-    #for i in range(0,len(ref_factors)):
-        #if 'Contingency Table' in ref_factors[i].moa_type:
-            #print('ct')
-            #fac_data[i] = [f.contable_a, f.contable_b, f.contable_c, f.contable_d]
-        #elif 'Prevalence Table' in ref_factors[i].moa_type:
-            #print('rt')
-            #fac_data[i] = [f.prevtable_a, f.prevtable_b, f.prevtable_c, f.prevtable_d]
-    #*************************************************************************************************
-
-    rfs_serialized = []
-    for rf in ref_factors:
-        rfs_serialized.append(model_to_dict(rf))
-
-    #Loop through json dumps on rfs_serialized (each dictionary in this list)
-    #rfs_json = json.dumps(rfs_serialized, cls=DjangoJSONEncoder)
-    
     context = {
-        'ref': ref,
-        'ref_factors': ref_factors,
+        'reference': ref,
+        'children': ref_factors,
         'page_title': 'View Factors',
     }
-    return render(request, 'cedar_core/edit_reference_factor_list.html', context)
+    return render(request, 'cedar_core/list_children_reference.html', context)
 
 
 

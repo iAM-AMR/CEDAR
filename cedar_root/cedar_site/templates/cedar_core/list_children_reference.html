@@ -10,27 +10,27 @@
 
 {% block content %}
 
+<div class="container-fluid maxWidth">
+
   <div class="row justify-content-center">
 
-    <div class="col-10">
+    <div class="col-12">
 
-      <h1 class="mt-2">{{ref.key_bibtex}}</h1>
-      <hr style="border-width:5px;">
+      {% include "cedar_core/breadcrumb.html" with whereami='detail_reference' %}
+
+      <hr style="border-width:3px;">
+
+      <h1>{{ reference.key_bibtex|default:"Reference Title"}}</h1>
+
       <br>
 
-      <!-- Actual factor table -->
-      <h2 class="mt-2">All Factors</h2>
 
-      <br>
+      <h2>Factors</h2>
+      <hr style="border-width:1px;">
 
-      <!-- Add new factors button -->
 
-      <a title="New Factor" href="{% url 'new_blank_factor' reference_id=ref.id %}" class="btn btn-success btn-lg" role="button">
-        <i class="fas fa-plus-square"></i>
-      </a>
-
-      <br><br>
-
+      <button class="btn btn-primary">Add New &nbsp;<i class="fa-solid fa-plus"></i></button>
+      
       <table id="factorTable" class="table table-bordered table-sm stripe" cellspacing="0" width="100%">
         <thead>
           <tr>
@@ -42,7 +42,7 @@
           </tr>
         </thead>
         <tbody>
-          {% for factor in ref_factors %}
+          {% for factor in children %}
             <tr>
               <td>{{ factor.factor_title }}</td>
               <td>{{ factor.factor_description }}</td>
@@ -51,7 +51,7 @@
 
               <td style='white-space: nowrap'>
                 
-                  <a title="Edit Factor Data" href="{% url 'edit_factor' reference_id=ref.id pk=factor.id %}" class="btn btn-info btn-xs" role="button">
+                  <a title="Edit Factor Data" href="{% url 'edit_factor' reference_id=reference.id pk=factor.id %}" class="btn btn-info btn-xs" role="button">
                     <i class="fas fa-pencil-alt"></i>
                   </a>
                   <a title="Delete" href="{% url 'delete_factor' pk=factor.id %}" class="btn btn-danger btn-xs" role="button">
@@ -64,6 +64,7 @@
       </table>
     </div>
   </div>
+</div>
 {% endblock %}
 
 {% block body_scripts %}
