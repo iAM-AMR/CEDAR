@@ -15,7 +15,16 @@ from django.http import (HttpResponse, HttpResponseNotFound,
 
 
 
-def browse_factors(request):
+def browse_factors(request): # ====================================================================
+    #                          --------------------------------------------------------------------
+    # =============================================================================================
+
+    """
+    Browse CEDAR by Factor.
+    """
+
+    # Use values with fields here to ensure the parent reference's ID is 
+    # available; calling .reference passes the object not the value.
 
     factor_list = factor.objects.all().values(
         'id',
@@ -23,10 +32,10 @@ def browse_factors(request):
         'reference__id',
     )
 
-    context = {'page_title': 'CEDAR: Browse Factors',
-               'navbar_status': 'active', 
-               'factor_list': factor_list,
-               }
+    context = {
+        'page_title': 'Browse CEDAR by Factor',
+        'factor_list': factor_list,
+    }
 
     return render(request, 'cedar_core/browse_factors.html', context)
 
