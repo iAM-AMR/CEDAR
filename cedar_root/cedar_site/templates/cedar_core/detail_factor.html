@@ -22,6 +22,11 @@
     {% include "cedar_core/detail_reference_header.html" %}
     {% include "cedar_core/breadcrumb.html" with whereami='detail_factor' %}
 
+    <div class="row">
+
+        <a href="{% url 'edit_factor' reference_id=reference.id  pk=factor.id %}"><button class="btn btn-primary" >Edit Factor</button></a> 
+    </div>
+
     <div class="row mt-4 justify-content-center">
         <div class="col-9">
             <h2 style="text-align: center;">{{  factor.factor_title  }}</h2>
@@ -71,6 +76,8 @@
 
                             {{ res_out.resistance_gene|default_if_none:"" }} </br>
                             {% include "cedar_core/prod_stage_icons.html" %} </br>
+
+                            <a>Edit</a>
                         </td>
                         <td>
                             <span data-bs-toggle="tooltip" data-placement="top" data-bs-title="Microbe">{{ res_out.microbe_level_01 }}</span> <span data-bs-toggle="tooltip" data-placement="top" data-bs-title="Microbe Sub-type">{{ res_out.microbe_level_02 }}</span>  

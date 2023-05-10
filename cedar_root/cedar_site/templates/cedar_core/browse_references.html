@@ -4,74 +4,75 @@
 
 {% load static %}
 
+{% load crispy_forms_tags %}
+
+{% block head %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'cedar_core/browse_style.css' %}">
+
+    <script type="text/javascript" src=" {% static 'cedar_core/browse.js' %} "></script>
+
+{% endblock head %}
 
 
 
-{% block    body_contents %}
+{% block body_contents %}
+
 <div class="container-fluid maxWidth">
 
-  <!-- table of references -->
-  <div class="row justify-content-center"> <!-- container-lg -->
-    <div class="col-12">
+    <div class="row justify-content-center"> 
+      
+      <div class="col-12">
 
-      <h1>Browse References</h1>
-      <hr style="border-width:5px;">
-      <br>
+          <h1>Browse References</h1>
+          <hr style="border-width:5px;">
+      
+          <form method="GET">
+            <div class="row">
+              <div class="form-group col-md-6">
+                {{ refs_filter.form.is_excluded|as_crispy_field }}
+              </div>
+              <div class="form-group col-md-6 my-auto">
+                <div class="d-flex justify-content-start">
+                  <button class="btn btn-primary" type="submit">Filter</button>
+                </div>
+              </div>
+            </div>
+          </form>
+          
+          <hr style="border-width:1px">
 
-      <form method="get">
-        {{ refs_filter.form.as_p }}
-        <button type="submit">Filter</button>
-      </form>
-      <br>
+          <table id="referenceTable" class="table table-borderless table-hover table-sm browse-table" cellspacing="0" width="100%">
+              
+              <thead class="table-dark">
+                  <tr>
+                      <th style='text-align:center'>ID</th>
+                      <th></th>
+                      <th>Bibtex Key</th>
+                      <th>Title</th>
+                  </tr>
+              </thead>
 
+              <tbody>
+                  {% for reference in refs_filter.qs %}
+                      <tr>
+                          <td> <span>{{ reference.id }}</span> </td>
+                          <td style='text-align:center'> {% if reference.is_excluded_extract %}<i data-bs-toggle="tooltip" data-placement="top" data-bs-title="Excluded" class="fa-solid fa-ban fa-sm"></i>{% endif %} </td>
+                          <td>{{ reference.key_bibtex }} </td>
+                          <td>
+                            <a href="{% url 'detail_reference' pk=reference.id %}">{{ reference.ref_title }}</a>
+                          </td>
+                      </tr>
+                  {% endfor %}
+              </tbody>
 
-      <table id="referenceTable" class="table table-bordered table-sm stripe" cellspacing="0" width="100%">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Bibtex Key</th>
-            <th>Title</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for reference in refs_filter.qs %}
-            <tr>
-              <td > <span>{{ reference.id }}</span> </td>
-              <td>{{ reference.key_bibtex }} {% if reference.is_excluded_extract %}<i data-bs-toggle="tooltip" data-placement="top" data-bs-title="Excluded" class="fa-solid fa-ban fa-sm"></i>{% endif %}</td>
-              <td>
-                <!-- <a href="/cedar_core/references/{{ reference.id }}/">{{ reference.study_title }}</a> -->
-                <a href="{% url 'detail_reference' pk=reference.id %}">{{ reference.ref_title }}</a>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+          </table>
+
+      </div>
+
     </div>
-  </div>
 
 </div>
 {% endblock body_contents %}
 
 
-{% block body_scripts %}
-
-  <script type="text/javascript">
-
-    $(document).ready(function () {
-
-      // Enable Tool Tips
-      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-  
-      // Customize Table
-      $('#referenceTable').DataTable({
-        "scrollY": "100%",
-        "scrollCollapse": true,
-        order: [[1, 'asc']],
-      });
-      $('.dataTables_length').addClass('bs-select');
-    });
-
-  </script>
-
-{% endblock body_scripts %}

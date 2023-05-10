@@ -1,0 +1,12 @@
+
+.browse-table tbody > tr > td {
+    white-space: nowrap;
+    }
+
+.dataTables_length {
+    margin-bottom: 0em;
+    }
+    
+.dataTables_filter {
+        margin-bottom: 0.5em;
+    }

@@ -1,56 +1,76 @@
 
-import csv
-import re
-from multiprocessing import context
-from webbrowser import get
-
-import numpy as np
-from cedar_core.forms import (FactorForm, QuerySelectForm, ReferenceForm,
-                              RefLocForm, RefLocFormSet, RefLocFormSetHelper,
-                              RefNoteForm, RefNoteFormSet,
-                              RefNoteFormSetHelper, ResistanceOutcomeForm,
-                              TopicTabForm)
-from cedar_core.models import (factor, publisher, reference,
-                               reference_join_location, reference_note,
-                               res_outcome)
-from crispy_forms.utils import render_crispy_form
-from dal import autocomplete
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required, permission_required
-from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import F, Q
-from django.forms.models import model_to_dict
-from django.http import (HttpResponse, HttpResponseNotFound,
-                         HttpResponseRedirect)
-from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
-from django.utils import timezone
 
 from cedar_core.filters import reference_filter
+from cedar_core.forms import (ReferenceForm, RefLocFormSet,
+                              RefLocFormSetHelper, RefNoteFormSet,
+                              RefNoteFormSetHelper)
+from cedar_core.models import factor, reference
+from django.contrib.auth.decorators import login_required, permission_required
+from django.db.models import Count, F
+from django.forms.models import model_to_dict
+from django.shortcuts import get_object_or_404, render
 
 
-#@login_required
-#@permission_required('cedar_core.add_factor') # this permission check serves to verify that the logged in user is part of the "Edit" permissions group
-def browse_references(request):
+
+
+
+def browse_references(request): # =================================================================
+    #                             ----------------------------------------------- BROWSE_REFERENCES
+    # =============================================================================================
+
+    """
+    Browse CEDAR by reference.
+    """
     
-    refs_list = reference.objects.filter(is_archived = False)
-    
+    refs_list   = reference.objects.filter(is_archived = False)
     refs_filter = reference_filter(request.GET, queryset=refs_list)
     
-
-
-    context = {'refs_list': refs_list,
-               'refs_filter': refs_filter, 
-               'page_title': 'CEDAR: Browse References', 
-               'view_references': 'active'}
-
-               
+    context = {
+        'page_title': 'Browse CEDAR by Reference', 
+        'refs_list': refs_list,
+        'refs_filter': refs_filter, 
+        'view_references': 'active',
+    }
+           
     return render(request, 'cedar_core/browse_references.html', context)
 
 
 
-def detail_reference(request, pk):
-# Get the details of a single reference, and list associated factors.
+
+
+def list_child_factors(request, pk): # ============================================================
+    #                                  ----------------------------------------- LIST_CHILD_FACTORS
+    # =============================================================================================
+    
+    """
+    Get factors associated with a reference whose ID is passed as pk.
+    """
+
+    thisreference = get_object_or_404(reference, pk = pk)
+    
+    # Get related factors, annotating each factor with the number of associated
+    # resistance outcomes. Access via res_outcome__count in template.
+    child_factors = thisreference.factor_set.all().annotate(Count('res_outcome'))
+
+    context = {
+        'page_title': 'List of Factors',
+        'reference':  thisreference,
+        'children':   child_factors,
+    }
+
+    return render(request, 'cedar_core/list_child_factors.html', context)
+
+
+
+
+
+def detail_reference(request, pk): # ==============================================================
+    #                                --------------------------------------------- DETAIL_REFERENCE
+    # =============================================================================================\
+
+    """
+    Get the details of a single reference, and list associated factors.
+    """
 
     thisreference = get_object_or_404(reference, pk = pk)
    
@@ -69,64 +89,6 @@ def detail_reference(request, pk):
                }
 
     return render(request, 'cedar_core/detail_reference.html', context)
-
-
-
-
-
-@login_required
-@permission_required('cedar_core.add_factor')
-def edit_reference_factor_list(request, pk):
-    
-    try:
-        ref = reference.objects.get(pk=pk)
-    except ObjectDoesNotExist:
-        return HttpResponseNotFound('<h1>Page not found</h1>')
-    
-    # Reverse Related Object Lookup
-    ref_factors = ref.factor_set.all()
-    
-    # **********Legacy code (depreciated): Retrieve 2x2 table info (contingency or prevalence) (back when resistance outcomes & factors were in the same table)*********************
-    
-    #fac_data = {} # stores 2x2 info in order of A, B, C, D (or P, R, Q, S)
-    #for f in ref_factors:
-        #if f.moa_type == 'Contingency Table':
-            #fac_data = [f.contable_a, f.contable_b, f.contable_c, f.contable_d]
-        #else if f.moa_type == 'Prevalence Table':
-            #fac_data = [f.prevtable_a, f.prevtable_b, f.prevtable_c, f.prevtable_d]
-            
-    #for i in range(0,len(ref_factors)):
-        #if 'Contingency Table' in ref_factors[i].moa_type:
-            #print('ct')
-            #fac_data[i] = [f.contable_a, f.contable_b, f.contable_c, f.contable_d]
-        #elif 'Prevalence Table' in ref_factors[i].moa_type:
-            #print('rt')
-            #fac_data[i] = [f.prevtable_a, f.prevtable_b, f.prevtable_c, f.prevtable_d]
-    #*************************************************************************************************
-
-    rfs_serialized = []
-    for rf in ref_factors:
-        rfs_serialized.append(model_to_dict(rf))
-
-    #Loop through json dumps on rfs_serialized (each dictionary in this list)
-    #rfs_json = json.dumps(rfs_serialized, cls=DjangoJSONEncoder)
-    
-    context = {
-        'ref': ref,
-        'ref_factors': ref_factors,
-        'page_title': 'View Factors',
-    }
-    return render(request, 'cedar_core/edit_reference_factor_list.html', context)
-
-
-
-
-
-
-
-
-
-
 
 
 

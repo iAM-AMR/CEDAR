@@ -8,22 +8,36 @@
 
 {% block head_css %}
   <!-- Your custom styles (optional) -->
-  <link rel="stylesheet" href="{% static 'cedar_core/view_facs_style.css' %}">
+  <!-- <link rel="stylesheet" href="{% static 'cedar_core/view_facs_style.css' %}"> -->
 {% endblock head_css %}
 
+
+
 {% block content %}
+
 <div class="container-fluid maxWidth">
+
 
     <div class="row justify-content-center">
 
-        <div class="col">
+        <div class="col-12">
 
-            <h1>{{factor.factor_title}}</h1>
+            {% include "cedar_core/breadcrumb.html" with whereami='detail_factor' %}
+
+            <hr style="border-width:3px;">
             
-            <hr style="border-width:5px;">
-            
+            <h1>{{factor.factor_title|default:"Factor Title" }}</h1>
+
+            <p>{{factor.factor_description}}</p>
+
+            <br>
+
             <!-- Actual factor table -->
             <h2 class="mb-4">Resistance Outcomes</h2>
+            <hr style="border-width:1px;">
+
+            <button class="btn btn-primary">Add New &nbsp;<i class="fa-solid fa-plus"></i></button>
+            <button class="btn btn-secondary">Add Multiple &nbsp;<i class="fa-solid fa-plus"></i></button>
 
             {% comment %}
             <!-- <a title="New Association with Resistance" href="{% url 'add_new_obj' obj_id=factor.id form_type='ro' %}" class="btn btn-success btn-lg" role="button">
@@ -55,7 +69,7 @@
                         <td>{{ ro.moa_unit }}</td>
                         <td>{{ ro.group_observe_production_stage }}</td>
                         <td style='white-space: nowrap'>
-                            <a title="Edit this Resistance Outcome" href="{% url 'detail_resistance_outcome' reference_id=reference.id factor_id=factor.id pk=ro.id %}" class="btn btn-info btn-xs" role="button">
+                            <a title="Edit this Resistance Outcome" href="{% url 'edit_resistance_outcome' reference_id=reference.id factor_id=factor.id pk=ro.id %}" class="btn btn-info btn-xs" role="button">
                               <i class="fas fa-pencil-alt"></i>
                             </a>
 
