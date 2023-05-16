@@ -42,10 +42,10 @@
         },
         "django-autocomplete-light": {
             "hashes": [
-                "sha256:2d8fcd32f1a0b9f4586ad897ca9808402d33c5fd14d7e7234ef2e529e9f3d99c"
+                "sha256:a34f192ac438c4df056dbfd399550799ddc631c4661960134ded924648770373"
             ],
             "index": "pypi",
-            "version": "==3.9.5"
+            "version": "==3.9.7"
         },
         "django-bootstrap5": {
             "hashes": [
