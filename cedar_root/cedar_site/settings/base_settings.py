@@ -206,8 +206,12 @@ STATIC_URL = 'static/'
 # compressing your files and creating unique names for each version so they 
 # can safely be cached forever.
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  
-
+STORAGES = {
+    # ...
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # This may be redundant.
 STATICFILES_DIRS = [
