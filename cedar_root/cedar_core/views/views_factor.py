@@ -53,11 +53,13 @@ def delete_factor(request, pk):
 
 
 
+
+
 def detail_factor(request, reference_id, pk):
 
     thisfactor = get_object_or_404(factor, pk = pk)
 
-    thisreference = get_object_or_404(reference, pk = reference_id)
+    thisreference = get_object_or_404(reference, pk = thisfactor.reference_id)
 
     resistance_outcome_list = thisfactor.res_outcome_set.all()
 

@@ -369,8 +369,10 @@ class factor(models.Model): # ==================================================
         return '%s (Reference %s)' % (self.factor_title, self.reference)
 
     def get_absolute_url(self):
-        return reverse("detail_factor", args=[str(self.id)])
+        return reverse("detail_factor", kwargs={'reference_id': self.reference_id, 
+                                                'pk': self.id})
     
+
 
 
 
