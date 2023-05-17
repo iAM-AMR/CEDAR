@@ -1,11 +1,23 @@
 
 
+{% comment %}
+
+This document creates a formatted resistance outcome.
+
+The requirements are:
+- res_out as a resistance outcome.
+- factor as a factor.
+
+{% endcomment %}
+
+
+
 {% if res_out.moa_type|stringformat:"s" == 'Contingency Table' %}
 
     <table id="contingency_table" class="table">
         <thead>
             <tr>
-                <th>// From: {{ res_out.place_in_text|default_if_none:"No Location Provided" }} //</th>
+                <th style="font-size: 0.7em">See: {{ res_out.place_in_text|default_if_none:"No Location Provided" }}</th>
                 <th>AMR+ (n)</th>
                 <th>AMR- (n)</th>
                 <th data-bs-toggle="tooltip" data-placement="top" data-bs-title={{ res_out.moa_unit|default_if_none:'Unit_Not_Available' }}>Total (n)</th>
@@ -29,12 +41,16 @@
         </tbody>
     </table>
 
+
+
+
+
 {% elif res_out.moa_type|stringformat:"s" == 'Prevalence Table' %}
 
     <table class="table">
         <thead>
             <tr>
-                <th>// From: {{ res_out.place_in_text|default_if_none:"No Location Provided" }} //</th>
+                <th style="font-size: 0.7em">See: {{ res_out.place_in_text|default_if_none:"No Location Provided" }}</th>
                 <th>AMR+ (%)</th>
                 <th>AMR- (%)</th>
                 <th data-bs-toggle="tooltip" data-placement="top" data-bs-title= {{ res_out.moa_unit|default_if_none:"Unit_Not_Available" }}>Total (n)</th>
@@ -63,7 +79,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th>// From: {{ res_out.place_in_text|default_if_none:"No Location Provided" }} //</th>
+                <th style="font-size: 0.7em">See: {{ res_out.place_in_text|default_if_none:"No Location Provided" }}</th>
                 <th>OR Low CI</th>
                 <th>Odds Ratio</th>
                 <th>OR Upper CI</th>
