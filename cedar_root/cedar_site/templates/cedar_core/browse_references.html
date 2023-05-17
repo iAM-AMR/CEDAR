@@ -60,7 +60,7 @@
                           <td style='text-align:center'> {% if reference.is_excluded_extract %}<i data-bs-toggle="tooltip" data-placement="top" data-bs-title="Excluded" class="fa-solid fa-ban fa-sm"></i>{% endif %} </td>
                           <td>{{ reference.key_bibtex }} </td>
                           <td>
-                            <a href="{% url 'detail_reference' pk=reference.id %}">{{ reference.ref_title }}</a>
+                            <a href="{{ reference.get_absolute_url }}">{{ reference.ref_title }}</a>
                           </td>
                       </tr>
                   {% endfor %}
