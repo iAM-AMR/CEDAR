@@ -5,14 +5,16 @@
 {% load crispy_forms_tags %}
 
 {% block head %}
-  <!-- Your custom styles (optional) -->
+  <script type="text/javascript" src=" {% static 'cedar_core/browse.js' %} "></script>
 {% endblock head %}
+
+
 
 {% block content %}
 
 <div class="container-fluid maxWidth">
 
-  <div class="row justify-content-center">
+  <div class="row">
 
     <div class="col-12">
 
@@ -20,24 +22,25 @@
 
       <hr style="border-width:3px;">
 
-      <h1>{{ reference.key_bibtex|default:"Reference Title"}}</h1>
+      <h1>{{ reference.ref_title|default:"Reference Title"}}</h1>
 
       <br>
-
 
       <h2>Factors</h2>
       <hr style="border-width:1px;">
 
 
-      <button class="btn btn-primary">Add New &nbsp;<i class="fa-solid fa-plus"></i></button>
       
-      <table id="factorTable" class="table table-bordered table-sm stripe" cellspacing="0" width="100%">
-        <thead>
+      <!-- Specify on-load table ordering through orderByColumnNumber. -->
+      <div id="orderByColumnNumber" style="display: none;">0</div>
+
+      <table id="factorTable" class="table table-bordered table-hover table-sm browse-table" cellspacing="0" width="100%">
+        <thead class="table-dark">
           <tr>
             <th>Title</th>
             <th>Description</th>
             <th>Host</th>
-            <th>Host Type</th>
+            <th>Host&nbsp;Type</th>
             <th>Outcomes</th>
             <th>Action</th>
           </tr>
@@ -70,32 +73,16 @@
         </tbody>
       </table>
     </div>
+
   </div>
+
+  <div class="row">
+    <div class="col" style="text-align:right">
+      <button class="btn btn-primary no-wrap" disabled>Add New <i class="fa-solid fa-plus"></i></button>
+    </div>
+  </div>
+
+
 </div>
 {% endblock %}
 
-{% block body_scripts %}
-
-
-  <!-- Table scrolling for each data table -->
-  <script>
-    $(document).ready(function () {
-      $('#factorTable').DataTable({
-        "scrollY": "200px",
-        "scrollCollapse": true,
-      });
-      $('.dataTables_length').addClass('bs-select');
-    });
-  </script>
-
-  <script>
-    $(document).ready(function () {
-      $('#facTable').DataTable({
-        "paging": false,
-        "searching": false,
-        "info": false,
-      });
-    });
-  </script>
-
-{% endblock body_scripts %}

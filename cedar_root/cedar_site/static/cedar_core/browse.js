@@ -17,11 +17,11 @@ $(document).ready(function () {
     var orderbycol = document.getElementById("orderByColumnNumber").innerHTML;
 
     $('.browse-table').DataTable({
-      "scrollY": "100%",
+      "scrollY": "",
       "scrollCollapse": true,
       order: [[orderbycol, 'asc']],
     });
 
     $('.dataTables_length').addClass('bs-select');
-    
+
   });
