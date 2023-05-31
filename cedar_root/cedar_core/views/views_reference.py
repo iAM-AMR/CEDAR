@@ -73,17 +73,18 @@ def detail_reference(request, pk): # ===========================================
     """
 
     thisreference = get_object_or_404(reference, pk = pk)
-   
-    # Reverse Related Object Lookup
-    factor_list = thisreference.factor_set.all()
 
+    # Get related factors, annotating each factor with the number of associated
+    # resistance outcomes. Access via res_outcome__count in template.
+    child_factors = thisreference.factor_set.all().annotate(Count('res_outcome'))
+   
     location_list = thisreference.reference_join_location_set.all()
 
     notes_list = thisreference.reference_note_set.all()
 
     context = {'page_title': 'CEDAR: Reference ' + str(pk),
                'reference': thisreference,
-               'reference_factors': factor_list,
+               'reference_factors': child_factors,
                'reference_locations': location_list,
                'reference_notes': notes_list,
                }

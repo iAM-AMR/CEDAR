@@ -53,20 +53,37 @@ def delete_factor(request, pk):
 
 
 
-def detail_factor(request, reference_id, pk):
 
+
+def detail_factor(request, reference_id, pk): # ===================================================
+    #                                           ------------------------------------- DETAIL_FACTOR
+    # =============================================================================================
+
+    """ View factor details
+
+    View factor data, parent reference, and child resistance outcome(s). 
+    """
+    
+    # Get factor through pk variable, using shortcut pk to factor's primary key.
     thisfactor = get_object_or_404(factor, pk = pk)
 
-    thisreference = get_object_or_404(reference, pk = reference_id)
+    # <<  reference_id >> is not used here; parent reference is got through 
+    # relationship.
+    thisreference = get_object_or_404(reference, pk = thisfactor.reference_id)
 
-    resistance_outcome_list = thisfactor.res_outcome_set.all()
+    # Get resistance outcomes.
+    resistance_outcomes = thisfactor.res_outcome_set.all()
 
-    context = {'page_title': 'CEDAR: Factor ' + str(pk),
-               'navstatus_factors': 'active', 
-               'factor': thisfactor,
-               'reference': thisreference,
-               'resistance_outcomes': resistance_outcome_list,
-               }
+    # Define page title.
+    page_title = 'CDR: Factor ' + str(thisfactor.id)
+
+
+    context = {
+        'page_title': page_title,
+        'factor': thisfactor,
+        'reference': thisreference,
+        'resistance_outcomes': resistance_outcomes,
+        }
 
     return render(request, 'cedar_core/detail_factor.html', context)
 

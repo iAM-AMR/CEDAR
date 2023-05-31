@@ -16,7 +16,7 @@
 
 
 
-{% block body_contents %}
+{% block content %}
 
 <div class="container-fluid maxWidth">
 
@@ -42,6 +42,9 @@
           
           <hr style="border-width:1px">
 
+          <!-- Specify on-load table ordering through orderByColumnNumber. -->
+          <div id="orderByColumnNumber" style="display: none;">2</div>
+
           <table id="referenceTable" class="table table-borderless table-hover table-sm browse-table" cellspacing="0" width="100%">
               
               <thead class="table-dark">
@@ -60,7 +63,7 @@
                           <td style='text-align:center'> {% if reference.is_excluded_extract %}<i data-bs-toggle="tooltip" data-placement="top" data-bs-title="Excluded" class="fa-solid fa-ban fa-sm"></i>{% endif %} </td>
                           <td>{{ reference.key_bibtex }} </td>
                           <td>
-                            <a href="{% url 'detail_reference' pk=reference.id %}">{{ reference.ref_title }}</a>
+                            <a href="{{ reference.get_absolute_url }}">{{ reference.ref_title }}</a>
                           </td>
                       </tr>
                   {% endfor %}
@@ -73,6 +76,6 @@
     </div>
 
 </div>
-{% endblock body_contents %}
+{% endblock content %}
 
 

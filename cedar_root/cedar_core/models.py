@@ -274,6 +274,11 @@ class reference(models.Model): # ===============================================
 
     def __str__(self):
         return '%s: %s' % (self.key_bibtex, self.ref_title)
+    
+    def get_absolute_url(self):
+        return reverse("detail_reference", args=[str(self.id)])
+
+
 
 
 
@@ -362,6 +367,12 @@ class factor(models.Model): # ==================================================
     
     def __str__(self):
         return '%s (Reference %s)' % (self.factor_title, self.reference)
+
+    def get_absolute_url(self):
+        return reverse("detail_factor", kwargs={'reference_id': self.reference_id, 
+                                                'pk': self.id})
+    
+
 
 
 

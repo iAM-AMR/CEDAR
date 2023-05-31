@@ -36,25 +36,37 @@
         </div>
     </div>
 
+
+    <!-- Description block. -->
     <div class="row mb-4 justify-content-center">
         <div class="col">
             <table id="factor_table" class="table">
                 <thead>
                     <tr>
                         <th>Description</th>
-                       
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>{{ factor.factor_description }}</td>
-                       
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
+
+    <!-- Child resistance outcome table. -->
+
+    {% comment %}
+
+    The resistance outcome table is a nested table; there are three columns in
+    the outer table (resistance, microbe, outcome). The production stage icons 
+    in the resistance column, and the contents of the outcome column are 
+    dynamically loaded from other documents. This allows the outcome to change
+    based on grain.
+
+    {% endcomment %}
 
     <div class="row">
         <div class="col">
@@ -75,9 +87,10 @@
                             {% endwith %}
 
                             {{ res_out.resistance_gene|default_if_none:"" }} </br>
+                            
                             {% include "cedar_core/prod_stage_icons.html" %} </br>
 
-                            <a>Edit</a>
+                            <a class="btn btn-primary btn-sm" role="button"  href=" {% url 'edit_resistance_outcome' reference_id=reference.id factor_id=factor.id pk=res_out.id  %} ">Edit</a>
                         </td>
                         <td>
                             <span data-bs-toggle="tooltip" data-placement="top" data-bs-title="Microbe">{{ res_out.microbe_level_01 }}</span> <span data-bs-toggle="tooltip" data-placement="top" data-bs-title="Microbe Sub-type">{{ res_out.microbe_level_02 }}</span>  
