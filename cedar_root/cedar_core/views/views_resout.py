@@ -1,11 +1,11 @@
 
 
-from cedar_core.forms import FactorForm, EditResistanceOutcomeForm, ResistanceOutcomeForm
+from cedar_core.forms import FactorForm, EditResistanceOutcomeForm
 from cedar_core.models import factor, reference, res_outcome
 from django.contrib.auth.decorators import login_required, permission_required
 from django.forms.models import model_to_dict
 from django.shortcuts import get_object_or_404, render, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic import DetailView
@@ -89,6 +89,12 @@ class resoutUpdateView(LoginRequiredMixin, UpdateView):
             raise PermissionDenied
         self.object = self.get_object()
         return super().post(request, *args, **kwargs)
+
+
+
+
+
+
 
 
 

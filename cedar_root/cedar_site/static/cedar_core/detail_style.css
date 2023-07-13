@@ -17,3 +17,11 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+
+.prevalence .input-group-text {
+
+  color: white;
+  background-color:steelblue;
+
+}
