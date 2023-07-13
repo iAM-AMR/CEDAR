@@ -175,7 +175,7 @@ def edit_reference(request, pk):
         note_formset = RefNoteFormSet(instance=ref)
         note_helper = RefNoteFormSetHelper()
     
-    context = {'ref': ref,
+    context = {'reference': ref,
                'ref_form': ref_form,
                'ref_form_helper': ref_form.helper,
                'loc_formset': loc_formset,
