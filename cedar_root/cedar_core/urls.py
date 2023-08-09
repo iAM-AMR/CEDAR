@@ -73,6 +73,7 @@ urlpatterns = [
 
     # Add
     path('reference/<int:reference_id>/factor/<int:pk>/outcome/add/', resoutCreateView.as_view(), name='resout-add'), 
+    path('reference/<int:reference_id>/factor/<int:pk>/outcome/create/', views_resout.createResistanceOutcome, name='create_ro'), 
 
     # Browse
     # There is no resistance outcome browse view.
@@ -91,6 +92,8 @@ urlpatterns = [
     # Edit
     path('reference/<int:reference_id>/factor/<int:factor_id>/outcome/<int:pk>/edit/',    resoutView.as_view(), name='edit_resistance_outcome'),
     path('reference/<int:reference_id>/factor/<int:factor_id>/outcome/<int:pk>/update/',  resoutUpdateView.as_view(), name='resout-update'),
+
+    path('reference/<int:reference_id>/factor/<int:factor_id>/outcome/<int:pk>/edit2/', views_resout.EditReferenceOutcome, name="edit-resout"),
 
 ]
 

@@ -1,7 +1,23 @@
 
+/* CSS for Resistance Outcome templates. */
+
+
+
 .rotate {
 
     transform: rotate(-90deg);
 
+    /*
+    position:absolute;
+    left:0;
+    right:0;
+    top: 10px;
+    margin:auto;
+    */
 }
 
+.countTable .input-group-text {
+
+    background-color: steelblue;
+    color: white;
+}

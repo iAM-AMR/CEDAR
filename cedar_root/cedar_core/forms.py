@@ -450,6 +450,29 @@ class FactorForm(ModelForm):
 
 
 
+class ExtractResistanceOutcomeForm(ModelForm): # ==================================================
+    #                                            ------------------------------- RESISTANCE OUTCOME
+    # =============================================================================================
+
+    """
+    Edit a resistance outcome.
+    This form replaces earlier versions, where layout was specified via crispy forms helper.
+    """
+
+    class Meta:
+        model = res_outcome
+        fields = ['resistance', 'resistance_gene', 'microbe_level_01', 'microbe_level_02', 
+                  'group_observe_production_stage', 'moa_type', 'moa_unit', 'place_in_text',
+                  'contable_a' , 'contable_b' , 'contable_c' , 'contable_d' , 
+                  'prevtable_a', 'prevtable_b', 'prevtable_c', 'prevtable_d', 
+                  'table_n_ab', 'table_n_cd', 'odds_ratio', 'odds_ratio_lo', 'odds_ratio_up', 
+                  'odds_ratio_sig', 'odds_ratio_confidence', 'ast_method', 
+                  'ast_reference_standard', 'ast_breakpoint_version', 'ast_breakpoint_is_explicit', 
+                  'is_figure_extract', 'figure_extract_method', 'figure_extract_reproducible']
+
+
+
+
 
 
 

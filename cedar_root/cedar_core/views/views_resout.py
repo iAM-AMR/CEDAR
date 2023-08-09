@@ -1,6 +1,6 @@
 
 
-from cedar_core.forms import FactorForm, EditResistanceOutcomeForm
+from cedar_core.forms import FactorForm, EditResistanceOutcomeForm, ExtractResistanceOutcomeForm
 from cedar_core.models import factor, reference, res_outcome
 from django.contrib.auth.decorators import login_required, permission_required
 from django.forms.models import model_to_dict
@@ -11,6 +11,99 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic import DetailView
 from django.views import View
 from django.core.exceptions import PermissionDenied
+from django.contrib import messages
+
+
+
+def EditReferenceOutcome(request, reference_id, factor_id, pk): # =================================
+    #                                                             --------- EDIT RESISTANCE OUTCOME
+    # =============================================================================================
+
+
+
+    ro = get_object_or_404(res_outcome, pk = pk)
+
+    parent_factor    = factor.objects.all().get(pk = ro.factor_id)
+    parent_reference = reference.objects.all().get(pk = parent_factor.reference_id)
+
+    if request.method == 'GET':
+        context = {'form': ExtractResistanceOutcomeForm(instance=ro), 
+                   'pk': pk, 
+                   'resistance_outcome': ro,
+                   'factor' : parent_factor, 
+                   'reference' : parent_reference,
+                   
+                   }
+
+
+        return render(request, 'cedar_core/extract_resistance_outcome.html', context)
+    
+    elif request.method == 'POST':
+        form = ExtractResistanceOutcomeForm(request.POST, instance=ro)
+
+        post_context = {'pk': pk, 
+                        'form': form,
+                        'factor' : parent_factor,
+                        'reference' : parent_reference,}
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'The resistance outcome has been saved successfully.')
+            return render(request, 'cedar_core/extract_resistance_outcome.html', context=post_context)
+        
+        else:
+            messages.error(request, 'Please correct the following errors:')
+            return render(request, 'cedar_core/extract_resistance_outcome.html', post_context)
+
+
+
+
+
+def createResistanceOutcome(request, reference_id, pk): # =========================================
+    #                                                     --------------- CREATE RESISTANCE OUTCOME
+    # =========================================================================
+
+    thisfactor       = get_object_or_404(factor, pk = pk)
+    parent_reference = reference.objects.all().get(pk = thisfactor.reference_id)
+
+    context = {
+        'pk'        : pk, 
+        'factor'    : thisfactor, 
+        'reference' : parent_reference,
+        'is_create' : True,
+        }
+
+
+    if request.method == 'GET':
+
+        form = ExtractResistanceOutcomeForm()
+        context['form'] = form
+
+        return render(request, 
+                      'cedar_core/extract_resistance_outcome.html', 
+                      context = context)
+    
+
+    elif request.method == 'POST':
+
+        form = ExtractResistanceOutcomeForm(request.POST)
+
+        context['form'] = form
+
+        if form.is_valid():
+            form.instance.factor = thisfactor
+            form.save()
+            messages.success(request, 'The resistance outcome has been saved successfully.')
+            return render(request, 'cedar_core/extract_resistance_outcome.html', context = context)
+        
+        else:
+            messages.error(request, 'Please correct the following errors:')
+            return render(request, 'cedar_core/extract_resistance_outcome.html', context = context)
+
+
+
+
+
 
 class resoutCreateView(LoginRequiredMixin, CreateView):
     
@@ -38,7 +131,6 @@ class resoutCreateView(LoginRequiredMixin, CreateView):
         initial = super().get_initial(**kwargs)
         initial['factor'] = self.kwargs['pk']
         return initial
-
 
 
 
