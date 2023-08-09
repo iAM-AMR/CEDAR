@@ -1,2 +1,1 @@
-python ./cedar_root/manage.py migrate;
-gunicorn --bind=0.0.0.0 --timeout 600 --chdir cedar_root cedar_site.wsgi --access-logfile '-' --error-logfile '-';
+gunicorn --bind=0.0.0.0 --timeout 600 --chdir cedar_root cedar_site.wsgi --access-logfile '-' --error-logfile '-'
