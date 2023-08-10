@@ -36,8 +36,8 @@
             <h2 class="mb-4">Resistance Outcomes</h2>
             <hr style="border-width:1px;">
 
-            <button class="btn btn-primary">Add New &nbsp;<i class="fa-solid fa-plus"></i></button>
-            <button class="btn btn-secondary">Add Multiple &nbsp;<i class="fa-solid fa-plus"></i></button>
+            <a title="Add New" href="{% url 'create_ro' reference_id=reference.id pk=factor.id %}" class="btn btn-primary btn-xs no-wrap" role="button">Add New <i class="fa-solid fa-plus"></i></a>
+            <button class="btn btn-secondary" disabled>Add Multiple &nbsp;<i class="fa-solid fa-plus"></i></button>
 
             {% comment %}
             <!-- <a title="New Association with Resistance" href="{% url 'add_new_obj' obj_id=factor.id form_type='ro' %}" class="btn btn-success btn-lg" role="button">

@@ -19,22 +19,21 @@
     <div class="container-fluid maxWidth">
 
         <!-- The header. -->
-        <div class="row justify-content-center align-items-center">
+        <div class="d-flex flex-row flex-wrap justify-content-between align-items-center mb-1">
             
-            <div class="col-10">
-                <h1 class="my-auto">Reference: {{ref.id}} | {{ref.key_bibtex}}</h1>
+            <div class="col-auto text-nowrap">
+                <h1 class="my-auto">{{reference.id}} | <small class="text-muted">{{reference.key_bibtex}}</small></h1>
             </div>
             
-            <div class="col-2">
-                <a class="btn btn-secondary btn-block" href="{% url 'edit_reference_factor_list' ref_id=ref.id %}">Factor List</a>
-            </div>            
-        
         </div>
+
+        {% include "cedar_core/breadcrumb.html" with whereami='detail_reference' %}
+
 
         <!-- The title (below header). -->
         <div class="row">
             <div class="col-12 mt-3">
-                <h2>{{ref.ref_title}}.</h2>
+                <h2>{{reference.ref_title}}.</h2>
                 <hr class="mt-0 mb-4" style="border-width:5px;">
             </div>
         </div>
@@ -61,7 +60,9 @@
                         
                         <div class="tab-pane fade" id="tab-3-locale" role="tabpanel" aria-labelledby="nav-locale-tab">
                             <button type="button" class="btn btn-success btn-xs" id="addloc">
+                                {% comment %}
                                 <a href="{% url 'add_new_obj' obj_id=ref.id form_type='loc' %}">Add Location</a>
+                                {% endcomment %}
                                 <i class="fas fa-plus-square"></i>
                             </button>
                             <br><br>
@@ -73,7 +74,9 @@
 
                         <div class="tab-pane fade" id="tab-4-notes" role="tabpanel" aria-labelledby="nav-notes-tab">
                             <button type="button" class="btn btn-success btn-xs" id="addnote">
+                                {% comment %}
                                 <a href="{% url 'add_new_obj' obj_id=ref.id form_type='note' %}">Add Note</a>
+                                {% endcomment %}
                                 <i class="fas fa-plus-square"></i>
                             </button>
                             <br><br>
