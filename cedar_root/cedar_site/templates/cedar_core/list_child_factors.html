@@ -1,93 +1,116 @@
+
+
 {% extends 'base.html' %}
 
 {% load static %}
 
-{% load crispy_forms_tags %}
-
 {% block head %}
-  <script type="text/javascript" src=" {% static 'cedar_core/browse.js' %} "></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'cedar_core/detail_style.css' %}">
 {% endblock head %}
 
-
-
 {% block content %}
-
 <div class="container-fluid maxWidth">
 
-  <div class="row">
+  {% include "cedar_core/detail_reference_header.html" with page_type='Factor List' %} 
+  {% include "cedar_core/breadcrumb.html" with whereami='detail_reference' %}
 
-    <div class="col-12">
-
-      {% include "cedar_core/breadcrumb.html" with whereami='detail_reference' %}
+  <!-- Reference Detail Block ------------------------------------------------>
+  <div class="row mt-4 mb-2 justify-content-center">
+    <div class="col-9 text-center">
 
       <hr style="border-width:3px;">
 
-      <h1>{{ reference.ref_title|default:"Reference Title"}}</h1>
-
-      <br>
-
-      <h2>Factors</h2>
-      <hr style="border-width:1px;">
-
-
-      
-      <!-- Specify on-load table ordering through orderByColumnNumber. -->
-      <div id="orderByColumnNumber" style="display: none;">0</div>
-
-      <table id="factorTable" class="table table-bordered table-hover table-sm browse-table" cellspacing="0" width="100%">
-        <thead class="table-dark">
-          <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Host</th>
-            <th>Host&nbsp;Type</th>
-            <th>Outcomes</th>
-            {% if user.is_authenticated %}
-              <th>Action</th>
-            {% endif %}
-          </tr>
-        </thead>
-        <tbody>
-          {% for factor in children %}
-            <tr>
-              <td>{{ factor.factor_title }}</td>
-              <td>{{ factor.factor_description }}</td>
-              <td>{{ factor.host_level_01 }}</td>
-              <td>{{ factor.host_level_02 }}</td>
-              <td>{{ factor.res_outcome__count }}</td>
-
-              {% if user.is_authenticated %}
-              <td style='white-space: nowrap'>
-                
-                  <a title="Edit Factor Data" href="{% url 'edit_factor' reference_id=reference.id pk=factor.id %}" class="btn btn-primary btn-xs" role="button">
-                    <i class="fa-solid fa-pencil-alt"></i>
-                  </a>
-
-                  <a title="View Resistance Outcomes" href="{% url 'list_child_resistance_outcomes' reference_id=reference.id pk=factor.id %}" class="btn btn-secondary btn-xs" role="button">
-                    <i class="fa-solid fa-list"></i>
-                  </a>
-
-                  <a title="Delete" href="{% url 'delete_factor' pk=factor.id %}" class="btn btn-danger btn-xs" role="button">
-                    <i class="fa-regular fa-trash-alt"></i>
-                  </a>
-              </td>
-              {% endif %}
-
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-
-  </div>
-
-  <div class="row">
-    <div class="col" style="text-align:right">
-      <a title="Add New" href="{% url 'new_blank_factor' reference_id=reference.id %}" class="btn btn-primary btn-xs no-wrap" role="button">Add New <i class="fa-solid fa-plus"></i></a>
     </div>
   </div>
 
 
+
+  <!-- Table Title/Add Block ------------------------------------------------->
+  <div class="row justify-content-between align-items-center mb-2">
+
+    <div class="col-4">
+        <h3> Factors </h3>
+    </div>
+
+    {% if user.is_authenticated %}
+      <div class="col-4 text-end">
+        <a title="Add New Factor" class="btn btn-info" role="button" href="{% url 'new_blank_factor' reference_id=reference.id %}"> Add New Factor &nbsp; <i class="fa-solid fa-plus"></i> </a>
+      </div>
+    {% endif %}
+
+  </div>
+  
+
+
+  <!-- Factor Table ---------------------------------------------------------->
+  <table id="factorTable" class="table table-bordered table-striped">
+    
+    <thead class="table-dark">
+      <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Host</th>
+        <th>Host&nbsp;Type</th>
+        <th>Outcomes</th>
+
+        {% if user.is_authenticated %}
+          <th class="text-center"> Actions </th>
+        {% endif %}
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for factor in children %}
+      <tr>
+        <td><a href="{{ factor.get_absolute_url }}">{{ factor.factor_title }}</a></td>
+        <td>{{ factor.factor_description }}</td>
+        <td>{{ factor.host_level_01 }}</td>
+        <td>{{ factor.host_level_02 }}</td>
+        <td>{{ factor.res_outcome__count }}</td>
+
+        {% if user.is_authenticated %}
+        <td class="text-center" style='white-space: nowrap'>
+          
+            <a title="Edit Factor Data" href="{% url 'edit_factor' reference_id=reference.id pk=factor.id %}" class="btn btn-primary btn-xs" role="button">
+              <i class="fa-solid fa-pencil-alt"></i>
+            </a>
+
+            <a title="View Resistance Outcomes" href="{% url 'list_child_resistance_outcomes' reference_id=reference.id pk=factor.id %}" class="btn btn-secondary btn-xs" role="button">
+              <i class="fa-solid fa-list"></i>
+            </a>
+
+            <a title="Delete" href="{% url 'delete_factor' pk=factor.id %}" class="btn btn-danger btn-xs confirm-delete" role="button" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+              <i class="fa-regular fa-trash-alt"></i>
+            </a>
+        </td>
+        {% endif %}
+      </tr>
+
+      {% endfor %}
+    </tbody>
+
+    {% include "cedar_core/delete_modal.html" %}
+
+  </table>
+  
 </div>
+
 {% endblock %}
 
+
+
+
+
+{% block body_scripts %}
+
+  <script>
+    $(document).ready(function () {
+      $('#factorTable').DataTable({
+        "paging": false,
+        "searching": false,
+        "info": false,
+      });
+    });
+  </script>
+
+{% endblock body_scripts %}
