@@ -82,11 +82,9 @@ urlpatterns = [
     # List Children
     # There is no resistance outcome child view.
 
-    # Details (TODO)
+    # Details
     # There are no details view for resistance outcomes; these are aliases to edit for now.
-    path('reference/<int:reference_id>/factor/<int:factor_id>/outcome/<int:pk>',          resoutView.as_view(), name='detail_resistance_outcome'),
-    path('reference/<int:reference_id>/factor/<int:factor_id>/outcome/<int:pk>/details/', resoutView.as_view(), name='detail_resistance_outcome'),
-
+    
     # Delete
     path('reference/<int:reference_id>/factor/<int:factor_id>/outcome/<int:pk>/delete/',  resoutDeleteView.as_view(), name='resout-delete'),
 
