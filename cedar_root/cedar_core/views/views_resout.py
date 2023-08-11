@@ -15,11 +15,56 @@ from django.contrib import messages
 
 
 
+
+
+def createResistanceOutcome(request, reference_id, pk): # =========================================
+    #                                                     --------------- CREATE RESISTANCE OUTCOME
+    # =============================================================================================
+
+    thisfactor       = get_object_or_404(factor, pk = pk)
+    parent_reference = reference.objects.all().get(pk = thisfactor.reference_id)
+
+    context = {
+        'pk'        : pk, 
+        'factor'    : thisfactor, 
+        'reference' : parent_reference,
+        'is_create' : True,
+        }
+
+
+    if request.method == 'GET':
+
+        form = ExtractResistanceOutcomeForm()
+        context['form'] = form
+
+        return render(request, 
+                      'cedar_core/extract_resistance_outcome.html', 
+                      context = context)
+    
+
+    elif request.method == 'POST':
+
+        form = ExtractResistanceOutcomeForm(request.POST)
+
+        context['form'] = form
+
+        if form.is_valid():
+            form.instance.factor = thisfactor
+            form.save()
+            messages.success(request, 'The resistance outcome has been saved successfully.')
+            return render(request, 'cedar_core/extract_resistance_outcome.html', context = context)
+        
+        else:
+            messages.error(request, 'Please correct the following errors:')
+            return render(request, 'cedar_core/extract_resistance_outcome.html', context = context)
+
+
+
+
+
 def EditReferenceOutcome(request, reference_id, factor_id, pk): # =================================
     #                                                             --------- EDIT RESISTANCE OUTCOME
     # =============================================================================================
-
-
 
     ro = get_object_or_404(res_outcome, pk = pk)
 
@@ -59,47 +104,34 @@ def EditReferenceOutcome(request, reference_id, factor_id, pk): # ==============
 
 
 
-def createResistanceOutcome(request, reference_id, pk): # =========================================
-    #                                                     --------------- CREATE RESISTANCE OUTCOME
-    # =========================================================================
-
-    thisfactor       = get_object_or_404(factor, pk = pk)
-    parent_reference = reference.objects.all().get(pk = thisfactor.reference_id)
-
-    context = {
-        'pk'        : pk, 
-        'factor'    : thisfactor, 
-        'reference' : parent_reference,
-        'is_create' : True,
-        }
 
 
-    if request.method == 'GET':
 
-        form = ExtractResistanceOutcomeForm()
-        context['form'] = form
 
-        return render(request, 
-                      'cedar_core/extract_resistance_outcome.html', 
-                      context = context)
-    
+class resoutDeleteView(LoginRequiredMixin, DeleteView): # =========================================
+    #                                                     --------------- DELETE RESISTANCE OUTCOME
+    # =============================================================================================
 
-    elif request.method == 'POST':
+    # This is a class-based delete view.
+    # https://docs.djangoproject.com/en/4.2/ref/class-based-views/generic-editing/#deleteview
+    # Where request = GET, display a confirmation page at <model>_confirm_delete.html.
+    # Where request = POST, delete object without confirmation.
 
-        form = ExtractResistanceOutcomeForm(request.POST)
+    # Here, we do not use the confirmation page. Rather, we use a bootstrap 
+    # confirmation modal with jQuery that POSTs. We override get_success_url()
+    # rather than specifying success_url to access object (inherited from 
+    # SingleObjectMixin). Alternatively, we could use get_context_data() to 
+    # get kwargs. 
 
-        context['form'] = form
+    # Alternatively, we could use a function-based delete view, as implemented
+    # for factor deletion.
 
-        if form.is_valid():
-            form.instance.factor = thisfactor
-            form.save()
-            messages.success(request, 'The resistance outcome has been saved successfully.')
-            return render(request, 'cedar_core/extract_resistance_outcome.html', context = context)
-        
-        else:
-            messages.error(request, 'Please correct the following errors:')
-            return render(request, 'cedar_core/extract_resistance_outcome.html', context = context)
+    model = res_outcome
 
+    def get_success_url(self):
+        thisfactor = self.object.factor
+        return reverse_lazy('list_child_resistance_outcomes', 
+                            kwargs={'reference_id': thisfactor.reference.id, 'pk': thisfactor.id})
 
 
 
@@ -168,9 +200,6 @@ class resoutDetailView(LoginRequiredMixin, DetailView):
 
    
 
-    
-
-
 class resoutUpdateView(LoginRequiredMixin, UpdateView):
     model = res_outcome
     form_class = EditResistanceOutcomeForm
@@ -184,19 +213,6 @@ class resoutUpdateView(LoginRequiredMixin, UpdateView):
 
 
 
-
-
-
-
-
-
-class resoutDeleteView(LoginRequiredMixin, DeleteView):
-    model = res_outcome
-    success_url = reverse_lazy('index')
-
-
-
-
 class resoutView(View):
 
     def get(self, request, *args, **kwargs):
@@ -207,102 +223,5 @@ class resoutView(View):
         view = resoutUpdateView.as_view()
         return view(request, *args, **kwargs)
     
-
-
-
-
-""" 
-def detail_res_outcome(request, reference_id, factor_id, res_outcome_id):
-
-    thisresoutcome = get_object_or_404(res_outcome, pk = res_outcome_id)
-
-    context = {'page_title': 'CEDAR: Outcome ' + str(res_outcome_id),
-               'res_outcome': thisresoutcome,
-               }
-
-    return render(request, 'cedar_core/detail_res_outcome.html', context)
-
- """
-
-""" 
-@login_required
-@permission_required('cedar_core.add_factor')
-def resistance_outcome_detail(request, reference_id, factor_id, pk):
-    
-    ref = reference.objects.get(pk=reference_id)
-    fac = factor.objects.get(pk=factor_id)
-    
-    prev_ro = get_object_or_404(res_outcome, pk = pk)
-
-
-    # New extraction (duplicate) under the same soid
-    #ro = res_outcome.objects.create(id=prev_ro.id)
-    
-    #Set fields to read only (example code just for reference)
-    #for f in range(len(factor_forms)):
-        #curr_factor = factor_forms[f]
-        #for key in curr_factor.fields:
-            #curr_factor.fields[key].disabled = True
-        ##factor_forms[f].fields['factor_title'].disabled = True
-        
-    if request.method == 'POST':
-        # ro_form = ResistanceOutcomeForm(request.POST, initial=model_to_dict(prev_ro), instance=ro)
-        ro_form = ResistanceOutcomeForm(request.POST, initial=model_to_dict(prev_ro))
-        
-        if ro_form.is_valid():
-            
-            print('CLEANED DATA')
-            print(ro_form.cleaned_data)
-            
-            output = ro_form.save(commit=False)
-
-    else:
-        ro_form = ResistanceOutcomeForm(initial=model_to_dict(prev_ro), instance=prev_ro)
-
-    context = {'ro': prev_ro,
-               'ro_form': ro_form,
-               'page_title': 'Edit Association with Resistance',
-               'ref': ref,
-               'factor': fac,
-    }
-    return render(request, 'cedar_core/resistance_outcome_detail.html', context)
-
- """
-""" 
-
-@login_required
-@permission_required('cedar_core.add_factor')
-def edit_resistance_outcome(request, reference_id, factor_id, pk):
-
-    resout = get_object_or_404(res_outcome, pk = pk)
-
-    # if this is a POST request we need to process the form data
-    if request.method == 'POST':
-        
-        print('Error: REQ is POST')
-        # https://docs.djangoproject.com/en/4.1/topics/forms/
-
-    else:
-        res_out_form = EditResistanceOutcomeForm()
-
-    context = {
-        'page_title': 'Edit RO: ' + str(pk),
-        'resistance_outcome': resout,
-        'EditResistanceOutcomeForm': res_out_form
-
-    }
-
-    return render(request, 'cedar_core/edit_resistance_outcome.html', context)
-
-
- """
-
-""" 
-If you wish to have separate templates for CreateView and UpdateView, you can 
-set either template_name or template_name_suffix on your view class.
-
-
-https://docs.djangoproject.com/en/4.1/topics/class-based-views/generic-editing/#model-forms
-"""
 
 
