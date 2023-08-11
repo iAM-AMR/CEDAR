@@ -459,6 +459,18 @@ class editResistanceOutcomeForm(ModelForm): # ==================================
     This form replaces earlier versions, where layout was specified via crispy forms helper.
     """
 
+    # Use tooltips to display help text.
+    """ 
+        def __init__(self, *args, **kwargs):
+        super(editResistanceOutcomeForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            help_text = self.fields[field].help_text
+            self.fields[field].help_text = None
+            if help_text != '':
+                self.fields[field].widget.attrs.update({'data-bs-toggle':"tooltip", 'data-placement':'top', 'data-bs-title':help_text}) 
+    """
+
+
     class Meta:
         model = res_outcome
         fields = ['resistance', 'resistance_gene', 'microbe_level_01', 'microbe_level_02', 
@@ -474,4 +486,3 @@ class editResistanceOutcomeForm(ModelForm): # ==================================
             'place_in_text': TextInput()
 
         }
-

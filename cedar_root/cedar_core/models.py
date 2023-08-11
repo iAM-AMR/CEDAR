@@ -63,7 +63,7 @@ for key in dict_capt:
 
 
 def get_help_text(field_name, dict = dict_help):
-    dict.get(field_name, "Missing Help Text")
+    return(dict.get(field_name, "Missing Help Text"))
 
 
 
