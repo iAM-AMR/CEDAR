@@ -450,7 +450,7 @@ class FactorForm(ModelForm):
 
 
 
-class ExtractResistanceOutcomeForm(ModelForm): # ==================================================
+class editResistanceOutcomeForm(ModelForm): # ==================================================
     #                                            ------------------------------- RESISTANCE OUTCOME
     # =============================================================================================
 

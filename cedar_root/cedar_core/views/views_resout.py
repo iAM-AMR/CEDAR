@@ -1,6 +1,6 @@
 
 
-from cedar_core.forms import ExtractResistanceOutcomeForm
+from cedar_core.forms import editResistanceOutcomeForm
 from cedar_core.models import factor, reference, res_outcome
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
@@ -32,7 +32,7 @@ def createResistanceOutcome(request, reference_id, pk): # ======================
 
     if request.method == 'GET':
 
-        form = ExtractResistanceOutcomeForm()
+        form = editResistanceOutcomeForm()
         context['form'] = form
 
         return render(request, 
@@ -42,7 +42,7 @@ def createResistanceOutcome(request, reference_id, pk): # ======================
 
     elif request.method == 'POST':
 
-        form = ExtractResistanceOutcomeForm(request.POST)
+        form = editResistanceOutcomeForm(request.POST)
 
         context['form'] = form
 
@@ -71,7 +71,7 @@ def EditReferenceOutcome(request, reference_id, factor_id, pk): # ==============
     parent_reference = reference.objects.all().get(pk = parent_factor.reference_id)
 
     if request.method == 'GET':
-        context = {'form': ExtractResistanceOutcomeForm(instance=ro), 
+        context = {'form': editResistanceOutcomeForm(instance=ro), 
                    'pk': pk, 
                    'resistance_outcome': ro,
                    'factor' : parent_factor, 
@@ -83,7 +83,7 @@ def EditReferenceOutcome(request, reference_id, factor_id, pk): # ==============
         return render(request, 'cedar_core/edit_resistance_outcome.html', context)
     
     elif request.method == 'POST':
-        form = ExtractResistanceOutcomeForm(request.POST, instance=ro)
+        form = editResistanceOutcomeForm(request.POST, instance=ro)
 
         post_context = {'pk': pk, 
                         'form': form,
