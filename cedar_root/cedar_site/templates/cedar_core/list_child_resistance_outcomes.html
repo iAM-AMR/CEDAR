@@ -20,12 +20,16 @@
         <h2> {{ factor.factor_title | default:"Factor Title" }} </h2>
       </div>
 
-      <div class="row">
+      <div class="row mb-4">
         <p> {{ factor.host_level_01 }} | {{ factor.host_level_02 }} </p>
       </div>
 
       <div class="row">
         <p> {{ factor.factor_description }} </p>
+      </div>
+
+      <div class="row">
+        <p> {{ factor.group_factor }} | {{ factor.group_comparator }} </p>
       </div>
 
     </div>
