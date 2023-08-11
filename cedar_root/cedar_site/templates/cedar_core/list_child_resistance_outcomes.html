@@ -82,7 +82,7 @@
         <td>{{ ro.group_observe_production_stage }}</td>
 
         {% if user.is_authenticated %}
-        <td class="text-center">
+        <td class="text-center" style='white-space: nowrap'>
 
             <a title="Edit Resistance Outcome" href="{% url 'edit_resout' reference_id=reference.id factor_id=factor.id pk=ro.id %}" class="btn btn-primary btn-xs" role="button">
               <i class="fas fa-pencil-alt"></i>
