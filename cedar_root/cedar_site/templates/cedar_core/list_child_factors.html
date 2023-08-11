@@ -42,7 +42,9 @@
             <th>Host</th>
             <th>Host&nbsp;Type</th>
             <th>Outcomes</th>
-            <th>Action</th>
+            {% if user.is_authenticated %}
+              <th>Action</th>
+            {% endif %}
           </tr>
         </thead>
         <tbody>
@@ -54,6 +56,7 @@
               <td>{{ factor.host_level_02 }}</td>
               <td>{{ factor.res_outcome__count }}</td>
 
+              {% if user.is_authenticated %}
               <td style='white-space: nowrap'>
                 
                   <a title="Edit Factor Data" href="{% url 'edit_factor' reference_id=reference.id pk=factor.id %}" class="btn btn-primary btn-xs" role="button">
@@ -68,6 +71,8 @@
                     <i class="fa-regular fa-trash-alt"></i>
                   </a>
               </td>
+              {% endif %}
+
             </tr>
           {% endfor %}
         </tbody>
