@@ -64,7 +64,10 @@
         <th>Result Format  </th>
         <th>Unit           </th>
         <th>Stage Measured </th>
-        <th class="text-center">Actions        </th>
+
+        {% if user.is_authenticated %}
+          <th class="text-center"> Actions </th>
+        {% endif %}
       </tr>
     </thead>
       
@@ -78,6 +81,7 @@
         <td>{{ ro.moa_unit }}</td>
         <td>{{ ro.group_observe_production_stage }}</td>
 
+        {% if user.is_authenticated %}
         <td class="text-center">
 
             <a title="Edit Resistance Outcome" href="{% url 'edit_resout' reference_id=reference.id factor_id=factor.id pk=ro.id %}" class="btn btn-primary btn-xs" role="button">
@@ -89,6 +93,7 @@
             </a>
           
         </td>
+        {% endif %}
       </tr>
 
       {% endfor %}
