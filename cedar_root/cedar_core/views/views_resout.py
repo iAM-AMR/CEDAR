@@ -38,7 +38,7 @@ def createResistanceOutcome(request, reference_id, pk): # ======================
         context['form'] = form
 
         return render(request, 
-                      'cedar_core/extract_resistance_outcome.html', 
+                      'cedar_core/edit_resistance_outcome.html', 
                       context = context)
     
 
@@ -52,11 +52,11 @@ def createResistanceOutcome(request, reference_id, pk): # ======================
             form.instance.factor = thisfactor
             form.save()
             messages.success(request, 'The resistance outcome has been saved successfully.')
-            return render(request, 'cedar_core/extract_resistance_outcome.html', context = context)
+            return render(request, 'cedar_core/edit_resistance_outcome.html', context = context)
         
         else:
             messages.error(request, 'Please correct the following errors:')
-            return render(request, 'cedar_core/extract_resistance_outcome.html', context = context)
+            return render(request, 'cedar_core/edit_resistance_outcome.html', context = context)
 
 
 
@@ -81,7 +81,7 @@ def EditReferenceOutcome(request, reference_id, factor_id, pk): # ==============
                    }
 
 
-        return render(request, 'cedar_core/extract_resistance_outcome.html', context)
+        return render(request, 'cedar_core/edit_resistance_outcome.html', context)
     
     elif request.method == 'POST':
         form = ExtractResistanceOutcomeForm(request.POST, instance=ro)
@@ -94,11 +94,11 @@ def EditReferenceOutcome(request, reference_id, factor_id, pk): # ==============
         if form.is_valid():
             form.save()
             messages.success(request, 'The resistance outcome has been saved successfully.')
-            return render(request, 'cedar_core/extract_resistance_outcome.html', context=post_context)
+            return render(request, 'cedar_core/edit_resistance_outcome.html', context=post_context)
         
         else:
             messages.error(request, 'Please correct the following errors:')
-            return render(request, 'cedar_core/extract_resistance_outcome.html', post_context)
+            return render(request, 'cedar_core/edit_resistance_outcome.html', post_context)
 
 
 
