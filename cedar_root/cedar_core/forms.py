@@ -415,6 +415,9 @@ class editResistanceOutcomeForm(ModelForm): # ==================================
                   'is_figure_extract', 'figure_extract_method', 'figure_extract_reproducible']
         
         widgets = {
-            'place_in_text': TextInput()
+            'place_in_text': TextInput(), 
+
+            'microbe_level_02': autocomplete.ModelSelect2(url='microbe-two-autocomplete', 
+                                                          forward=['microbe_level_01'])
 
         }

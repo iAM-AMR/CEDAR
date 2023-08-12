@@ -5,7 +5,7 @@
 from django.urls import path, re_path
 
 from cedar_core.views import *
-from cedar_core.views import PublisherAutocomplete
+from cedar_core.views import PublisherAutocomplete, MicrobeTwoAutocomplete
 
 # from django.urls include
 # from django.contrib.auth import views as auth_views
@@ -20,6 +20,8 @@ urlpatterns = [
     ##path('accounts/', include('django.contrib.auth.urls')), #create_field='publish-id-autocomplete'
     re_path(r'^publish-id-autocomplete/$', PublisherAutocomplete.as_view(), name='publish-id-autocomplete',),
     #path('accounts/login/', auth_views.LoginView.as_view(template_name='cedar_core/login.html')),
+
+    re_path(r'^microbe-two-autocomplete/$', MicrobeTwoAutocomplete.as_view(), name='microbe-two-autocomplete',), 
 
     path('about/',  views.about,      name='about'),
     path('export/', views.get_timber, name='get_timber'),
