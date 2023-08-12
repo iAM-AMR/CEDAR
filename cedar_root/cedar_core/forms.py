@@ -335,7 +335,7 @@ class FactorForm(ModelForm):
             #self.fields[to_exclude[i]].label = False
         
         # another alternative
-        #self.helper.form_show_labels = False
+        self.helper.form_show_labels = False
 
         self.helper.layout = Layout(
             Div(
