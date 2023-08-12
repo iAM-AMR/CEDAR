@@ -46,7 +46,7 @@
         </div>
 
         <div class="row">
-            <div class="col d-flex align-items-center"><p>Allocated Productiion Stage: {{ factor.group_allocate_production_stage }}</p></div>
+            <div class="col"><p>Allocated Productiion Stage: {{ factor.group_allocate_production_stage }}</p></div>
             <div class="col"> {% crispy_addon form.group_observe_production_stage prepend="Measured Production Stage" form_show_labels=False %}</div>
             <div class="col"> {% crispy_addon form.microbe_level_01 prepend="Microbe" form_show_labels=False %}</div>
             <div class="col"> {% crispy_addon form.microbe_level_02 prepend="Microbe" form_show_labels=False %}</div>
