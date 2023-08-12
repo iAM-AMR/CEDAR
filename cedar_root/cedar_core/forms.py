@@ -370,7 +370,7 @@ class FactorForm(ModelForm):
                     css_class='form-horizontal'
                 ),
                 FormActions(
-                    Submit('save', 'Save changes')
+                    Submit('submit', 'Save changes')
                 ),
             ),
         )
