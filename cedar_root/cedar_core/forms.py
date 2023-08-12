@@ -309,21 +309,18 @@ class TopicTabForm(forms.Form):
 
 
 class FactorForm(ModelForm):
+    
     class Meta:
         model = factor
 
         fields = ['factor_title', 'factor_description', 'host_level_01', 'host_level_02', 'group_allocate_production_stage',
                     'group_factor', 'group_comparator']
-        help_texts = {}
 
-        labels = {
-            'factor_title': '',
-            'factor_description': '',
-            'host_level_01': '',
-            'host_level_02': '',
-            'group_allocate_production_stage': 'Stage of Factor Application or Presence',
-            'group_factor': '',
-            'group_comparator': '',
+        widgets = {
+             'factor_title': TextInput(),
+            'host_level_02': autocomplete.ModelSelect2(url='host-two-autocomplete', 
+                                                      forward=['host_level_01'])
+
         }
 
     def __init__(self, *args, **kwargs):

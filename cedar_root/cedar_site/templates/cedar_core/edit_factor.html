@@ -1,15 +1,19 @@
+
+
 {% extends 'base.html' %}
 
 {% load crispy_forms_tags %}
 
 {% load static %}
 
-{% load widget_tweaks %}
-
 {% block head %}
   <!-- Your custom styles (optional) -->
   <link rel="stylesheet" href="{% static 'cedar_core/fac_detail_style.css' %}">
 {% endblock head %}
+
+
+
+
 
 {% block content %}
     <div class="container">
@@ -37,6 +41,9 @@
                     {% csrf_token %}
                     {% crispy fac_form %}
                 </form>
+
+                {{ form.media }}
+
             </div>
         </div>
     </div>

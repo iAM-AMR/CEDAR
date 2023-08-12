@@ -22,6 +22,11 @@ urlpatterns = [
     #path('accounts/login/', auth_views.LoginView.as_view(template_name='cedar_core/login.html')),
 
     re_path(r'^microbe-two-autocomplete/$', MicrobeTwoAutocomplete.as_view(), name='microbe-two-autocomplete',), 
+    
+    re_path(r'^host-two-autocomplete/$', 
+            HostTwoAutocomplete.as_view(), 
+            name='host-two-autocomplete',), 
+
 
     path('about/',  views.about,      name='about'),
     path('export/', views.get_timber, name='get_timber'),
