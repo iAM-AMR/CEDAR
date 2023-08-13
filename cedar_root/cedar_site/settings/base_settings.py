@@ -101,6 +101,8 @@ TEMPLATES = [
 ]
 
 
+AUTH_USER_MODEL = "cedar_core.user"
+
 # Password validation is configured in the AUTH_PASSWORD_VALIDATORS setting.
 # These are the default validators.
 
