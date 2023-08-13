@@ -1,51 +1,21 @@
 
-# MODELS for CEDAR_forest
 
-"""
-Version Control (Git) Policy:
-    When making changes during development:
-        1) Make migrations (e.g., "python .\cedar_root\manage.py makemigrations").
-        2) Commit and copy Commit ID.
-        3) Commit backup of database to CEDAR_forest_floor.
-            Format: "Dump pre-migration <COMMIT ID>"
-        4) Migrate (e.g., "python .\cedar_root\manage.py migrate")
-        5) Commit backup of database to CEDAR_forest_floor.
-            Format: "Dump post-migration <COMMIT ID>"
-"""
+# CEDAR Models
 
+from decimal import Decimal
+from pathlib import Path
 
+import pandas
+from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin, UserManager
-from django.apps import apps
-from django.contrib import auth
-from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
-from django.contrib.auth.hashers import make_password
-from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
+from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
-from django.db.models.manager import EmptyManager
+from django.urls import reverse
 from django.utils import timezone
-from django.utils.itercompat import is_iterable
 from django.utils.translation import gettext_lazy as _
 
 from .validators import UnicodeUsernameValidator
-
-
-
-from cProfile import label
-from pickle import TRUE
-from pathlib import Path
-from sre_constants import NOT_LITERAL
-from django.db import models 
-from django.core.validators import RegexValidator, MinValueValidator
-from django.core.exceptions import ValidationError
-from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
-from decimal import Decimal
-from django.urls import reverse
-
-import pandas
-
 
 # Read in the local CEDAR_dictionary to get captions and help-text.
 
