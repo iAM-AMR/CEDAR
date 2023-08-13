@@ -1,34 +1,21 @@
 
-# MODELS for CEDAR_forest
 
-"""
-Version Control (Git) Policy:
-    When making changes during development:
-        1) Make migrations (e.g., "python .\cedar_root\manage.py makemigrations").
-        2) Commit and copy Commit ID.
-        3) Commit backup of database to CEDAR_forest_floor.
-            Format: "Dump pre-migration <COMMIT ID>"
-        4) Migrate (e.g., "python .\cedar_root\manage.py migrate")
-        5) Commit backup of database to CEDAR_forest_floor.
-            Format: "Dump post-migration <COMMIT ID>"
-"""
+# CEDAR Models
 
-
-
-from cProfile import label
-from pickle import TRUE
-from pathlib import Path
-from sre_constants import NOT_LITERAL
-from django.db import models 
-from django.core.validators import RegexValidator, MinValueValidator
-from django.core.exceptions import ValidationError
-from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
 from decimal import Decimal
-from django.urls import reverse
+from pathlib import Path
 
 import pandas
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin, UserManager
+from django.core.mail import send_mail
+from django.core.validators import MinValueValidator, RegexValidator
+from django.db import models
+from django.urls import reverse
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
+from .validators import UnicodeUsernameValidator
 
 # Read in the local CEDAR_dictionary to get captions and help-text.
 
@@ -1432,3 +1419,76 @@ class reference_note(models.Model): #former matrix table m_reference_note
     
     #def __str__(self):
         #return self.status
+
+
+
+
+class User(AbstractBaseUser, PermissionsMixin):
+    """
+    An abstract base class implementing a fully featured User model with
+    admin-compliant permissions.
+
+    Username and password are required. Other fields are optional.
+    """
+
+    username_validator = UnicodeUsernameValidator()
+
+    username = models.CharField(
+        _("username"),
+        max_length=150,
+        unique=True,
+        help_text=_(
+            "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
+        ),
+        validators=[username_validator],
+        error_messages={
+            "unique": _("A user with that username already exists."),
+        },
+    )
+    first_name = models.CharField(_("first name"), max_length=150, blank=True)
+    last_name = models.CharField(_("last name"), max_length=150, blank=True)
+    email = models.EmailField(_("email address"), blank=True)
+    is_staff = models.BooleanField(
+        _("staff status"),
+        default=False,
+        help_text=_("Designates whether the user can log into this admin site."),
+    )
+    is_active = models.BooleanField(
+        _("active"),
+        default=True,
+        help_text=_(
+            "Designates whether this user should be treated as active. "
+            "Unselect this instead of deleting accounts."
+        ),
+    )
+    date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
+
+    objects = UserManager()
+
+    EMAIL_FIELD = "email"
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["email"]
+
+    class Meta:
+        verbose_name = _("user")
+        verbose_name_plural = _("users")
+        # abstract = True
+
+    def clean(self):
+        super().clean()
+        self.email = self.__class__.objects.normalize_email(self.email)
+
+    def get_full_name(self):
+        """
+        Return the first_name plus the last_name, with a space in between.
+        """
+        full_name = "%s %s" % (self.first_name, self.last_name)
+        return full_name.strip()
+
+    def get_short_name(self):
+        """Return the short name for the user."""
+        return self.first_name
+
+    def email_user(self, subject, message, from_email=None, **kwargs):
+        """Send an email to this user."""
+        send_mail(subject, message, from_email, [self.email], **kwargs)
