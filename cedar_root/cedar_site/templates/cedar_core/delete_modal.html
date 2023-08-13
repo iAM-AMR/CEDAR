@@ -1,0 +1,58 @@
+
+
+<!-- Delete Confirmation Modal -->
+
+{% comment %}
+
+Usage:
+    1. Add {% include "cedar_core/delete_modal.html" %} to template.
+    2. Set delete button class="confirm-delete".
+
+{% endcomment %}
+
+<div class="modal fade" id="confirmDeleteModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+            <p>This cannot be undone.</p>
+            </div>
+
+            <div class="modal-footer">
+                <form method="post" id="confirm-delete-form">
+                    {% csrf_token %}
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- This script sets the modal form's submit action (the delete button's target) 
+     to the clicked object's target.  
+-->
+
+<script>
+
+    // When object of class 'confirm-delete' is clicked:
+    $(document).on('click', '.confirm-delete', function () {
+  
+        // Set the 'confirm-delete-form' action to href value of object:
+        $("#confirm-delete-form").attr("action", $(this).attr("href"));
+  
+    });
+
+</script>

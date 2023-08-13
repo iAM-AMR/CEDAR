@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, TextInput
 from django import forms
 from cedar_core.models import factor, reference, reference_join_location, reference_note, res_outcome, location_01, location_02, host_01, microbe_01, atc_vet, dict_help, dict_capt
 from django.utils.translation import gettext_lazy as _
@@ -307,91 +307,20 @@ class TopicTabForm(forms.Form):
             ),
         )
 
-class QuerySelectForm(forms.Form):
-    
-    AM_CLASS_CHOICES = [
-        ('Fluoroquinolones', 'Fluoroquinolones'),
-        ('Macrolides', 'Macrolides'),
-        ('Third-generation cephalosporins', 'Third-generation cephalosporins'),
-        ('Tetracyclines', 'Tetracyclines'),
-    ]
-    
-    AM_CHOICES = [
-        ('ciprofloxacin', 'ciprofloxacin'),
-        ('ceftiofur', 'ceftiofur'),
-        ('gentamicin', 'gentamicin'),
-        ('oxytetracycline', 'oxytetracycline')
-    ]
-    
-    #hosts = list(host_01.objects.values_list('host_name', flat=True))
-    #microbes = list(microbe_01.objects.values_list('microbe_name', flat=True))
-    
-    MICROBE_CHOICES = [
-        (1, 'Campylobacter'),
-        (2, 'Escherichia coli'),
-        (3, 'Salmonella'),
-        (4, 'Enterococcus'),
-    ]
-    
-    HOST_CHOICES = [
-        (1, 'Chicken'),
-        (2, 'Swine'),
-        (3, 'Turkey'),
-        (4, 'Cattle'),
-    ]
-    
-    am_classes = forms.MultipleChoiceField(choices=AM_CLASS_CHOICES, widget=forms.CheckboxSelectMultiple, required=False) # can change these to be querysets instead of manually defining options
-    ams = forms.MultipleChoiceField(choices=AM_CHOICES, widget=forms.CheckboxSelectMultiple, required=False)
-    microbes = forms.MultipleChoiceField(choices=MICROBE_CHOICES, widget=forms.CheckboxSelectMultiple, required=False)
-    hosts = forms.MultipleChoiceField(choices=HOST_CHOICES)
-
-    #class Meta:
-        #model = factor
-        #fields = ['host_01', 'microbe_01', 'resistance']
-        #help_texts = {}
-        #for fieldname in fields:
-            #help_texts[fieldname] = None
-        #labels = {
-            #'hosts': 'Host',
-            #'microbes': 'Microbes',
-            #'am_classes': 'Antimicrobial Classes',
-        #}
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_tag = False
-        self.helper.form_show_labels = False
-        self.helper.layout = Layout(
-            HTML(''' <h5>Host</h5> '''),
-            'hosts',
-            HTML(''' <h5>Microbes</h5> '''),
-            'microbes',
-            HTML(''' <h5>Antimicrobial Classes</h5> '''),
-            'am_classes',
-            HTML(''' <h5>Specific Antimicrobial(s)</h5> '''),
-            'ams',
-            FormActions(
-                Submit('save', 'Export query')
-            ),
-        )
 
 class FactorForm(ModelForm):
+    
     class Meta:
         model = factor
 
         fields = ['factor_title', 'factor_description', 'host_level_01', 'host_level_02', 'group_allocate_production_stage',
                     'group_factor', 'group_comparator']
-        help_texts = {}
 
-        labels = {
-            'factor_title': '',
-            'factor_description': '',
-            'host_level_01': '',
-            'host_level_02': '',
-            'group_allocate_production_stage': 'Stage of Factor Application or Presence',
-            'group_factor': '',
-            'group_comparator': '',
+        widgets = {
+             'factor_title': TextInput(),
+            'host_level_02': autocomplete.ModelSelect2(url='host-two-autocomplete', 
+                                                      forward=['host_level_01'])
+
         }
 
     def __init__(self, *args, **kwargs):
@@ -406,7 +335,7 @@ class FactorForm(ModelForm):
             #self.fields[to_exclude[i]].label = False
         
         # another alternative
-        #self.helper.form_show_labels = False
+        self.helper.form_show_labels = False
 
         self.helper.layout = Layout(
             Div(
@@ -441,7 +370,7 @@ class FactorForm(ModelForm):
                     css_class='form-horizontal'
                 ),
                 FormActions(
-                    Submit('save', 'Save changes')
+                    Submit('submit', 'Save changes')
                 ),
             ),
         )
@@ -450,7 +379,7 @@ class FactorForm(ModelForm):
 
 
 
-class ExtractResistanceOutcomeForm(ModelForm): # ==================================================
+class editResistanceOutcomeForm(ModelForm): # ==================================================
     #                                            ------------------------------- RESISTANCE OUTCOME
     # =============================================================================================
 
@@ -458,6 +387,18 @@ class ExtractResistanceOutcomeForm(ModelForm): # ===============================
     Edit a resistance outcome.
     This form replaces earlier versions, where layout was specified via crispy forms helper.
     """
+
+    # Use tooltips to display help text.
+    """ 
+        def __init__(self, *args, **kwargs):
+        super(editResistanceOutcomeForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            help_text = self.fields[field].help_text
+            self.fields[field].help_text = None
+            if help_text != '':
+                self.fields[field].widget.attrs.update({'data-bs-toggle':"tooltip", 'data-placement':'top', 'data-bs-title':help_text}) 
+    """
+
 
     class Meta:
         model = res_outcome
@@ -469,185 +410,11 @@ class ExtractResistanceOutcomeForm(ModelForm): # ===============================
                   'odds_ratio_sig', 'odds_ratio_confidence', 'ast_method', 
                   'ast_reference_standard', 'ast_breakpoint_version', 'ast_breakpoint_is_explicit', 
                   'is_figure_extract', 'figure_extract_method', 'figure_extract_reproducible']
+        
+        widgets = {
+            'place_in_text': TextInput(), 
 
+            'microbe_level_02': autocomplete.ModelSelect2(url='microbe-two-autocomplete', 
+                                                          forward=['microbe_level_01'])
 
-
-
-
-
-
-
-
-class EditResistanceOutcomeForm(ModelForm):
-    
-    class Meta:
-        model = res_outcome
-        exclude = ['']
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_id = ''
-        self.helper.form_class = 'res-out-detail'
-        self.helper.form_method = 'post'
-        self.helper.form_action = ''
-        self.helper.form_show_labels = False
-        self.helper.add_input(Submit('submit', 'Submit'))
-
-        self.helper.layout = Layout(
-            Div(
-                Row(
-                    Column(
-                        PrependedText('microbe_level_01', 'Microbe'),
-                        css_class='col-md-6',
-                    ),
-                    Column(
-                        PrependedText('microbe_level_02', 'Microbe'),
-                        css_class='col-md-6',
-                    ), 
-                ),
-                Row(
-                    Column(
-                        PrependedText('resistance', 'Resistance (Phenotypic)'), 
-                        css_class='col-md-6',
-                    ),
-
-                    Column(
-                        PrependedText('resistance_gene', 'Resistance (Genomic)'), 
-                        css_class='col-md-6',
-                    ),
-                ),
-                Row(
-                    Column(
-                        HTML(''' <p>Group Allocation Production Stage:  {{factor.group_allocate_production_stage}} </p> ''')
-                    ),
-                    Column(
-                        PrependedText('group_observe_production_stage', 'Observed Production Stage'), 
-                        css_class='col-md-6',
-                    ),
-                ),
-
-                HTML('''<hr class="mb-4" style="border-width:5px;">'''),
-
-                
-                HTML('''<br>'''),
-                Row(
-                    HTML(''' <h5 class="col-2">Location</h5> '''),
-                    Column(
-                        'place_in_text',
-                        css_class='col-md-8',
-                    ), 
-                ),
-                HTML('''<br>'''),
-                Row(
-                    HTML(''' <h5 class="col-2">Result Unit</h5> '''),
-                    Column(
-                        'moa_unit',
-                        css_class='col-md-8',
-                    ), 
-                ),
-                HTML('''<br>'''),
-                Row(
-                    HTML(''' <h5 class="col-2">Grain/Type</h5> '''),
-                    Column(
-                        Field('moa_type', css_id='moa_type_id'),
-                        css_class='col-md-8',
-                    ), 
-                ),
-                
-                # Quantitative Data -------------------------------------------
-
-                HTML('''<br> <h3>Quantitative Data</h3> '''),
-
-                HTML('''<hr style="border-width:5px;">'''),
-
-                HTML('''<p> This section combines a count table and a prevalence table. <br>
-                            You do not need to extract all fields. <br>
-                            See the data extraction guide for more details. 
-                        </p> '''),
-
-
-                HTML('''
-                        <br>
-                        <table id="fullFacData" class="table table-bordered">
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <h6>AMR+</h6>
-                                </td>
-                                <td>
-                                    <h6>AMR-</h6>
-                                </td>
-                                <td>
-                                    <h6>Total</h6>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td rowspan="2" class="rotate align-middle "><h5>Factor</h5></td>
-                                <td rowspan="2">'''),
-
-                HTML(''' <h5>{{ factor.group_factor }}</h5> '''),
-                HTML('''        </td>
-                                <td>'''),
-                AppendedText('contable_a', '(n)'),
-                HTML('''        </td>
-                                <td>'''),
-                AppendedText('contable_b', '(n)', css_id='ct_b'),
-                HTML('''        </td>
-                                <td rowspan="2">'''),
-                AppendedText('table_n_ab', '(n)', css_id='total_exp', style="height: 110px"),
-                HTML('''        </td>
-                            </tr>
-                            <tr>
-                                <td>'''),
-                AppendedText('prevtable_a', '(%)',css_id='pt_a', wrapper_class="prevalence"),
-                HTML('''        </td>
-                                <td>'''),
-                AppendedText('prevtable_b', '(%)', css_id='pt_b', wrapper_class="prevalence"),
-                HTML('''        </td>
-                            </tr>
-                            <tr>
-                                <td class="rotate" rowspan="2"><h5>Comparator</h5></td>
-                                <td rowspan="2">'''),
-                
-                # Comparator Row
-                HTML(''' <h5> {{ factor.group_comparator }}</h5> '''),
-                HTML('''        </td>
-                                <td>'''),
-                AppendedText('contable_c', '(n)', css_id='ct_c'),
-                HTML('''        </td>
-                                <td>'''),
-                AppendedText('contable_d', '(n)', css_id='ct_d'),
-                HTML('''        </td>
-                                <td rowspan="2">'''),
-                AppendedText('table_n_cd', '(n)', css_id='total_ref', style="height: 110px"),
-                HTML('''        </td>
-                            </tr>
-                            <tr>
-                                <td>'''),
-                AppendedText('prevtable_c', '(%)', css_id='pt_c', wrapper_class="prevalence"),
-                HTML('''        </td>
-                                <td>'''),
-                AppendedText('prevtable_d', '(%)', css_id='pt_d', wrapper_class="prevalence"),
-                HTML('''        </td>
-                            </tr>
-                        </table>
-                '''),
-                HTML('''<br>'''),
-                Row(
-                    Column(PrependedText('odds_ratio', "Odds Ratio"), css_class='col-2'), 
-                    Column(PrependedText('odds_ratio_lo', "OR (Lower Bounds)"), css_class='col-2'),
-                    Column(PrependedText('odds_ratio_up', "OR (Upper Bounds)"), css_class='col-2'),
-                    Column(PrependedText('odds_ratio_sig', "OR Significance Level"), css_class='col-2'),
-                ),
-                
-                FormActions(
-                    Submit('save', 'Save changes')
-                ),
-            ),
-        )
-
-
-
-
+        }

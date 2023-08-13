@@ -6,13 +6,17 @@
 
 {% load crispy_forms_tags %}
 
-{% load widget_tweaks %}
+{% load crispy_forms_field %}
+
 
 {% block head %}
 
-    <link rel="stylesheet" type="text/css" href="{% static 'cedar_core/detail_style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'cedar_core/resistance_out.css' %}">
+    <script src="{% static 'cedar_core/data_extraction.js' %}"></script>
 
 {% endblock head %}
+
+
 
 
 
@@ -20,39 +24,135 @@
 
 <div class="container-fluid maxWidth">
 
-    <h1>Edit a Resistance Outcome</h1>
+    {% if is_create %}
+        <h1>CREATE | <small class="text-muted">Resistance Outcome (New) </small></h1>
+    {% else %}
+        <h1>EDIT | <small class="text-muted">Resistance Outcome {{pk}}  </small></h1>
+    {% endif %}
 
-    {% include "cedar_core/breadcrumb.html" with whereami='detail_factor' %}
+    {% include "cedar_core/breadcrumb.html" with whereami='resistance_outcome' %}
 
-    <p>{{ factor.factor_description  }}</p>
+    <br>
 
 
+    <!-- FORM ------------------------------------------------------------------------------------>
+    <form method="post">
+
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col"> {% crispy_addon form.moa_type prepend="Measure Type (Grain)" form_show_labels=False %} </div>
+            <div class="col"> {% crispy_addon form.place_in_text prepend="Place in Text" form_show_labels=False %}   </div>
+        </div>
+
+        <div class="row">
+            <div class="col"><p>Allocated Productiion Stage: {{ factor.group_allocate_production_stage }}</p></div>
+            <div class="col"> {% crispy_addon form.group_observe_production_stage prepend="Measured Production Stage" form_show_labels=False %}</div>
+            <div class="col"> {% crispy_addon form.microbe_level_01 prepend="Microbe" form_show_labels=False %}</div>
+            <div class="col"> {% crispy_addon form.microbe_level_02 prepend="Microbe" form_show_labels=False %}</div>
+        </div>
+
+        <div class="row">
+            <div class="col"> {% crispy_addon form.resistance prepend="Resistance" form_show_labels=False %}           </div>
+            <div class="col"> {% crispy_addon form.resistance_gene prepend="Resistance Gene" form_show_labels=False %} </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col">
+                    {% crispy_addon form.ast_method prepend="AST Method &nbsp;" form_show_labels=False %}
+                    {% crispy_addon form.ast_reference_standard prepend="AST Standard" form_show_labels=False %}
+                    {% crispy_addon form.ast_breakpoint_version prepend="AST Version &nbsp;" form_show_labels=False %}
+            </div>
+            <div class="col">
+                {% crispy_addon form.is_figure_extract prepend="Figure Extraction?" form_show_labels=False %}
+                {% crispy_addon form.figure_extract_method prepend="Figure Extraction Method" form_show_labels=False %}
+                {% crispy_addon form.figure_extract_reproducible prepend="Are Raw Extraction Data Saved?" form_show_labels=False %}
+            </div>
+        </div>
+
+        <!-- Outcome Table --------------------------------------------------->
+        <table id="comboTable" class="table table-bordered align-middle">
+
+            <thead class="table-dark">
+                <tr>
+                    <th scope="colgroup" colspan="2">Comparison Groups</th>
+                    <th scope="col">AMR+</th>
+                    <th scope="col">AMR-</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+
+                    <td class="rotate" style="text-align: center">Factor</td>
+                    <td>{{ factor.group_factor }}</td>
+                    <td>
+                        <div class="countTable">{% crispy_addon form.contable_a append="(n)" form_show_labels=False %}</div> 
+                        {% crispy_addon form.prevtable_a append="(%)" form_show_labels=False %}
+                    </td>
+                    <td>
+                        <div class="countTable">{% crispy_addon form.contable_b append="(n)" form_show_labels=False %}</div>
+                        {% crispy_addon form.prevtable_b append="(%)" form_show_labels=False %}
+                    </td>
+                    <td>
+                        {% crispy_addon form.table_n_ab append="(n)" form_show_labels=False %}
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td class="rotate" style="text-align: center">Comparator</td>
+                    <td>{{ factor.group_comparator }}</td>
+                    <td>
+                        <div class="countTable">{% crispy_addon form.contable_c append="(n)" form_show_labels=False %}</div>
+                        {% crispy_addon form.prevtable_c append="(%)" form_show_labels=False %}
+                    </td>
+                    <td>
+                        <div class="countTable">{% crispy_addon form.contable_d append="(n)" form_show_labels=False %}</div>
+                        {% crispy_addon form.prevtable_d append="(%)" form_show_labels=False %}
+                    </td>
+                    <td>
+                        {% crispy_addon form.table_n_cd append="(n)" form_show_labels=False %}
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+        <!-- Odds Ratio ------------------------------------------------------>
+        <div class="row">
+            <div class="col">{% crispy_addon form.odds_ratio prepend="Odds Ratio" form_show_labels=False %}</div>
+            <div class="col">{% crispy_addon form.odds_ratio_confidence prepend="OR Confidence" form_show_labels=False %}</div>
+            <div class="col">{% crispy_addon form.odds_ratio_lo prepend="OR Lower CI" form_show_labels=False %}</div>
+            <div class="col">{% crispy_addon form.odds_ratio_up prepend="OR Upper CI" form_show_labels=False %}</div>
+            <div class="col">{% crispy_addon form.odds_ratio_sig prepend="OR Significance" form_show_labels=False %}</div>
+        </div>
+        
+        <!-- Submit ---------------------------------------------------------->
+        <input type="submit" value="Save" />
     
-    
-        {% crispy form %}
-    
-    
+    </form>
+
+    {{ form.media }}
+
+    <!-- MESSAGES -------------------------------------------------------------------------------->
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}"{% endif %}>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
 </div>
 
 {% endblock content %}
-
-
-
-{% block body_scripts %}
-
-<script>
-
-    // Prevent scrolling from inadvertently modifying number in active numeric field. 
-    document.addEventListener("wheel", function(event){
-        if(document.activeElement.type === "number"){
-            document.activeElement.blur();
-        }
-    });
-
-</script>
-
-{% endblock body_scripts %}
-
-
-
-

@@ -63,7 +63,7 @@ for key in dict_capt:
 
 
 def get_help_text(field_name, dict = dict_help):
-    dict.get(field_name, "Missing Help Text")
+    return(dict.get(field_name, "Missing Help Text"))
 
 
 
@@ -282,76 +282,88 @@ class reference(models.Model): # ===============================================
 
 
 
-class factor(models.Model): # =======================================================================================================================
-    # ---------------------------------------------------------------------------------------------------------------------------------------- FACTOR
-    # ===============================================================================================================================================
+class factor(models.Model): # =========================================================================================
+    # ---------------------------------------------------------------------------------------------------------- FACTOR
+    # =================================================================================================================
+
     """
     A factor associated with antimicrobial resistance.
     """
     
-    reference                  = models.ForeignKey(to        = 'reference', 
-                                                   default   = 99999, 
-                                                   on_delete = models.CASCADE, 
-                                                   help_text = get_help_text('reference'))
+    reference                                              = models.ForeignKey(
+        to        = 'reference', 
+        default   = 99999, 
+        on_delete = models.CASCADE, 
+        help_text = get_help_text('reference'))
 
-    pid_factor       = models.PositiveIntegerField(blank     = True, 
-                                                   null      = True, 
-                                                   help_text = get_help_text('pid_factor')) 
+    pid_factor                                   = models.PositiveIntegerField(
+        blank     = True, 
+        null      = True, 
+        help_text = get_help_text('pid_factor')) 
 
 
-    # Factor Details ------------------------------------------------------------------------------
+    # Factor Details ----------------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    factor_title                = models.TextField(blank     = True, 
-                                                   null      = True, # To Change
-                                                   help_text = get_help_text('factor_title'))
+    factor_title                                            = models.TextField(
+        blank     = True, 
+        null      = True, # To Change
+        help_text = get_help_text('factor_title'))
 
-    factor_description          = models.TextField(blank     = True, 
-                                                   null      = True, # To Change
-                                                   help_text = get_help_text('factor_description'))
+    factor_description                                      = models.TextField(
+        blank     = True, 
+        null      = True, # To Change
+        help_text = get_help_text('factor_description'))
+    
+    group_factor                                            = models.TextField(
+        null      = True, 
+        blank     = True, 
+        help_text = get_help_text('group_factor'))
+
+    group_comparator                                        = models.TextField(
+        null      = True, 
+        blank     = True, 
+        help_text = get_help_text('group_comparator'))
+
+    group_allocate_production_stage                        = models.ForeignKey(
+        to        = 'production_stage', 
+        null      = True, 
+        blank     = True, 
+        on_delete = models.SET_NULL,                                       
+        help_text = get_help_text('group_allocate_production_stage'))
     
 
-    group_factor                = models.TextField(null      = True, 
-                                                   blank     = True, 
-                                                   help_text = get_help_text('group_factor'))
+    # Factor Host Details -----------------------------------------------------
+    # -------------------------------------------------------------------------
 
-    group_comparator            = models.TextField(null      = True, 
-                                                   blank     = True, 
-                                                   help_text = get_help_text('group_comparator'))
-
-    group_allocate_production_stage = models.ForeignKey(to        = 'production_stage', 
-                                                        null      = True, 
-                                                        blank     = True, 
-                                                        on_delete = models.SET_NULL,                                       
-                                                        help_text = get_help_text('group_allocate_production_stage'))
-    
-
-    # Factor Host Details -------------------------------------------------------------------------
-    # 
-
-    host_level_01              = models.ForeignKey(to        = 'host_01', 
-                                                   blank     = True, 
-                                                   null      = True, 
-                                                   on_delete = models.SET_NULL, 
-                                                   help_text = get_help_text('host_level_01'))
+    host_level_01                                          = models.ForeignKey(
+        to        = 'host_01', 
+        blank     = True, 
+        null      = True, 
+        on_delete = models.SET_NULL, 
+        help_text = get_help_text('host_level_01'))
 
     # To be depreciated; see scheme_update_new_subhost
-    host_level_02              = models.ForeignKey(to        = 'host_02', 
-                                                   on_delete = models.SET_NULL, 
-                                                   blank     = True, 
-                                                   null      = True, 
-                                                   help_text = get_help_text('host_level_02'))
+    host_level_02                                          = models.ForeignKey(
+        to        = 'host_02', 
+        blank     = True, 
+        null      = True, 
+        on_delete = models.SET_NULL, 
+        help_text = get_help_text('host_level_02'))
     
     # Not yet in use; see scheme_update_new_subhost
-    host_production_stream     = models.ForeignKey(to        = 'production_stream',
-                                                   null      = True,
-                                                   on_delete = models.SET_NULL,
-                                                   help_text = get_help_text('host_production_stream'))
+    host_production_stream                                 = models.ForeignKey(
+        to        = 'production_stream',
+        null      = True,
+        on_delete = models.SET_NULL,
+        help_text = get_help_text('host_production_stream'))
 
     # Not yet in use; see scheme_update_new_subhost
-    host_life_stage            = models.ForeignKey(to        = 'host_life_stage',
-                                                   null      = True,
-                                                   on_delete = models.SET_NULL,
-                                                   help_text = get_help_text('host_life_stage'))
+    host_life_stage                                        = models.ForeignKey(
+        to        = 'host_life_stage',
+        null      = True,
+        on_delete = models.SET_NULL,
+        help_text = get_help_text('host_life_stage'))
     
     
     exclude_cedar = models.BooleanField(blank=True, null=True) # to do: rename to depreciated

@@ -116,7 +116,7 @@ def edit_factor(request, reference_id, pk):
             print('CLEANED DATA')
             print(fac_form.cleaned_data)
             
-            output = fac_form.save(commit=False)
+            fac_form.save()
     else:
         fac_form = FactorForm(initial=model_to_dict(fac), instance=fac)
 

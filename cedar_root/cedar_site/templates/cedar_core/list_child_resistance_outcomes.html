@@ -4,108 +4,118 @@
 
 {% load static %}
 
-{% load crispy_forms_tags %}
-
-{% block head %}
-  <!-- Your custom styles (optional) -->
-  <!-- <link rel="stylesheet" href="{% static 'cedar_core/view_facs_style.css' %}"> -->
-{% endblock head %}
-
-
-
 {% block content %}
 
 <div class="container-fluid maxWidth">
 
-
-    <div class="row justify-content-center">
-
-        <div class="col-12">
-
-            {% include "cedar_core/breadcrumb.html" with whereami='detail_factor' %}
-
-            <hr style="border-width:3px;">
-            
-            <h1>{{factor.factor_title|default:"Factor Title" }}</h1>
-
-            <p>{{factor.factor_description}}</p>
-
-            <br>
-
-            <!-- Actual factor table -->
-            <h2 class="mb-4">Resistance Outcomes</h2>
-            <hr style="border-width:1px;">
-
-            <a title="Add New" href="{% url 'create_ro' reference_id=reference.id pk=factor.id %}" class="btn btn-primary btn-xs no-wrap" role="button">Add New <i class="fa-solid fa-plus"></i></a>
-            <button class="btn btn-secondary" disabled>Add Multiple &nbsp;<i class="fa-solid fa-plus"></i></button>
-
-            {% comment %}
-            <!-- <a title="New Association with Resistance" href="{% url 'add_new_obj' obj_id=factor.id form_type='ro' %}" class="btn btn-success btn-lg" role="button">
-              <i class="fas fa-plus-square"></i>
-            </a> -->
-            {% endcomment %}
+  {% include "cedar_core/detail_reference_header.html" with page_type='Outcome List' %} 
+  {% include "cedar_core/breadcrumb.html" with whereami='detail_factor' %}
 
 
-            <table id="resistanceOutcomeTable" class="table table-bordered useDataTable" cellspacing="0" width="100%">
-                
-                <thead>
-                    <tr>
-                        <th>Microbe</th>
-                        <th>AMR</th>
-                        <th>Result Format</th>
-                        <th>Unit</th>
-                        <th>Stage Measured</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                
-                <tbody>
+  <!-- Factor Detail Block --------------------------------------------------->
+  <div class="row mt-4 mb-4 justify-content-center">
+    <div class="col-9 text-center">
 
-                    {% for ro in resistance_outcomes %}
-                    <tr>
-                        <td>{{ ro.microbe_level_01 }} {{ ro.microbe_level_02|default_if_none:"" }}</td>
-                        <td>{{ ro.resistance }}</td>
-                        <td>{{ ro.moa_type }}</td>
-                        <td>{{ ro.moa_unit }}</td>
-                        <td>{{ ro.group_observe_production_stage }}</td>
-                        <td style='white-space: nowrap'>
-                            <a title="Edit this Resistance Outcome" href="{% url 'edit_resistance_outcome' reference_id=reference.id factor_id=factor.id pk=ro.id %}" class="btn btn-info btn-xs" role="button">
-                              <i class="fas fa-pencil-alt"></i>
-                            </a>
+      <div class="row">
+        <h2> {{ factor.factor_title | default:"Factor Title" }} </h2>
+      </div>
 
-                            <!-- TO DO: Make a delete button and view for deleting a resistance outcome, modelled after delete_factor in view_factors.html -->
-                        </td>
-                    </tr>
-                    {% endfor %}
+      <div class="row mb-4">
+        <p> {{ factor.host_level_01 }} | {{ factor.host_level_02 }} </p>
+      </div>
 
-                </tbody>
+      <div class="row">
+        <p> {{ factor.factor_description }} </p>
+      </div>
 
-            </table>
+      <div class="row">
+        <p> {{ factor.group_factor }} | {{ factor.group_comparator }} </p>
+      </div>
 
-        </div>
-    
+    </div>
+  </div>
+  
+
+
+  <!-- Table Title/Add Block ------------------------------------------------->
+  <div class="row justify-content-between align-items-center mb-2">
+
+    <div class="col-4">
+      <h3> Resistance Outcomes </h3>
     </div>
 
+    {% if user.is_authenticated %}
+      <div class="col-4 text-end">
+        <a title="Add New Outcome" class="btn btn-info" role="button" href="{% url 'create_ro' reference_id=reference.id pk=factor.id %}"> Add New Outcome &nbsp; <i class="fa-solid fa-plus"></i> </a>
+      </div>
+    {% endif %}
+
+  </div>
+
+
+  
+  <!-- Resistance Outcome Table ---------------------------------------------->
+  <table id="resistanceOutcomeTable" class="table table-bordered table-striped">
+      
+    <thead class="table-dark">
+      <tr>
+        <th>Microbe        </th>
+        <th>AMR            </th>
+        <th>Result Format  </th>
+        <th>Unit           </th>
+        <th>Stage Measured </th>
+
+        {% if user.is_authenticated %}
+          <th class="text-center"> Actions </th>
+        {% endif %}
+      </tr>
+    </thead>
+      
+    <tbody>
+      {% for ro in resistance_outcomes %}
+
+      <tr>
+        <td>{{ ro.microbe_level_01 }} {{ ro.microbe_level_02|default_if_none:"" }}</td>
+        <td>{{ ro.resistance }}</td>
+        <td>{{ ro.moa_type }}</td>
+        <td>{{ ro.moa_unit }}</td>
+        <td>{{ ro.group_observe_production_stage }}</td>
+
+        {% if user.is_authenticated %}
+        <td class="text-center" style='white-space: nowrap'>
+
+            <a title="Edit Resistance Outcome" href="{% url 'edit_resout' reference_id=reference.id factor_id=factor.id pk=ro.id %}" class="btn btn-primary btn-xs" role="button">
+              <i class="fas fa-pencil-alt"></i>
+            </a>
+
+            <a title="Delete Resistance Outcome" href="{% url 'resout-delete' reference_id=reference.id factor_id=factor.id pk=ro.id %}" class="btn btn-danger btn-xs confirm-delete" role="button" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+              <i class="fas fa-trash-alt"></i>
+            </a>
+          
+        </td>
+        {% endif %}
+      </tr>
+
+      {% endfor %}
+    </tbody>
+
+  </table>
+
+  {% include "cedar_core/delete_modal.html" %}
+
 </div>
+
 {% endblock %}
+
+
+
+
 
 {% block body_scripts %}
 
-
-  <!-- Table scrolling for each data table -->
   <script>
     $(document).ready(function () {
-      $('#roTable').DataTable({
-        "scrollY": "200px",
-        "scrollCollapse": true,
-      });
-      $('.dataTables_length').addClass('bs-select');
-    });
-  </script>
-
-  <script>
-    $(document).ready(function () {
-      $('.useDataTable').DataTable({
+      $('#resistanceOutcomeTable').DataTable({
         "paging": false,
         "searching": false,
         "info": false,

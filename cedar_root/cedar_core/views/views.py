@@ -2,7 +2,7 @@
 
 import csv
 from cedar_core.filters import timber_filter
-from cedar_core.models import factor, publisher, reference, res_outcome
+from cedar_core.models import factor, publisher, reference, res_outcome, host_02, microbe_02
 from dal import autocomplete
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse, HttpResponseRedirect
@@ -50,6 +50,63 @@ class PublisherAutocomplete(autocomplete.Select2QuerySetView): # ===============
 
         return qs
 
+
+
+
+class MicrobeTwoAutocomplete(autocomplete.Select2QuerySetView): # =================================
+    #                                                             -------- MICROBE TWO AUTOCOMPLETE
+    # =============================================================================================
+
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_authenticated:
+            return microbe_02.objects.none()
+
+        qs = microbe_02.objects.all()
+
+        subset = self.forwarded.get('microbe_level_01', None)
+
+        # If subset != None, filter where foreign key = subset.
+        if subset:
+            qs = qs.filter(microbe_level_01=subset)
+
+        # Note, 'name' may only work here where __str__ is defined in the model.
+        # Replace with field name on failure.
+        if self.q:
+            qs = qs.filter(microbe_02_name__istartswith=self.q)
+
+        return qs
+
+
+
+class HostTwoAutocomplete(autocomplete.Select2QuerySetView): # ====================================
+    #                                                          -------------- HOST TWO AUTOCOMPLETE
+    # =============================================================================================
+
+    """
+    Use DAL for autocompletion of host_02, and cascading selection.
+    """
+
+    def get_queryset(self):
+
+        # Guard against unauthenticated enumeration of table.
+        if not self.request.user.is_authenticated:
+            return host_02.objects.none()
+
+        qs = host_02.objects.all()
+
+        subset = self.forwarded.get('host_level_01', None)
+
+        # If subset != None, filter where foreign key = subset.
+        if subset:
+            qs = qs.filter(host_level_01=subset)
+
+        # Note, 'name' may only work here where __str__ is defined in the model.
+        # Replace with field name on failure.
+        if self.q:
+            qs = qs.filter(host_subtype_name__istartswith=self.q)
+
+        return qs
 
 
 

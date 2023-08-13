@@ -5,7 +5,7 @@
 from django.urls import path, re_path
 
 from cedar_core.views import *
-from cedar_core.views import PublisherAutocomplete
+from cedar_core.views import PublisherAutocomplete, MicrobeTwoAutocomplete
 
 # from django.urls include
 # from django.contrib.auth import views as auth_views
@@ -16,22 +16,31 @@ from cedar_core.views import PublisherAutocomplete
 # app_name = 'cedar'
 
 urlpatterns = [
+
     ##path('accounts/', include('django.contrib.auth.urls')), #create_field='publish-id-autocomplete'
     re_path(r'^publish-id-autocomplete/$', PublisherAutocomplete.as_view(), name='publish-id-autocomplete',),
     #path('accounts/login/', auth_views.LoginView.as_view(template_name='cedar_core/login.html')),
 
+    re_path(r'^microbe-two-autocomplete/$', MicrobeTwoAutocomplete.as_view(), name='microbe-two-autocomplete',), 
+    
+    re_path(r'^host-two-autocomplete/$', 
+            HostTwoAutocomplete.as_view(), 
+            name='host-two-autocomplete',), 
+
+
     path('about/',  views.about,      name='about'),
     path('export/', views.get_timber, name='get_timber'),
+
 
     # REFERENCES --------------------------------------------------------------
 
     # Add
     # There is no add reference view.
 
-    # Browse
+    # Browse All
     path('browse/references/',          views_reference.browse_references, name='browse_references'),
     
-    # Children
+    # List Children
     path('reference/<int:pk>/factors/', views_reference.list_child_factors, name='list_child_factors'),
 
     # Details
@@ -51,10 +60,10 @@ urlpatterns = [
     # Add
     path('reference/<int:reference_id>/factor/new/',                  views.new_blank_factor,     name='new_blank_factor'),
     
-    # Browse
+    # Browse All
     path('browse/factors/',    views_factor.browse_factors, name='browse_factors'),
 
-    # Children
+    # List Children
     path('reference/<int:reference_id>/factor/<int:pk>/outcomes/',    views_factor.list_child_resistance_outcomes, name='list_child_resistance_outcomes'),
 
     # Details
@@ -71,29 +80,24 @@ urlpatterns = [
     
     # RESITANCE OUTCOMES ------------------------------------------------------
 
-    # Add
-    path('reference/<int:reference_id>/factor/<int:pk>/outcome/add/', resoutCreateView.as_view(), name='resout-add'), 
+    # Create
     path('reference/<int:reference_id>/factor/<int:pk>/outcome/create/', views_resout.createResistanceOutcome, name='create_ro'), 
 
-    # Browse
+    # Browse All
     # There is no resistance outcome browse view.
 
-    # Children
+    # List Children
     # There is no resistance outcome child view.
 
     # Details
     # There are no details view for resistance outcomes; these are aliases to edit for now.
-    path('reference/<int:reference_id>/factor/<int:factor_id>/outcome/<int:pk>',          resoutView.as_view(), name='detail_resistance_outcome'),
-    path('reference/<int:reference_id>/factor/<int:factor_id>/outcome/<int:pk>/details/', resoutView.as_view(), name='detail_resistance_outcome'),
-
+    
     # Delete
     path('reference/<int:reference_id>/factor/<int:factor_id>/outcome/<int:pk>/delete/',  resoutDeleteView.as_view(), name='resout-delete'),
 
-    # Edit
-    path('reference/<int:reference_id>/factor/<int:factor_id>/outcome/<int:pk>/edit/',    resoutView.as_view(), name='edit_resistance_outcome'),
-    path('reference/<int:reference_id>/factor/<int:factor_id>/outcome/<int:pk>/update/',  resoutUpdateView.as_view(), name='resout-update'),
+    # Update
+    path('reference/<int:reference_id>/factor/<int:factor_id>/outcome/<int:pk>/edit/', views_resout.EditReferenceOutcome, name="edit_resout"),
 
-    path('reference/<int:reference_id>/factor/<int:factor_id>/outcome/<int:pk>/edit2/', views_resout.EditReferenceOutcome, name="edit-resout"),
 
 ]
 
