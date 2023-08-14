@@ -469,11 +469,12 @@ class res_outcome(models.Model): # =============================================
 
     # AST Method and Details ----------------------------------------------------------------------
 
-    ast_method                         = models.ForeignKey(to        = 'ast_method_old', 
-                                                           on_delete = models.SET_NULL, 
-                                                           blank     = True, 
-                                                           null      = True, 
-                                                           help_text = get_help_text('ast_method'))
+    ast_method                                             = models.ForeignKey(
+        to        = 'ast_method', 
+        null      = True, 
+        blank     = True, 
+        on_delete = models.SET_NULL, 
+        help_text = get_help_text('ast_method'))
 
     ast_reference_standard             = models.ForeignKey(to        = 'ast_reference_standard', 
                                                            on_delete = models.SET_NULL, 
@@ -656,6 +657,9 @@ class ast_method(models.Model): # ==============================================
         null      = True, 
         blank     = True, 
         help_text = get_help_text('hist_ast_method_id'))
+    
+    def __str__(self):
+        return self.ast_method_name
 
 
 class atc_vet(models.Model): # ========================================================================================
