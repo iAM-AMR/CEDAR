@@ -456,7 +456,7 @@ class res_outcome(models.Model): # =============================================
     prevtable_d = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))], blank=True, null=True, help_text=get_help_text('prevtable_d'))
     
     # Contingency / Prevalence Table Margin Totals
-    table_n_ab = models.PositiveIntegerField(blank=True, null=True, help_text=dict_help.get('table_n_ab'))
+    table_n_ab = models.PositiveIntegerField(blank=True, null=True, help_text=get_help_text('table_n_ab'))
     table_n_cd = models.PositiveIntegerField(blank=True, null=True, help_text=get_help_text('table_n_cd'))
     
     # Odds Ratios
