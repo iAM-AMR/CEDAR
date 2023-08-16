@@ -143,6 +143,12 @@ LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 
 
+# Set the redirect URL for LogoutView().
+
+# Default = None
+LOGOUT_REDIRECT_URL = '/'
+
+
 
 
 
