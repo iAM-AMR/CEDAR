@@ -100,8 +100,8 @@ TEMPLATES = [
     },
 ]
 
-
-AUTH_USER_MODEL = "cedar_core.user"
+# AUTHENTICATION
+# -----------------------------------------------------------------------------
 
 # Password validation is configured in the AUTH_PASSWORD_VALIDATORS setting.
 # These are the default validators.
@@ -121,6 +121,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Set custom user model.
+# https://docs.djangoproject.com/en/dev/ref/settings/#std-setting-AUTH_USER_MODEL
+AUTH_USER_MODEL = "cedar_core.user"
+
+# Set the login URL for LoginView(), as LoginView() is not explicitly defined
+# in urls.py. Default is '/accounts/login/'.
+LOGIN_URL = '/accounts/login/'
+
+# Set the success URL for LoginView(), as LoginView() is not explicitly defined
+# in urls.py. Default is '/accounts/profile/', which is not currently implemented.
+LOGIN_REDIRECT_URL = '/'
+
 
 # et al.
 # -----------------------------------------------------------------------------
@@ -137,8 +149,14 @@ ROOT_URLCONF = 'cedar_site.urls'
 WSGI_APPLICATION = 'cedar_site.wsgi.application'
 
 
-LOGIN_URL = '/accounts/login/'
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# Do not require re-login after browser close.
+# https://docs.djangoproject.com/en/dev/topics/http/sessions/#browser-length-sessions-vs-persistent-sessions
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+# Require re-login after 2 weeks (default: 1209600 [2 weeks]).
+# https://docs.djangoproject.com/en/dev/ref/settings/#std-setting-SESSION_COOKIE_AGE
+SESSION_COOKIE_AGE = 1209600
+
 
 # Default primary key field type to use for models that don’t have a field 
 # with primary_key=True. Default: 'django.db.models.AutoField'. Alternative:
