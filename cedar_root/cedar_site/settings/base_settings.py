@@ -23,6 +23,20 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+# Set the root (default or top-level) URLconf.
+
+ROOT_URLCONF = 'cedar_site.urls'
+
+# The full Python path of the WSGI application object that Django’s built-in
+# servers (e.g. runserver) will use.
+
+WSGI_APPLICATION = 'cedar_site.wsgi.application'
+
+# Default primary key field type to use for models that don’t have a field 
+# with primary_key=True. Default: 'django.db.models.AutoField'. Alternative:
+# BigAutoField (a 64 bit integer).
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # INSTALLED_APPS is a list of strings designating all applications that are 
 # enabled in the Django installation. These applications are enabled by 
@@ -59,7 +73,6 @@ INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
 ]
 
-
 # "Django middleware is a system that allows developers to hook into the 
 # request-response cycle of a Django web application."
 
@@ -80,32 +93,18 @@ MIDDLEWARE = [
 ]
 
 
-# TEMPLATE is a list containing the settings for all template engines to be used 
-# with Django. These are the default settings for TEMPLATE, which enable all 
-# templates in the specified DIR (and all sub-directories).
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'APP_DIRS': True,
-        'DIRS': [BASE_DIR / 'cedar_site/templates'],
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
+
 
 # AUTHENTICATION
 # -----------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/topics/auth/
 
-# Password validation is configured in the AUTH_PASSWORD_VALIDATORS setting.
-# These are the default validators.
 
+# Set the validators used to check the strength of users' passwords.
+# https://docs.djangoproject.com/en/dev/topics/auth/passwords/#password-validation
+
+# Default = [] (empty list) 
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -121,47 +120,30 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 # Set custom user model.
+# https://docs.djangoproject.com/en/dev/topics/auth/customizing/
 # https://docs.djangoproject.com/en/dev/ref/settings/#std-setting-AUTH_USER_MODEL
-AUTH_USER_MODEL = "cedar_core.user"
+
+# Default = 'auth.User'
+AUTH_USER_MODEL = 'cedar_core.user'
+
 
 # Set the login URL for LoginView(), as LoginView() is not explicitly defined
-# in urls.py. Default is '/accounts/login/'.
+# in urls.py. 
+
+# Default = '/accounts/login/'
 LOGIN_URL = '/accounts/login/'
 
-# Set the success URL for LoginView(), as LoginView() is not explicitly defined
-# in urls.py. Default is '/accounts/profile/', which is not currently implemented.
+
+# Set the success URL for LoginView();  as LoginView() is not explicitly defined
+# in urls.py. , which is not currently implemented.
+
+# Default = '/accounts/profile/'
 LOGIN_REDIRECT_URL = '/'
 
 
-# et al.
-# -----------------------------------------------------------------------------
 
-# Enable Bootstrap 5. 
-CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
-CRISPY_TEMPLATE_PACK = 'bootstrap5'
-
-# Set the root (default or top-level) URLconf.
-ROOT_URLCONF = 'cedar_site.urls'
-
-# The full Python path of the WSGI application object that Django’s built-in
-# servers (e.g. runserver) will use.
-WSGI_APPLICATION = 'cedar_site.wsgi.application'
-
-
-# Do not require re-login after browser close.
-# https://docs.djangoproject.com/en/dev/topics/http/sessions/#browser-length-sessions-vs-persistent-sessions
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-
-# Require re-login after 2 weeks (default: 1209600 [2 weeks]).
-# https://docs.djangoproject.com/en/dev/ref/settings/#std-setting-SESSION_COOKIE_AGE
-SESSION_COOKIE_AGE = 1209600
-
-
-# Default primary key field type to use for models that don’t have a field 
-# with primary_key=True. Default: 'django.db.models.AutoField'. Alternative:
-# BigAutoField (a 64 bit integer).
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
 # LOCALIZATION 
@@ -205,6 +187,30 @@ USE_L10N = True
 
 
 
+
+
+# SESSION
+# -----------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/topics/http/sessions/
+
+
+# Do not require re-login after browser close.
+# https://docs.djangoproject.com/en/dev/topics/http/sessions/#browser-length-sessions-vs-persistent-sessions
+
+# Default = False
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+
+# Require re-login after 2 weeks 1209600 = 2 weeks]).
+# https://docs.djangoproject.com/en/dev/ref/settings/#std-setting-SESSION_COOKIE_AGE
+
+# Default = 1209600
+SESSION_COOKIE_AGE = 1209600
+
+
+
+
+
 # STATIC FILES
 # -----------------------------------------------------------------------------
 
@@ -237,3 +243,35 @@ STORAGES = {
 STATICFILES_DIRS = [
     BASE_DIR / 'cedar_site/static'
 ]
+
+
+
+
+
+# TEMPLATE
+# -----------------------------------------------------------------------------
+
+# TEMPLATES is a list containing the settings for all template engines to be used 
+# with Django. These are the default settings for TEMPLATE, which enable all 
+# templates in the specified DIR (and all sub-directories).
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'DIRS': [BASE_DIR / 'cedar_site/templates'],
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+# Enable Bootstrap 5. 
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+CRISPY_TEMPLATE_PACK = 'bootstrap5'

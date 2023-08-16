@@ -22,9 +22,15 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('', include('cedar_core.urls')),
     path('favicon.ico', views.favicon),
     path('admin/', admin.site.urls),
+
+    # Adding `accounts/` includes default authentication views as described:
+    # https://docs.djangoproject.com/en/dev/topics/auth/default/#using-the-views
+    # Login template must be provided (by default) at 'registration/login.html'.
     path('accounts/', include('django.contrib.auth.urls')),
-    #path('accounts/login/', auth_views.LoginView.as_view(template_name='cedar_site/login.html'), name='login'),
+
+    # Include CEDAR_CORE's 'urls.py'.
+    path('', include('cedar_core.urls')),
+
 ]
