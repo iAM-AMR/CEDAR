@@ -4,20 +4,16 @@
 
 from decimal import Decimal
 
-from utils.get_help_text import get_help_text
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin, UserManager
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.mail import send_mail
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-
-from .validators import UnicodeUsernameValidator
-
-
-
+from utils.get_help_text import get_help_text
 
 
 class reference(models.Model): # ====================================================================================================================
