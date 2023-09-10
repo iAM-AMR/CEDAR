@@ -1,6 +1,6 @@
 from django.forms import ModelForm, TextInput
 from django import forms
-from cedar_core.models import factor, reference, reference_join_location, reference_note, res_outcome, location_01, location_02, host_01, microbe_01, atc_vet, dict_help, dict_capt
+from cedar_core.models import factor, reference, reference_join_location, reference_note, res_outcome, location_01, location_02, host_01, microbe_01, atc_vet
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse, reverse_lazy
 
@@ -74,11 +74,11 @@ class ReferenceForm(ModelForm):
                     Div(
                         Row(
                             Column(
-                                PrependedText('ref_title', dict_capt['ref_title'], placeholder="Study Title"),
+                                PrependedText('ref_title', 'ref_title', placeholder="Study Title"),
                                 ccs_class='col-md-6',
                             ),
                             Column(
-                                PrependedText('ref_author', dict_capt['ref_author'], placeholder="Author Name(s) Here"),
+                                PrependedText('ref_author', 'ref_author', placeholder="Author Name(s) Here"),
                                 ccs_class='col-md-6',
                             )
                         ),

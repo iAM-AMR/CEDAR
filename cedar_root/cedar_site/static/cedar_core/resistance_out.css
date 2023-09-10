@@ -25,3 +25,8 @@
 tr {
     text-align: center;
 }
+
+/* Workaround for colapse of autoselect field. */
+.select2-selection.select2-selection--single.modelselect2.form-select {
+    height: 37px;
+}

@@ -3,55 +3,17 @@
 # CEDAR Models
 
 from decimal import Decimal
-from pathlib import Path
 
-import pandas
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin, UserManager
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.mail import send_mail
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-
-from .validators import UnicodeUsernameValidator
-
-# Read in the local CEDAR_dictionary to get captions and help-text.
-
-BASE_DIR               = Path(__file__).resolve().parent.parent
-cedar_forest_dict_path = BASE_DIR / 'CEDAR_forest_dictionary.csv'
-cedar_forest_dict      = pandas.read_csv(cedar_forest_dict_path, encoding='utf-8')
-
-# Create lists from each column.
-field_names    = cedar_forest_dict.field.tolist()
-field_helpt    = cedar_forest_dict.description.tolist()
-field_captions = cedar_forest_dict.caption.tolist()
-
-# Make dictionaries indexed by field names.
-dict_help = dict(zip(field_names, field_helpt))
-dict_capt = dict(zip(field_names, field_captions))
-
-
-
-# Clean the data dict
-for key in dict_help:
-    if isinstance(dict_help[key], float):
-        dict_help[key] = ''
-    else:
-        dict_help[key] = dict_help[key].replace('\xa0',' ')
-
-# Clean the data dict
-for key in dict_capt:
-    if isinstance(dict_capt[key], float):
-        dict_capt[key] = ''
-    else:
-        dict_capt[key] = dict_capt[key].replace('\xa0',' ')
-
-
-def get_help_text(field_name, dict = dict_help):
-    return(dict.get(field_name, "Missing Help Text"))
-
+from utils.get_help_text import get_help_text
 
 
 class reference(models.Model): # ====================================================================================================================
@@ -456,7 +418,7 @@ class res_outcome(models.Model): # =============================================
     prevtable_d = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))], blank=True, null=True, help_text=get_help_text('prevtable_d'))
     
     # Contingency / Prevalence Table Margin Totals
-    table_n_ab = models.PositiveIntegerField(blank=True, null=True, help_text=dict_help.get('table_n_ab'))
+    table_n_ab = models.PositiveIntegerField(blank=True, null=True, help_text=get_help_text('table_n_ab'))
     table_n_cd = models.PositiveIntegerField(blank=True, null=True, help_text=get_help_text('table_n_cd'))
     
     # Odds Ratios
@@ -469,11 +431,12 @@ class res_outcome(models.Model): # =============================================
 
     # AST Method and Details ----------------------------------------------------------------------
 
-    ast_method                         = models.ForeignKey(to        = 'ast_method_old', 
-                                                           on_delete = models.SET_NULL, 
-                                                           blank     = True, 
-                                                           null      = True, 
-                                                           help_text = get_help_text('ast_method'))
+    ast_method                                             = models.ForeignKey(
+        to        = 'ast_method', 
+        null      = True, 
+        blank     = True, 
+        on_delete = models.SET_NULL, 
+        help_text = get_help_text('ast_method'))
 
     ast_reference_standard             = models.ForeignKey(to        = 'ast_reference_standard', 
                                                            on_delete = models.SET_NULL, 
@@ -656,6 +619,9 @@ class ast_method(models.Model): # ==============================================
         null      = True, 
         blank     = True, 
         help_text = get_help_text('hist_ast_method_id'))
+    
+    def __str__(self):
+        return self.ast_method_name
 
 
 class atc_vet(models.Model): # ========================================================================================
