@@ -49,7 +49,19 @@ class reference(models.Model): # ===============================================
         blank      = True, 
         help_text  = get_help_text('refwk'))
 
-    # id_lit_review <- This or something similar should be the 
+    id_librarykey                                           = models.CharField(
+        null       = False,  # Default
+        blank      = False,  # Require a library key
+        default    = '',
+        max_length = 50,     # Support >32 char UUID
+        help_text  = get_help_text('id_librarykey'))
+
+    id_submission                                           = models.CharField(
+        null       = False,  # Default
+        blank      = True,   # Do not require a submission key
+        default    = '',
+        max_length = 50,     # Support >32 char UUID
+        help_text  = get_help_text('id_submission'))
 
 
     # Omissions -----------------------------------------------------------------------------------
