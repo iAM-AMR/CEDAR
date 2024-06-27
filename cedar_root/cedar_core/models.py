@@ -35,34 +35,63 @@ class reference(models.Model): # ===============================================
 
     # ID ------------------------------------------------------------------------------------------
 
-    pid_reference       = models.PositiveIntegerField(null       = True,
-                                                      blank      = True,) 
+    pid_reference                                = models.PositiveIntegerField(
+        null       = True,
+        blank      = True)
 
-    key_bibtex                     = models.CharField(default    = '', 
-                                                      max_length = 200, 
-                                                      help_text  = get_help_text('key_bibtex'))
+    key_bibtex                                              = models.CharField(
+        default    = '', 
+        max_length = 200, 
+        help_text  = get_help_text('key_bibtex'))
 
-    refwk               = models.PositiveIntegerField(null       = True, 
-                                                      blank      = True, 
-                                                      help_text  = get_help_text('refwk'))
+    refwk                                        = models.PositiveIntegerField(
+        null       = True, 
+        blank      = True, 
+        help_text  = get_help_text('refwk'))
+
+    id_librarykey                                           = models.CharField(
+        null       = False,  # Default
+        blank      = False,  # Require a library key
+        default    = '',
+        max_length = 50,     # Support >32 char UUID
+        help_text  = get_help_text('id_librarykey'))
+
+    id_submission                                           = models.CharField(
+        null       = False,  # Default
+        blank      = True,   # Do not require a submission key
+        default    = '',
+        max_length = 50,     # Support >32 char UUID
+        help_text  = get_help_text('id_submission'))
 
 
     # Omissions -----------------------------------------------------------------------------------
 
-    # Archive -----------------------------------
-    is_archived                 = models.BooleanField(null       = True,
-                                                      blank      = True, 
-                                                      default    = False, 
-                                                      help_text  = get_help_text('is_archived'))
+    # Archived ----------------------------------------------------------------
+    is_archived                                          = models.BooleanField(
+        null       = True,
+        blank      = True, 
+        default    = False, 
+        help_text  = get_help_text('is_archived'))
 
-    archived_reason                = models.CharField(null       = True, 
-                                                      blank      = True, 
-                                                      max_length = 200, 
-                                                      help_text  = get_help_text('archived_reason'))
+    archived_reason                                         = models.CharField(
+        null       = True, 
+        blank      = True, 
+        max_length = 200, 
+        help_text  = get_help_text('archived_reason'))
     
     # Exclude Extract ---------------------------
 
     # To support users using CEDAR for Lit Searches.
+    # DEPRECIATE.
+    # CEDAR will not support literature search features.
+
+    # Move these to archive? OR merge?
+
+    # The source of truth for the inclusion/exclusion from specific projects should be elsewhere. The library?
+    # Seemingly, it would be better to have this in a .CSV along with whatever identifier is used there.
+    # Then, this is managed by the actual authors. And this allows the same object to be included/excluded in theirs and 
+    # others' projects. 
+
     is_excluded_extract         = models.BooleanField(default    = False, 
                                                       help_text  = get_help_text('is_excluded_extract'))
 
@@ -76,6 +105,12 @@ class reference(models.Model): # ===============================================
                                                       on_delete  = models.SET_NULL, 
                                                       help_text  = get_help_text('excluded_extract_reason_type'))                                                    
     
+    
+    
+    # This needs to be moved to a project-specific table.
+    # Or, we need a notes field (like notes - model) or a field in the table to indicate type of note, and include 
+    # this info there. Cause it's 
+
     # Exclude Model -----------------------------
     is_excluded_model           = models.BooleanField(null       = True, 
                                                       blank      = True, 
@@ -87,63 +122,82 @@ class reference(models.Model): # ===============================================
                                                       help_text  = get_help_text('excluded_model_reason'))
     
 
-    # Meta-data -----------------------------------------------------------------------------------
-    publisher                     = models.ForeignKey(to         = 'publisher', 
-                                                      null       = True, 
-                                                      blank      = True, 
-                                                      on_delete  = models.SET_NULL,                                  
-                                                      help_text  = get_help_text('publisher'))
-
-    publisher_name_alt             = models.CharField(blank      = True,
-                                                      default    = '', 
-                                                      max_length = 500, 
-                                                      help_text  = get_help_text('publisher_name_alt'))
-
-    publish_year                   = models.CharField(blank      = True, 
-                                                      max_length = 4,  
-                                                      help_text  = get_help_text('publish_year'), 
-                                                      validators = [RegexValidator(r'^\d{4}$')])
-
-    publish_doi                    = models.CharField(blank      = True, 
-                                                      max_length = 500, 
-                                                      help_text  = get_help_text('publish_doi'))
-
-    publish_pmid                   = models.CharField(blank      = True, 
-                                                      max_length = 8,  
-                                                      help_text  = get_help_text('publish_pmid'), 
-                                                      validators = [RegexValidator(r'^\d{8}$')])
+    # Bibliographic data --------------------------------------------------------------------------
+    # This is not the source of truth for these data; these data are from the library.
     
-    ref_title                      = models.TextField(default    = '', 
-                                                      help_text  = get_help_text('ref_title'))
+     # Should we rename this to simply publisher to simplify input? Because the publisher dropdown is unique to CEDAR.
+    # Copy all publishers out to the free-text? Then users can skip updating... but they can't enter the data... Why would
+    # they though? We should make sure it's good in the library. What about publications that have changed names?
+    # So what? What analysis is ever going to be important to do via an ontology... 
 
-    ref_author                     = models.TextField(blank      = True, 
-                                                      help_text  = get_help_text('ref_author'))
 
-    ref_abstract                   = models.TextField(blank      = True, 
-                                                      help_text  = get_help_text('ref_abstract'))
+    publisher_name_alt                                     = models.CharField(
+        blank      = True,
+        default    = '', 
+        max_length = 500, 
+        help_text  = get_help_text('publisher_name_alt'))
+
+    publish_year                                            = models.CharField(
+        blank      = True, 
+        max_length = 4,  
+        help_text  = get_help_text('publish_year'), 
+        validators = [RegexValidator(r'^\d{4}$')])
+
+    publish_doi                                             = models.CharField(
+        blank      = True, 
+        max_length = 500, 
+        help_text  = get_help_text('publish_doi'))
+
+    ref_title                                               = models.TextField(
+        default    = '', 
+        help_text  = get_help_text('ref_title'))
+
+    ref_author                                              = models.TextField(
+        blank      = True, 
+        help_text  = get_help_text('ref_author'))
+
+    ref_abstract                                            = models.TextField(
+        blank      = True, 
+        help_text  = get_help_text('ref_abstract'))
     
-    ref_country                   = models.ForeignKey(to         = 'location_01', 
-                                                      null       = True,
-                                                      blank      = False,
-                                                      on_delete  = models.SET_NULL)
+
 
     # Reference Features --------------------------------------------------------------------------
 
-    # Study Design ------------------------------
-    study_design                  = models.ForeignKey(to         = 'study_design', 
-                                                      null       = True,
-                                                      blank      = True,  
-                                                      on_delete  = models.SET_NULL,
-                                                      help_text  = get_help_text('study_design'))
-    
-    study_design_detail            = models.TextField(blank      = True,  
-                                                      help_text  = get_help_text('study_design_detail'))
+    ref_country                                            = models.ForeignKey(
+        to         = 'location_01', 
+        null       = True,
+        blank      = False,
+        on_delete  = models.SET_NULL, 
+        help_text  = get_help_text('fk_ref_country'))
 
-    study_sample_method            = models.TextField(blank      = True,  
-                                                      help_text  = get_help_text('study_sample_method'))
+    study_design                                           = models.ForeignKey(
+        to         = 'study_design', 
+        null       = True,
+        blank      = True,  
+        on_delete  = models.SET_NULL,
+        help_text  = get_help_text('study_design'))
     
+    study_design_detail                                     = models.TextField(
+        blank      = True,  
+        help_text  = get_help_text('study_design_detail'))
+
+    study_sample_method                                     = models.TextField(
+        blank      = True,  
+        help_text  = get_help_text('study_sample_method'))
+
+    ref_has_ast_mic_table                                  = models.ForeignKey(
+        to         = 'logic_dictionary', 
+        null       = True,
+        blank      = True, 
+        on_delete  = models.SET_NULL, 
+        help_text  = get_help_text('ref_has_ast_mic_table'), 
+        related_name = 'ast_mic_table')
+
+
 
     # AST ---------------------------------------
+    # DEPRECIATED
     ref_ast_method                = models.ForeignKey(to         = 'ast_method_old',
                                                       null       = True, 
                                                       blank      = True, 
@@ -155,6 +209,8 @@ class reference(models.Model): # ===============================================
                                                       choices    = ANSWER_CHOICES, 
                                                       help_text  = get_help_text('ref_has_ast_explicit_break'))
 
+
+    # Why is this still here? AST explicit break needs to move to RO.
     ref_has_ast_explicit_break                                = models.ForeignKey(
         to         = 'logic_dictionary',
         null       = True,
@@ -171,13 +227,20 @@ class reference(models.Model): # ===============================================
                                                       choices    = ANSWER_CHOICES, 
                                                       help_text  = get_help_text('ref_has_ast_mic_table'))
 
-    ref_has_ast_mic_table                               = models.ForeignKey(
-        to         = 'logic_dictionary', 
-        null       = True,
-        blank      = True, 
-        on_delete  = models.SET_NULL, 
-        help_text  = get_help_text('ref_has_ast_mic_table'), 
-        related_name = 'ast_mic_table')
+    # Should we drop this? Why bother... how many actually have a PMID but not a DOI?
+    publish_pmid                   = models.CharField(blank      = True, 
+                                                      max_length = 8,  
+                                                      help_text  = get_help_text('publish_pmid'), 
+                                                      validators = [RegexValidator(r'^\d{8}$')])
+
+
+   
+    publisher                     = models.ForeignKey(to         = 'publisher', 
+                                                      null       = True, 
+                                                      blank      = True, 
+                                                      on_delete  = models.SET_NULL,                                  
+                                                      help_text  = get_help_text('publisher'))
+    
 
 
 
@@ -201,7 +264,9 @@ class reference(models.Model): # ===============================================
     source_project               =  models.ForeignKey(to         = 'source_project',
                                                       null       = True, 
                                                       blank      = True, 
-                                                      on_delete  = models.SET_NULL)           
+                                                      on_delete  = models.SET_NULL)
+
+    # TODO: Add other projects via table.        
 
     cedar_extract_esr           = models.BooleanField(blank=True, null=True, help_text=get_help_text('cedar_extract_esr'))
     cedar_extract_turkey_update = models.BooleanField(blank=True, null=True, help_text=get_help_text('cedar_extract_turkey_update'))
@@ -231,9 +296,9 @@ class reference(models.Model): # ===============================================
 
 
 
-class factor(models.Model): # =========================================================================================
-    # ---------------------------------------------------------------------------------------------------------- FACTOR
-    # =================================================================================================================
+class factor(models.Model): # =======================================================================================================================
+    # ---------------------------------------------------------------------------------------------------------------------------------------- FACTOR
+    # ===============================================================================================================================================
 
     """
     A factor associated with antimicrobial resistance.
@@ -345,114 +410,181 @@ class res_outcome(models.Model): # =============================================
     An measured association with a resistance outcome.
     """
 
-    factor                             = models.ForeignKey(to        = 'factor', 
-                                                           on_delete = models.CASCADE, 
-                                                           blank     = True, 
-                                                           null      = True,                           # SHOULD BOTH BE FALSE
-                                                           help_text = get_help_text('factor'))
-    
-    pid_ro                   = models.PositiveIntegerField(blank     = True, 
-                                                           null      = True, 
-                                                           help_text = get_help_text('pid_ro'))
-    
-    resistance                         = models.ForeignKey(to        = 'atc_vet', 
-                                                           on_delete = models.SET_NULL, 
-                                                           blank     = True, 
-                                                           null      = True, 
-                                                           help_text = get_help_text('resistance'))
+    factor                                                 = models.ForeignKey(
+        to         = 'factor', 
+        null       = True,
+        blank      = True, 
+        on_delete  = models.CASCADE,                            # SHOULD BOTH BE FALSE
+        help_text  = get_help_text('factor'))
 
-    resistance_gene                    = models.ForeignKey(to        = 'genetic_element', 
-                                                           on_delete = models.SET_NULL, 
-                                                           blank     = True, 
-                                                           null      = True, 
-                                                           help_text = get_help_text('resistance_gene'))
-    
-    microbe_level_01                   = models.ForeignKey(to        = 'microbe_01', 
-                                                           on_delete = models.SET_NULL, 
-                                                           blank     = True, 
-                                                           null      = True, 
-                                                           help_text = get_help_text('microbe_level_01'))
+    pid_ro                                       = models.PositiveIntegerField(
+        null       = True, 
+        blank      = True, 
+        help_text  = get_help_text('pid_ro'))
 
-    microbe_level_02                   = models.ForeignKey(to        = 'microbe_02', 
-                                                           on_delete = models.SET_NULL, 
-                                                           blank     = True, 
-                                                           null      = True, 
-                                                           help_text = get_help_text('microbe_level_02'))
+    resistance                                             = models.ForeignKey(
+        to         = 'atc_vet', 
+        null       = True, 
+        blank      = True, 
+        on_delete  = models.SET_NULL, 
+        help_text  = get_help_text('resistance'))
+
+    resistance_gene                                        = models.ForeignKey(
+        to         = 'genetic_element', 
+        null       = True, 
+        blank      = True, 
+        on_delete  = models.SET_NULL,         
+        help_text  = get_help_text('resistance_gene'))
     
-    group_observe_production_stage     = models.ForeignKey(to        = 'production_stage', 
-                                                           null      = True, 
-                                                           blank     = True, 
-                                                           on_delete = models.SET_NULL, 
-                                                           help_text = get_help_text('group_observe_production_stage'))
+    microbe_level_01                                       = models.ForeignKey(
+        to         = 'microbe_01', 
+        null       = True, 
+        blank      = True, 
+        on_delete  = models.SET_NULL,
+        help_text  = get_help_text('microbe_level_01'))
+
+    microbe_level_02                                       = models.ForeignKey(
+        to         = 'microbe_02',
+        null       = True,
+        blank      = True,
+        on_delete  = models.SET_NULL, 
+        help_text  = get_help_text('microbe_level_02'))
+    
+    group_observe_production_stage                         = models.ForeignKey(
+        to         = 'production_stage', 
+        null       = True, 
+        blank      = True, 
+        on_delete  = models.SET_NULL, 
+        help_text  = get_help_text('group_observe_production_stage'))
         
 
     # Quantitative Data ---------------------------------------------------------------------------
 
-    moa_type                           = models.ForeignKey(to        = 'moa_type', 
-                                                           on_delete = models.SET_NULL, 
-                                                           blank     = True, 
-                                                           null      = True, 
-                                                           help_text = get_help_text('moa_type'))
+    moa_type                                               = models.ForeignKey(
+        to         = 'moa_type',
+        null       = True,
+        blank      = True, 
+        on_delete  = models.SET_NULL, 
+        help_text  = get_help_text('moa_type'))
 
-    moa_unit                           = models.ForeignKey(to        = 'moa_unit', 
-                                                           on_delete = models.SET_NULL, 
-                                                           blank     = True, 
-                                                           null      = True, 
-                                                           help_text = get_help_text('moa_unit'))
+    moa_unit                                               = models.ForeignKey(
+        to         = 'moa_unit',
+        null       = True, 
+        blank      = True, 
+        on_delete  = models.SET_NULL, 
+        help_text  = get_help_text('moa_unit'))
     
-    place_in_text                       = models.TextField(blank     = True, 
+    place_in_text                                           = models.TextField(
+        null       = True,
+        blank      = True, 
+        help_text  = get_help_text('place_in_text'))
+
+    # AST Method and Details ----------------------------------------------------------------------
+
+    ast_method                                             = models.ForeignKey(
+        to         = 'ast_method', 
+        null       = True, 
+        blank      = True, 
+        on_delete  = models.SET_NULL, 
+        help_text  = get_help_text('ast_method'))
+
+    ast_reference_standard                                 = models.ForeignKey(
+        to         = 'ast_reference_standard',
+        null       = True,
+        blank      = True,
+        on_delete  = models.SET_NULL, 
+        help_text  = get_help_text('ast_reference_standard'))
+
+    ast_breakpoint_version                                 = models.ForeignKey(
+        to         = 'ast_reference_standard_version',
+        null       = True,
+        blank      = True, 
+        on_delete  = models.SET_NULL, 
+        help_text  = get_help_text('ast_breakpoint_version'))
+
+    ast_breakpoint_is_explicit       = models.BooleanField(blank     = True, 
                                                            null      = True, 
-                                                           help_text = get_help_text('place_in_text'))
+                                                           help_text = get_help_text('ast_breakpoint_is_explicit'))
 
     # Contingency Table
-    contable_a = models.PositiveIntegerField(blank=True, null=True, help_text=get_help_text('contable_a'))
-    contable_b = models.PositiveIntegerField(blank=True, null=True, help_text=get_help_text('contable_b'))
-    contable_c = models.PositiveIntegerField(blank=True, null=True, help_text=get_help_text('contable_c'))
-    contable_d = models.PositiveIntegerField(blank=True, null=True, help_text=get_help_text('contable_d'))
+    contable_a                                   = models.PositiveIntegerField(
+        null       = True, 
+        blank      = True, 
+        help_text  = get_help_text('contable_a'))
+
+    contable_b                                   = models.PositiveIntegerField(
+        null       = True, 
+        blank      = True, 
+        help_text  = get_help_text('contable_b'))
+    
+    contable_c                                   = models.PositiveIntegerField(
+        null       = True, 
+        blank      = True, 
+        help_text  = get_help_text('contable_c'))
+    
+    contable_d                                   = models.PositiveIntegerField(
+        null       = True, 
+        blank      = True, 
+        help_text  = get_help_text('contable_d'))
+
 
     # Prevalence Table
     # MinValueValidator at 0.01 ensures no negative numbers can be entered
-    prevtable_a = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))], blank=True, null=True, help_text=get_help_text('prevtable_a'))
-    prevtable_b = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))], blank=True, null=True, help_text=get_help_text('prevtable_b'))
-    prevtable_c = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))], blank=True, null=True, help_text=get_help_text('prevtable_c'))
-    prevtable_d = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))], blank=True, null=True, help_text=get_help_text('prevtable_d'))
+    # TODO: Evaluate whether max digits is appropriate. Should it be 5? 100.00 as the maxium?
+
+    prevtable_a                                          = models.DecimalField(
+        null       = True,
+        blank      = True, 
+        max_digits = 10, decimal_places = 2, 
+        validators = [MinValueValidator(Decimal('0.00'))], 
+        help_text  = get_help_text('prevtable_a'))
+
+    prevtable_b                                          = models.DecimalField(
+        null       = True,
+        blank      = True, 
+        max_digits = 10, decimal_places = 2, 
+        validators = [MinValueValidator(Decimal('0.00'))], 
+        help_text  = get_help_text('prevtable_b'))
+
+    prevtable_c                                          = models.DecimalField(
+        null       = True, 
+        blank      = True, 
+        max_digits = 10, decimal_places = 2, 
+        validators = [MinValueValidator(Decimal('0.00'))], 
+        help_text  = get_help_text('prevtable_c'))
+
+    prevtable_d                                          = models.DecimalField(
+        null       = True, 
+        blank      = True, 
+        max_digits = 10, decimal_places = 2, 
+        validators = [MinValueValidator(Decimal('0.00'))], 
+        help_text  = get_help_text('prevtable_d'))
     
-    # Contingency / Prevalence Table Margin Totals
-    table_n_ab = models.PositiveIntegerField(blank=True, null=True, help_text=get_help_text('table_n_ab'))
-    table_n_cd = models.PositiveIntegerField(blank=True, null=True, help_text=get_help_text('table_n_cd'))
+    table_n_ab                                   = models.PositiveIntegerField(
+        null       = True, 
+        blank      = True, 
+        help_text  = get_help_text('table_n_ab'))
+
+    table_n_cd                                   = models.PositiveIntegerField(
+        null       = True, 
+        blank      = True, 
+        help_text  = get_help_text('table_n_cd'))
     
     # Odds Ratios
-    odds_ratio            = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))], blank=True, null=True, help_text=get_help_text('odds_ratio')) #
+    odds_ratio                                           = models.DecimalField(
+        null       = True,
+        blank      = True,
+        max_digits = 10, decimal_places = 2, 
+        validators = [MinValueValidator(Decimal('0.00'))], 
+        help_text  = get_help_text('odds_ratio'))
+
     odds_ratio_lo         = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))], blank=True, null=True, help_text=get_help_text('odds_ratio_lo')) #
     odds_ratio_up         = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))], blank=True, null=True, help_text=get_help_text('odds_ratio_up')) #
     odds_ratio_sig        =    models.CharField(max_length=20, blank=True, null=True, help_text=get_help_text('odds_ratio_sig'))
     odds_ratio_confidence = models.DecimalField(blank=True, null=True, max_digits=5, decimal_places=3, help_text=get_help_text('odds_ratio_confidence'))
     
 
-    # AST Method and Details ----------------------------------------------------------------------
-
-    ast_method                                             = models.ForeignKey(
-        to        = 'ast_method', 
-        null      = True, 
-        blank     = True, 
-        on_delete = models.SET_NULL, 
-        help_text = get_help_text('ast_method'))
-
-    ast_reference_standard             = models.ForeignKey(to        = 'ast_reference_standard', 
-                                                           on_delete = models.SET_NULL, 
-                                                           blank     = True, 
-                                                           null      = True, 
-                                                           help_text = get_help_text('ast_reference_standard'))
-
-    ast_breakpoint_version             = models.ForeignKey(to        = 'ast_reference_standard_version',
-                                                           on_delete = models.SET_NULL, 
-                                                           blank     = True, 
-                                                           null      = True, 
-                                                           help_text = get_help_text('ast_breakpoint_version'))
-
-    ast_breakpoint_is_explicit       = models.BooleanField(blank     = True, 
-                                                           null      = True, 
-                                                           help_text = get_help_text('ast_breakpoint_is_explicit'))
+    
     
 
     # Figure Extraction Method and Details --------------------------------------------------------
@@ -528,8 +660,13 @@ class res_outcome(models.Model): # =============================================
 
 
 
-# SECONDARY TABLES (Alphabetical Order) ===============================================================================
-# =====================================================================================================================
+
+
+
+
+# ===================================================================================================================================================
+# SECONDARY TABLES (Alphabetical Order) -------------------------------------------------------------------------------------------------------------
+# ===================================================================================================================================================
 
 
 class ast_reference_standard(models.Model): # =========================================================================
@@ -550,7 +687,7 @@ class ast_reference_standard(models.Model): # ==================================
 
 
 
-class ast_reference_standard_version(models.Model): # =========================================================================
+class ast_reference_standard_version(models.Model): # =================================================================
     #                                        --------------------------------------------------- AST_BREAKPOINT_VERSION
     # =================================================================================================================
 
@@ -613,12 +750,12 @@ class ast_method(models.Model): # ==============================================
         help_text  = get_help_text('ast_method_type_accno'))
 
     ast_method_is_ast_type                               = models.BooleanField(
-        help_text = get_help_text('ast_method_is_ast_type'))
+        help_text  = get_help_text('ast_method_is_ast_type'))
 
     hist_ast_method_id                                   = models.IntegerField(
-        null      = True, 
-        blank     = True, 
-        help_text = get_help_text('hist_ast_method_id'))
+        null       = True, 
+        blank      = True, 
+        help_text  = get_help_text('hist_ast_method_id'))
     
     def __str__(self):
         return self.ast_method_name
@@ -632,19 +769,58 @@ class atc_vet(models.Model): # =================================================
     Antimicrobials, from the ATC and ATCvet indices.
     """
 
-    levelname_1 = models.CharField(max_length=100,                        help_text=get_help_text('levelname_1'))
-    levelname_2 = models.CharField(max_length=100, blank=True, null=True, help_text=get_help_text('levelname_2'))
-    levelname_3 = models.CharField(max_length=100, blank=True, null=True, help_text=get_help_text('levelname_3'))
-    levelname_4 = models.CharField(max_length=200, blank=True, null=True, help_text=get_help_text('levelname_4'))
-    levelname_4_coarse       = models.CharField(max_length=100, blank=True, null=True, help_text=get_help_text('levelname_4_coarse'))
-    levelname_5 = models.CharField(max_length=100, blank=True, null=True, help_text=get_help_text('levelname_5'))
-    levelname_5_alt          = models.CharField(max_length=100, blank=True, null=True, help_text=get_help_text('levelname_5_alt'))
-    levelname_5_comb_example = models.CharField(max_length=100, blank=True, null=True, help_text=get_help_text('levelname_5_comb_example'))
+    levelname_1                                             = models.CharField(
+        max_length = 100,                        
+        help_text  = get_help_text('levelname_1'))
+
+    levelname_2                                             = models.CharField(
+        null       = True,
+        blank      = True, 
+        max_length = 100,  
+        help_text  = get_help_text('levelname_2'))
+
+    levelname_3                                             = models.CharField(
+        null       = True, 
+        blank      = True, 
+        max_length = 100, 
+        help_text  = get_help_text('levelname_3'))
+
+    levelname_4                                             = models.CharField(
+        null       = True, 
+        blank      = True,
+        max_length = 200,                                   # Why 200 here?
+        help_text  = get_help_text('levelname_4'))
+
+    levelname_4_coarse                                      = models.CharField(
+        null       = True, 
+        blank      = True, 
+        max_length = 100, 
+        help_text  = get_help_text('levelname_4_coarse'))
+
+    levelname_5                                             = models.CharField(
+        null       = True,
+        blank      = True,
+        max_length = 100,   
+        help_text  = get_help_text('levelname_5'))
+
+    levelname_5_alt                                         = models.CharField(
+        null       = True, 
+        blank      = True, 
+        max_length = 100, 
+        help_text  = get_help_text('levelname_5_alt'))
+
+    levelname_5_comb_example                                = models.CharField(
+        null       = True, 
+        blank      = True, 
+        max_length = 100, 
+        help_text  = get_help_text('levelname_5_comb_example'))
+    
     levelcode_1 = models.CharField(max_length=4,   blank=True, null=True, help_text=get_help_text('levelcode_1'))
     levelcode_2 = models.CharField(max_length=8,   blank=True, null=True, help_text=get_help_text('levelcode_2'))
     levelcode_3 = models.CharField(max_length=10,  blank=True, null=True, help_text=get_help_text('levelcode_3'))
     levelcode_4 = models.CharField(max_length=12,  blank=True, null=True, help_text=get_help_text('levelcode_4'))
     levelcode_5 = models.CharField(max_length=16,  blank=True, null=True, help_text=get_help_text('levelcode_5'))
+    
     is_added    = models.BooleanField(                                    help_text=get_help_text('is_added'))
     is_gene     = models.BooleanField(                                    help_text=get_help_text('is_gene'))
     aro_number  = models.IntegerField(             blank=True, null=True, help_text=get_help_text('aro_number'))
