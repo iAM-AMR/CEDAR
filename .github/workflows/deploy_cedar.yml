@@ -34,10 +34,10 @@ jobs:
     steps:
 
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -47,7 +47,7 @@ jobs:
           source venv/bin/activate
 
       - name: Set up dependency caching for faster installs
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
@@ -75,7 +75,7 @@ jobs:
         run: zip release.zip ./* -r -x 'venv/*'
 
       - name: Upload zip
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: python-app
           path: release.zip
@@ -94,7 +94,7 @@ jobs:
     steps:
 
       - name: Download zip
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: python-app
 
@@ -108,5 +108,10 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1F0514CD2DDF442FB732476812B025B8 }}
           package: release.zip
+          
+          # A startup command can be specified here (e.g., to complete database
+          # migrations). However, we already use a startup script to configure
+          # gunicorn on Azure. Additional startup commands are specified there.
+          # Unclear precedence|replacement with startup script.
 
-      # We could also use 'startup-command:' here, rather than specifying startup.txt as a command in Azure App Services.
+          # startup-command: 
