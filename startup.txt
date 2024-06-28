@@ -1,2 +1,13 @@
+# These commands are run at startup on Azure App Services.
+# This file must be executable or the app will fail to start.
+# Run: `git add --chmod=+x .\startup.txt` after edits to set the executable bit.
+
+
+# Run migrations on the production database.
+# When disabled, migrations must be run manually through SSH. 
 python cedar_root/manage.py migrate
+
+# Start the gunicorn web server.
+# Must? be last command in startup script.
+# Set wsgi directory (default: root) using --chdir. Enable logging.
 gunicorn --bind=0.0.0.0 --timeout 600 --chdir cedar_root cedar_site.wsgi --access-logfile '-' --error-logfile '-'
