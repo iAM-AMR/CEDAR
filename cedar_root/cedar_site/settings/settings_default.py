@@ -109,3 +109,39 @@ DATABASES = {
 CRISPY_FAIL_SILENTLY = (os.getenv('CRISPY_FAIL_SILENTLY', default = 'False').lower() == 'true')
 
 
+
+# DOCS
+# -----------------------------------------------------------------------------
+
+
+# To use the default local database:
+
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+"""
+
+
+# To use local PSQL, install Postgres and add /PostgreSQL/14/bin to the PATH.
+# 'C:/Program Files/PostgreSQL/14/bin' is the Windows default installation location.
+
+"""
+os.environ["PATH"] += os.pathsep + 'C:/Program Files/PostgreSQL/14/bin'
+"""
+
+
+# To use Graphviz (https://graphviz.org/), replace <path_to> with the path to
+# Graphviz on your system.
+
+"""
+os.environ["PATH"] += os.pathsep + '<path_to>/Graphviz/bin'
+os.environ["PATH"] += os.pathsep + '<path_to>/Graphviz/lib'
+os.environ["PATH"] += os.pathsep + '<path_to>/Graphviz/include'
+"""
+
+
